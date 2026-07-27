@@ -29,6 +29,10 @@ product.innerHTML = `
 <input type="number" placeholder="Сумма">
 </div>
 
+<button type="button" onclick="this.parentElement.remove()">
+❌ Удалить товар
+</button>
+
 `;
 
 client.insertBefore(product, client.querySelector("button"));
