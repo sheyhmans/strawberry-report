@@ -1,34 +1,142 @@
-let productCount = 1;
+let clientCount = 1;
 
-function addProduct() {
 
-productCount++;
+function addProduct(button) {
 
-let client = document.querySelector(".product.innerHTML = `
+    let products = button.previousElementSibling;
 
-<h3>Товар ${productCount}</h3>
+    let product = document.createElement("div");
 
-<div class="field">
-<label>Название товара</label>
-<input type="text" placeholder="Название">
-</div>
+    product.className = "product";
 
-<div class="field">
-<label>Количество</label>
-<input type="number" placeholder="Количество">
-</div>
+    product.innerHTML = `
+    
+    <label>Название товара</label>
+    <input type="text" placeholder="Название товара">
 
-<div class="field">
-<label>Сумма товара</label>
-<input type="number" placeholder="Сумма">
-</div>
+    <label>Количество</label>
+    <input type="text" placeholder="Количество">
 
-<button type="button" onclick="this.parentElement.remove()">
-❌ Удалить товар
-</button>
+    <label>Сумма товара</label>
+    <input type="number" placeholder="Сумма">
 
-`;
+    <button onclick="removeProduct(this)">
+    ❌ Удалить товар
+    </button>
 
-client.insertBefore(product, client.querySelector("button"));
+    `;
+
+    products.appendChild(product);
+
+}
+
+
+
+function removeProduct(button) {
+
+    let product = button.parentElement;
+
+    product.remove();
+
+}
+
+
+
+function addClient() {
+
+    clientCount++;
+
+
+    let clients = document.getElementById("clients");
+
+
+    let client = document.createElement("div");
+
+    client.className = "client card";
+
+
+    client.innerHTML = `
+
+    <h2>Клиент №${clientCount}</h2>
+
+
+    <div class="products">
+
+
+    <div class="product">
+
+
+    <label>Название товара</label>
+    <input type="text" placeholder="Название товара">
+
+
+    <label>Количество</label>
+    <input type="text" placeholder="Количество">
+
+
+    <label>Сумма товара</label>
+    <input type="number" placeholder="Сумма">
+
+
+    <button onclick="removeProduct(this)">
+    ❌ Удалить товар
+    </button>
+
+
+    </div>
+
+
+    </div>
+
+
+    <button onclick="addProduct(this)">
+    ➕ Добавить товар
+    </button>
+
+
+    <label>Оплата</label>
+
+    <select>
+    <option>Нал</option>
+    <option>Перевод</option>
+    <option>Терминал</option>
+    </select>
+
+
+    <label>Сумма оплаты</label>
+    <input type="number">
+
+
+    <label>Время</label>
+    <input type="text">
+
+
+    <button onclick="removeClient(this)">
+    ❌ Удалить клиента
+    </button>
+
+
+    `;
+
+
+    clients.appendChild(client);
+
+}
+
+
+
+function removeClient(button) {
+
+    let client = button.parentElement;
+
+    client.remove();
+
+}
+
+
+
+function createReport(){
+
+    alert("Отчет будет сформирован на следующем этапе 🍓");
 
 }
