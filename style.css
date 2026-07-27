@@ -50,4 +50,6 @@ button {
     background: #2e7d32;
     color: white;
     font-size: 17px;
+}.field {
+    margin-bottom: 20px;
 }
