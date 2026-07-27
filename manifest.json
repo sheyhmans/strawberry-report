@@ -1,0 +1,10 @@
+{
+  "name": "STRAWBERRY — Отчет смены",
+  "short_name": "STRAWBERRY",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2e7d32",
+  "lang": "ru",
+  "icons": []
+}
