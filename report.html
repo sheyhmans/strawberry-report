@@ -18,55 +18,65 @@
 <h1>🍓 Новая смена</h1>
 
 
-<div class="field">
+<div class="card">
+
 <label>Дата смены</label>
-<input type="text" placeholder="27.07 - 28.07">
-</div>
+<input id="date" type="text" placeholder="27.07 - 28.07">
 
 
-<div class="field">
 <label>Цвет касса</label>
-<input type="number" placeholder="10000">
-</div>
+<input id="colorCash" type="number" placeholder="10000">
 
 
-<div class="field">
 <label>Фрукт касса</label>
-<input type="number" placeholder="15000">
+<input id="fruitCash" type="number" placeholder="15000">
+
 </div>
 
 
-<div class="client">
+<div id="clients">
+
+
+<div class="client card">
 
 <h2>Клиент №1</h2>
 
 
-<h3>Товар 1</h3>
+<div class="products">
 
-<div class="field">
+
+<div class="product">
+
+
 <label>Название товара</label>
-<input type="text" placeholder="Например: Ст.клубника в шк">
-</div>
+<input type="text" placeholder="Ст.клубника в шк">
 
 
-<div class="field">
 <label>Количество</label>
-<input type="number" placeholder="2">
-</div>
+<input type="text" placeholder="2">
 
 
-<div class="field">
 <label>Сумма товара</label>
 <input type="number" placeholder="1800">
+
+
+<button onclick="removeProduct(this)">
+❌ Удалить товар
+</button>
+
+
 </div>
 
 
-<button onclick="addProduct()">
+</div>
+
+
+<button onclick="addProduct(this)">
 ➕ Добавить товар
 </button>
 
 
-<div class="field">
+
 <label>Оплата</label>
 
 <select>
@@ -75,47 +85,50 @@
 <option>Терминал</option>
 </select>
 
-</div>
 
-
-<div class="field">
 <label>Сумма оплаты</label>
 <input type="number" placeholder="1800">
-</div>
 
 
-<div class="field">
 <label>Время</label>
 <input type="text" placeholder="01:27">
-</div>
+
+
+<button onclick="removeClient(this)">
+❌ Удалить клиента
+</button>
 
 
 </div>
 
 
-<button>
+</div>
+
+
+<button onclick="addClient()">
 👤 Добавить клиента
 </button>
 
 
-<div class="field">
+<div class="card">
 
 <label>Расходы</label>
 
-<input type="text" placeholder="Например: Доставка 350">
+<input type="text" placeholder="Доставка 350">
 
 </div>
 
 
-<button>
+<button onclick="createReport()">
 📋 Сформировать отчет
 </button>
 
 
 </div>
 
+
 <script src="app.js"></script>
-  
+
 </body>
 
 </html>
