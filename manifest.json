@@ -6,5 +6,11 @@
   "background_color": "#ffffff",
   "theme_color": "#2e7d32",
   "lang": "ru",
-  "icons": []
+  "icons": [
+  {
+    "src": "IMG_1949.png",
+    "sizes": "512x512",
+    "type": "image/png"
+  }
+]
 }
