@@ -4,13 +4,7 @@ function addProduct() {
 
 productCount++;
 
-let client = document.querySelector(".client");
-
-let product = document.createElement("div");
-
-product.className = "product";
-
-product.innerHTML = `
+let client = document.querySelector(".product.innerHTML = `
 
 <h3>Товар ${productCount}</h3>
 
