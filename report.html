@@ -25,19 +25,26 @@
 
 <div class="card">
 
-<label>Дата смены</label>
+
+<label>
+Дата смены
+</label>
 
 <input id="date" type="date">
 
 
 
-<label>Цвет касса</label>
+<label>
+Цвет касса
+</label>
 
 <input id="colorCash" type="number" placeholder="10000">
 
 
 
-<label>Фрукт касса</label>
+<label>
+Фрукт касса
+</label>
 
 <input id="fruitCash" type="number" placeholder="15000">
 
@@ -47,29 +54,34 @@
 
 
 
-<div id="clients">
 
+<div id="clients">
 
 
 <div class="client card">
 
 
-<h2>Клиент №1</h2>
+<h2>
+Клиент №1
+</h2>
 
 
 
 <div class="products">
 
 
+
 <div class="product">
 
 
+<label>
+Товар
+</label>
 
-<label>Выбрать товар</label>
 
 <select class="productSelect">
 
-<option value="">
+<option>
 Выберите товар
 </option>
 
@@ -77,29 +89,44 @@
 
 
 
-<label>Количество</label>
+
+<label>
+Количество
+</label>
 
 <input class="quantity" type="number" value="1">
 
 
 
-<label>Дополнение</label>
+<label>
+Дополнение
+</label>
 
-<input class="productInfo" type="text" placeholder="290гр, N122, скидка">
+<input class="productInfo" type="text" placeholder="290гр, скидка">
+
+
+
+<label>
+Своя цена (если нужно)
+</label>
+
+<input class="customPrice" type="number" placeholder="Оставить пустым">
 
 
 
 <p>
+
 Сумма:
-<span class="productTotal">0</span>₽
+<span class="productTotal">
+0
+</span>₽
+
 </p>
 
 
 
 <button onclick="removeProduct(this)">
-
 ❌ Удалить товар
-
 </button>
 
 
@@ -113,15 +140,25 @@
 
 
 <button onclick="addProduct(this)">
-
 ➕ Добавить товар
-
 </button>
 
 
 
 
-<label>Оплата</label>
+<h3>
+Итого клиента:
+<span class="clientTotal">
+0
+</span>₽
+</h3>
+
+
+
+
+<label>
+Оплата
+</label>
 
 
 <select class="payment">
@@ -138,28 +175,20 @@
 Терминал
 </option>
 
-
 </select>
 
 
 
-
-<label>Сумма оплаты</label>
-
-<input class="paymentSum" type="number" readonly>
-
-
-
-<label>Время</label>
+<label>
+Время
+</label>
 
 <input class="paymentTime" type="text" placeholder="01:27">
 
 
 
 <button onclick="removeClient(this)">
-
 ❌ Удалить клиента
-
 </button>
 
 
@@ -167,16 +196,14 @@
 </div>
 
 
-
 </div>
 
 
 
 
+
 <button onclick="addClient()">
-
 👤 Добавить клиента
-
 </button>
 
 
@@ -190,7 +217,6 @@
 Расходы
 </label>
 
-
 <input id="expenses" type="text" placeholder="Доставка 350">
 
 
@@ -199,8 +225,7 @@
 По клубникам
 </label>
 
-
-<input id="strawberryInfo" type="text" placeholder="1.218гр клубники - 610р">
+<input id="strawberryInfo" type="text" placeholder="Информация по клубнике">
 
 
 </div>
@@ -210,10 +235,30 @@
 
 
 <button onclick="createReport()">
-
-📋 Сформировать отчет
-
+📋 Создать отчет
 </button>
+
+
+
+
+<div id="reportResult" class="card" style="display:none">
+
+
+<h2>
+Готовый отчет
+</h2>
+
+
+<textarea id="reportText"></textarea>
+
+
+<button onclick="copyReport()">
+📋 Копировать отчет
+</button>
+
+
+</div>
+
 
 
 
@@ -221,9 +266,7 @@
 <a href="index.html">
 
 <button>
-
 ⬅ Назад
-
 </button>
 
 </a>
@@ -231,7 +274,6 @@
 
 
 </div>
-
 
 
 
