@@ -8,6 +8,50 @@
 
 <title>Продажи | Strawberry POS</title>
 
+.bottom-nav{
+
+position:fixed;
+bottom:15px;
+left:50%;
+transform:translateX(-50%);
+
+width:calc(100% - 30px);
+max-width:400px;
+
+height:70px;
+
+background:#18181b;
+
+border-radius:25px;
+
+display:flex;
+
+justify-content:space-around;
+
+align-items:center;
+
+border:1px solid #252525;
+
+z-index:999;
+
+}
+
+.bottom-nav a{
+
+text-decoration:none;
+color:#999;
+
+display:flex;
+flex-direction:column;
+
+align-items:center;
+
+font-size:12px;
+
+gap:5px;
+
+}
+  
 <style>
 
 *{
@@ -24,7 +68,7 @@ color:#fff;
 .app{
 max-width:430px;
 margin:auto;
-padding:25px 18px 40px;
+padding:25px 18px 120px;
 }
 
 .header{
@@ -1283,6 +1327,30 @@ location.reload();
 
 </script>
 
+<div class="bottom-nav">
+
+<a href="index.html">
+🏠
+<span>Главная</span>
+</a>
+
+<a href="shift.html" style="color:#ff2d55;">
+🛒
+<span>Продажи</span>
+</a>
+
+<a href="catalog.html">
+📦
+<span>Каталог</span>
+</a>
+
+<a href="history.html">
+📋
+<span>История</span>
+</a>
+
+</div>
+  
 </body>
 
 </html>
