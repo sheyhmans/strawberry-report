@@ -8,9 +8,241 @@
 
 <title>Strawberry POS</title>
 
-<link rel="stylesheet" href="style.css">
+
+<style>
+
+*{
+    box-sizing:border-box;
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",Arial,sans-serif;
+}
+
+
+body{
+    margin:0;
+    min-height:100vh;
+    background:#09090b;
+    color:white;
+}
+
+
+.app{
+    max-width:430px;
+    margin:auto;
+    padding:25px 18px;
+}
+
+
+
+.header{
+    display:flex;
+    align-items:center;
+    gap:15px;
+    margin-bottom:25px;
+}
+
+
+.logo{
+    width:58px;
+    height:58px;
+    border-radius:20px;
+    background:#ff2d55;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:32px;
+}
+
+
+h1{
+    margin:0;
+    font-size:25px;
+}
+
+
+.header p{
+    margin:5px 0 0;
+    color:#999;
+}
+
+
+
+.main-card{
+
+    background:
+    linear-gradient(135deg,#ff2d55,#7a1830);
+
+    border-radius:28px;
+
+    padding:25px;
+
+    margin-bottom:20px;
+
+}
+
+
+.main-card span{
+    color:#ffd7df;
+}
+
+
+.main-card h2{
+    font-size:30px;
+    margin:10px 0;
+}
+
+
+.main-card p{
+    margin:0;
+    color:#ffd7df;
+}
+
+
+
+.start{
+
+    width:100%;
+
+    border:none;
+
+    height:55px;
+
+    border-radius:18px;
+
+    background:white;
+
+    color:#111;
+
+    font-size:17px;
+
+    font-weight:600;
+
+    margin-bottom:25px;
+
+}
+
+
+
+.stats{
+
+    display:grid;
+
+    grid-template-columns:repeat(3,1fr);
+
+    gap:10px;
+
+    margin-bottom:25px;
+
+}
+
+
+
+.stat{
+
+    background:#18181b;
+
+    border-radius:18px;
+
+    padding:15px 8px;
+
+    text-align:center;
+
+}
+
+
+
+.stat small{
+
+    color:#888;
+
+}
+
+
+
+.stat b{
+
+    display:block;
+
+    margin-top:8px;
+
+    font-size:20px;
+
+}
+
+
+
+
+.menu{
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:15px;
+
+}
+
+
+
+.card{
+
+    background:#18181b;
+
+    border-radius:22px;
+
+    padding:20px;
+
+    height:130px;
+
+}
+
+
+
+.card div{
+
+    font-size:32px;
+
+}
+
+
+
+.card h3{
+
+    margin:12px 0 0;
+
+    font-size:17px;
+
+}
+
+
+
+.card p{
+
+    margin:5px 0;
+
+    color:#888;
+
+    font-size:13px;
+
+}
+
+
+
+footer{
+
+    text-align:center;
+
+    color:#555;
+
+    margin-top:35px;
+
+}
+
+
+</style>
+
 
 </head>
+
 
 
 <body>
@@ -19,14 +251,15 @@
 <div class="app">
 
 
-<header class="header">
+<div class="header">
+
 
 <div class="logo">
 🍓
 </div>
 
 
-<div class="title">
+<div>
 
 <h1>Strawberry POS</h1>
 
@@ -35,40 +268,23 @@
 </div>
 
 
-</header>
+</div>
 
 
 
+<div class="main-card">
 
-<section class="welcome-card">
+<span>Текущая смена</span>
 
-<div>
+<h2>Не начата</h2>
 
-<span>Сегодня</span>
-
-<h2 id="date">
-28 июля
-</h2>
-
-<p>Смена не начата</p>
+<p>Начните смену для учета продаж</p>
 
 </div>
 
 
-<div class="status">
 
-🌙
-
-</div>
-
-
-</section>
-
-
-
-
-
-<button class="start-btn">
+<button class="start">
 
 ▶ Начать смену
 
@@ -77,63 +293,50 @@
 
 
 
-
-<section class="stats">
-
-
-<div class="glass">
-
-<span>Продажи</span>
-
-<strong>0 ₽</strong>
-
-</div>
+<div class="stats">
 
 
+<div class="stat">
 
-<div class="glass">
+<small>Продажи</small>
 
-<span>Клиенты</span>
-
-<strong>0</strong>
+<b>0 ₽</b>
 
 </div>
 
 
 
-<div class="glass">
+<div class="stat">
 
-<span>Товары</span>
+<small>Клиенты</small>
 
-<strong>0</strong>
+<b>0</b>
 
 </div>
 
 
-</section>
 
+<div class="stat">
 
+<small>Товары</small>
 
+<b>0</b>
 
-
-<h3 class="section-title">
-Разделы
-</h3>
-
-
-
-
-<section class="cards">
-
-
-
-<a href="shift.html" class="card">
-
-<div class="card-icon">
-🛒
 </div>
 
-<div>
+
+
+</div>
+
+
+
+
+<div class="menu">
+
+
+<div class="card">
+
+<div>🛒</div>
 
 <h3>Продажи</h3>
 
@@ -141,58 +344,35 @@
 
 </div>
 
-</a>
 
 
+<div class="card">
 
-
-<a href="catalog.html" class="card">
-
-<div class="card-icon">
-📦
-</div>
-
-<div>
+<div>📦</div>
 
 <h3>Каталог</h3>
 
-<p>Товары и цены</p>
+<p>Товары</p>
 
 </div>
 
-</a>
 
 
+<div class="card">
 
-
-
-<a href="history.html" class="card">
-
-<div class="card-icon">
-📋
-</div>
-
-<div>
+<div>📋</div>
 
 <h3>История</h3>
 
-<p>Отчеты смен</p>
+<p>Отчеты</p>
 
 </div>
 
-</a>
 
 
+<div class="card">
 
-
-
-<a href="settings.html" class="card">
-
-<div class="card-icon">
-⚙️
-</div>
-
-<div>
+<div>⚙️</div>
 
 <h3>Настройки</h3>
 
@@ -200,31 +380,20 @@
 
 </div>
 
-</a>
-
-
-
-</section>
-
-
-
-
-
-<nav class="bottom-nav">
-
-<span>🏠</span>
-<span>📦</span>
-<span>📋</span>
-<span>⚙️</span>
-
-</nav>
-
-
 
 </div>
 
 
-<script src="app.js"></script>
+
+<footer>
+
+Strawberry POS
+
+</footer>
+
+
+
+</div>
 
 
 </body>
