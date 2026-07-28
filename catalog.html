@@ -15,7 +15,6 @@
 
 <body>
 
-
 <div class="app">
 
 
@@ -25,17 +24,25 @@
 <div class="card">
 
 
-<label>Название товара</label>
+<label>
+Название товара
+</label>
 
-<input id="newName" type="text" placeholder="Например: Ст.клубника в шк">
+<input id="newName" type="text" placeholder="Ст.клубника в шк">
 
 
-<label>Цена</label>
+
+<label>
+Цена
+</label>
 
 <input id="newPrice" type="number" placeholder="900">
 
 
-<label>Категория</label>
+
+<label>
+Категория
+</label>
 
 <select id="newCategory">
 
@@ -53,9 +60,39 @@
 
 
 
+<label>
+Единица измерения
+</label>
+
+<select id="newUnit">
+
+<option value="шт">
+шт
+</option>
+
+<option value="кг">
+кг
+</option>
+
+<option value="гр">
+гр
+</option>
+
+<option value="ящик">
+ящик
+</option>
+
+<option value="букет">
+букет
+</option>
+
+</select>
+
+
+
 <button onclick="addCatalogItem()">
 
-➕ Добавить в каталог
+➕ Добавить товар
 
 </button>
 
@@ -66,8 +103,9 @@
 
 <div class="card">
 
-
-<h2>Мои товары</h2>
+<h2>
+Мои товары
+</h2>
 
 
 <div id="catalogList">
@@ -88,7 +126,6 @@
 </button>
 
 </a>
-
 
 
 </div>
