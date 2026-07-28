@@ -19,27 +19,19 @@
 <div class="app">
 
 
-<header class="top-header">
+<header class="header">
 
-<div class="brand">
-
-<div class="brand-logo">
+<div class="logo">
 🍓
 </div>
 
-<div>
+
+<div class="title">
 
 <h1>Strawberry POS</h1>
 
-<p>Ночная смена</p>
+<p>Учет ночной смены</p>
 
-</div>
-
-</div>
-
-
-<div class="profile">
-●
 </div>
 
 
@@ -48,21 +40,22 @@
 
 
 
-<section class="shift-card">
+<section class="welcome-card">
 
+<div>
 
-<div class="shift-info">
+<span>Сегодня</span>
 
-<span>Текущая смена</span>
+<h2 id="date">
+28 июля
+</h2>
 
-<h2>Не начата</h2>
-
-<p>Начните смену для учета продаж</p>
+<p>Смена не начата</p>
 
 </div>
 
 
-<div class="shift-icon">
+<div class="status">
 
 🌙
 
@@ -75,11 +68,12 @@
 
 
 
-<div class="title-row">
+<button class="start-btn">
 
-<h3>Сегодня</h3>
+▶ Начать смену
 
-</div>
+</button>
+
 
 
 
@@ -87,7 +81,7 @@
 <section class="stats">
 
 
-<div class="stat-card">
+<div class="glass">
 
 <span>Продажи</span>
 
@@ -96,16 +90,8 @@
 </div>
 
 
-<div class="stat-card">
 
-<span>Товары</span>
-
-<strong>0</strong>
-
-</div>
-
-
-<div class="stat-card">
+<div class="glass">
 
 <span>Клиенты</span>
 
@@ -114,173 +100,8 @@
 </div>
 
 
-</section>
 
-
-
-
-
-
-<section class="menu-grid">
-
-
-
-<a href="shift.html" class="app-card">
-
-<div class="card-icon">
-🛒
-</div>
-
-<h3>Продажи</h3>
-
-<p>Добавить покупку</p>
-
-</a>
-
-
-
-<a href="catalog.html" class="app-card">
-
-<div class="card-icon">
-📦
-</div>
-
-<h3>Каталог</h3>
-
-<p>Товары и цены</p>
-
-</a>
-
-
-
-
-<a href="history.html" class="app-card">
-
-<div class="card-icon">
-📋
-</div>
-
-<h3>История</h3>
-
-<p>Отчеты смен</p>
-
-</a>
-
-
-
-
-<a href="settings.html" class="app-card">
-
-<div class="card-icon">
-⚙️
-</div>
-
-<h3>Настройки</h3>
-
-<p>Параметры</p>
-
-</a>
-
-
-
-</section>
-
-
-
-
-
-<footer>
-
-Strawberry POS v1.0
-
-</footer>
-
-
-
-</div>
-
-
-
-<script src="app.js"></script>
-
-
-</body>
-
-</html><!DOCTYPE html>
-<html lang="ru">
-
-<head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Strawberry POS</title>
-
-<link rel="stylesheet" href="style.css">
-
-</head>
-
-
-<body>
-
-
-<div class="app">
-
-
-<header class="hero">
-
-<div class="brand-icon">
-🍓
-</div>
-
-<div>
-
-<h1>Strawberry POS</h1>
-
-<p>Система учета смен</p>
-
-</div>
-
-</header>
-
-
-
-<section class="main-card">
-
-<div>
-
-<span>Текущая смена</span>
-
-<h2>Не начата</h2>
-
-<p>Начните новую смену для учета продаж</p>
-
-</div>
-
-
-<div class="status-circle">
-🌙
-</div>
-
-</section>
-
-
-
-
-<section class="stats">
-
-
-<div class="stat-box">
-
-<span>Продажи</span>
-
-<strong>0 ₽</strong>
-
-</div>
-
-
-<div class="stat-box">
+<div class="glass">
 
 <span>Товары</span>
 
@@ -295,12 +116,20 @@ Strawberry POS v1.0
 
 
 
-<section class="menu">
+<h3 class="section-title">
+Разделы
+</h3>
 
 
-<a href="shift.html" class="menu-card">
 
-<div class="menu-icon">
+
+<section class="cards">
+
+
+
+<a href="shift.html" class="card">
+
+<div class="card-icon">
 🛒
 </div>
 
@@ -308,7 +137,7 @@ Strawberry POS v1.0
 
 <h3>Продажи</h3>
 
-<p>Добавить клиента и товар</p>
+<p>Новая покупка</p>
 
 </div>
 
@@ -316,9 +145,10 @@ Strawberry POS v1.0
 
 
 
-<a href="catalog.html" class="menu-card">
 
-<div class="menu-icon">
+<a href="catalog.html" class="card">
+
+<div class="card-icon">
 📦
 </div>
 
@@ -335,9 +165,10 @@ Strawberry POS v1.0
 
 
 
-<a href="history.html" class="menu-card">
 
-<div class="menu-icon">
+<a href="history.html" class="card">
+
+<div class="card-icon">
 📋
 </div>
 
@@ -345,7 +176,7 @@ Strawberry POS v1.0
 
 <h3>История</h3>
 
-<p>Все отчеты смен</p>
+<p>Отчеты смен</p>
 
 </div>
 
@@ -354,9 +185,10 @@ Strawberry POS v1.0
 
 
 
-<a href="settings.html" class="menu-card">
 
-<div class="menu-icon">
+<a href="settings.html" class="card">
+
+<div class="card-icon">
 ⚙️
 </div>
 
@@ -364,11 +196,12 @@ Strawberry POS v1.0
 
 <h3>Настройки</h3>
 
-<p>Параметры системы</p>
+<p>Система</p>
 
 </div>
 
 </a>
+
 
 
 </section>
@@ -376,11 +209,16 @@ Strawberry POS v1.0
 
 
 
-<footer>
 
-Strawberry POS • v1.0
+<nav class="bottom-nav">
 
-</footer>
+<span>🏠</span>
+<span>📦</span>
+<span>📋</span>
+<span>⚙️</span>
+
+</nav>
+
 
 
 </div>
