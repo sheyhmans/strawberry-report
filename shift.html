@@ -1057,9 +1057,72 @@ box.innerHTML=html;
 
 function finishShift(){
 
-alert("Следующим шагом подключим сохранение отчета");
+let totalSales = 0;
+let cash = 0;
+let transfer = 0;
+let terminal = 0;
 
-  
+
+clients.forEach(c=>{
+
+c.items.forEach(i=>{
+
+totalSales += i.sum;
+
+});
+
+
+if(c.payment){
+
+cash += c.payment.cash || 0;
+transfer += c.payment.transfer || 0;
+terminal += c.payment.terminal || 0;
+
+}
+
+});
+
+
+
+let expenseTotal = 0;
+
+
+expenses.forEach(e=>{
+
+expenseTotal += e.sum;
+
+});
+
+
+
+let finalCash = cash - expenseTotal;
+
+
+
+alert(
+
+`Закрытие смены
+
+
+Продажи: ${totalSales} ₽
+
+
+Наличные: ${cash} ₽
+
+Перевод: ${transfer} ₽
+
+Терминал: ${terminal} ₽
+
+
+Расходы: ${expenseTotal} ₽
+
+
+Остаток налички:
+${finalCash} ₽`
+
+);
+
+
 }
     </script>
 
