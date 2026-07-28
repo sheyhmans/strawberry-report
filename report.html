@@ -2,132 +2,241 @@
 <html lang="ru">
 
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Новая смена — STRAWBERRY</title>
+<title>Новая смена</title>
 
 <link rel="stylesheet" href="style.css">
 
 </head>
 
+
 <body>
+
 
 <div class="app">
 
+
 <h1>🍓 Новая смена</h1>
+
 
 
 <div class="card">
 
 <label>Дата смены</label>
-<input id="date" type="text" placeholder="27.07 - 28.07">
+
+<input id="date" type="date">
+
 
 
 <label>Цвет касса</label>
+
 <input id="colorCash" type="number" placeholder="10000">
 
 
+
 <label>Фрукт касса</label>
+
 <input id="fruitCash" type="number" placeholder="15000">
 
+
 </div>
+
+
 
 
 <div id="clients">
 
 
+
 <div class="client card">
+
 
 <h2>Клиент №1</h2>
 
 
+
 <div class="products">
+
 
 <div class="product">
 
 
-<label>Название товара</label>
-<input class="productName" type="text" placeholder="Роза красн">
 
+<label>Выбрать товар</label>
 
-<label>Количество</label>
-<input class="productCount" type="text" placeholder="9шт">
+<select class="productSelect">
 
+<option value="">
+Выберите товар
+</option>
 
-<label>Сумма товара</label>
-<input class="productPrice" type="number" placeholder="2250">
-
-
-<label>Дополнение</label>
-<input class="productInfo" type="text" placeholder="290гр, N122, скидка">
-
-
-<button onclick="removeProduct(this)">
-❌ Удалить товар
-</button>
-
-
-</div>
-
-</div>
-
-
-<button onclick="addProduct(this)">
-➕ Добавить товар
-</button>
-
-
-<label>Оплата</label>
-<select class="payment">
-<option>Нал</option>
-<option>Перевод</option>
-<option>Терминал</option>
 </select>
 
 
+
+<label>Количество</label>
+
+<input class="quantity" type="number" value="1">
+
+
+
+<label>Дополнение</label>
+
+<input class="productInfo" type="text" placeholder="290гр, N122, скидка">
+
+
+
+<p>
+Сумма:
+<span class="productTotal">0</span>₽
+</p>
+
+
+
+<button onclick="removeProduct(this)">
+
+❌ Удалить товар
+
+</button>
+
+
+
+</div>
+
+
+</div>
+
+
+
+
+<button onclick="addProduct(this)">
+
+➕ Добавить товар
+
+</button>
+
+
+
+
+<label>Оплата</label>
+
+
+<select class="payment">
+
+<option>
+Нал
+</option>
+
+<option>
+Перевод
+</option>
+
+<option>
+Терминал
+</option>
+
+
+</select>
+
+
+
+
 <label>Сумма оплаты</label>
+
 <input class="paymentSum" type="number">
 
 
+
 <label>Время</label>
+
 <input class="paymentTime" type="text" placeholder="01:27">
 
 
+
 <button onclick="removeClient(this)">
+
 ❌ Удалить клиента
+
 </button>
 
 
+
 </div>
 
 
+
 </div>
+
+
 
 
 <button onclick="addClient()">
+
 👤 Добавить клиента
+
 </button>
+
+
+
 
 
 <div class="card">
 
-<label>Расходы</label>
+
+<label>
+Расходы
+</label>
+
 
 <input id="expenses" type="text" placeholder="Доставка 350">
 
+
+
+<label>
+По клубникам
+</label>
+
+
+<input id="strawberryInfo" type="text" placeholder="1.218гр клубники - 610р">
+
+
 </div>
+
+
+
 
 
 <button onclick="createReport()">
+
 📋 Сформировать отчет
+
 </button>
+
+
+
+
+<a href="index.html">
+
+<button>
+
+⬅ Назад
+
+</button>
+
+</a>
+
 
 
 </div>
 
 
+
+
 <script src="app.js"></script>
+
 
 </body>
 
