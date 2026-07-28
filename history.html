@@ -126,8 +126,21 @@ margin-top:40px;
 </div>
 
 
-
+<button onclick="copyLastReport()" style="
+width:100%;
+height:52px;
+border:0;
+border-radius:17px;
+background:#30d158;
+font-size:16px;
+font-weight:600;
+margin-bottom:15px;
+">
+📲 Скопировать отчёт WhatsApp
+</button>
+  
 <div id="history">
+
 
 <div class="empty">
 Смен пока нет
@@ -325,6 +338,174 @@ box.innerHTML=
 
 }
 
+function copyLastReport(){
+
+
+let historyData =
+
+JSON.parse(
+
+localStorage.getItem("shiftHistory")
+
+) || [];
+
+
+
+if(historyData.length===0){
+
+alert("Нет закрытых смен");
+
+return;
+
+}
+
+
+
+let s =
+historyData[historyData.length-1];
+
+
+
+let text =
+
+`Отчёт смены Strawberry 🍓
+
+
+Дата:
+${s.date}
+
+
+Продажи:
+${s.sales} ₽
+
+
+Клиенты:
+
+`;
+
+
+
+s.clients.forEach((c,index)=>{
+
+
+let sum=0;
+
+
+text += `
+
+${index+1}. ${c.name}
+
+`;
+
+
+c.items.forEach(i=>{
+
+
+sum += i.sum;
+
+
+text +=
+`${i.name} — ${i.amount} — ${i.sum} ₽
+`;
+
+
+});
+
+
+text +=
+
+`
+Итого клиента:
+${sum} ₽
+
+
+Оплата:
+
+💵 ${c.payment?.cash || 0} ₽
+💳 ${c.payment?.transfer || 0} ₽
+🧾 ${c.payment?.terminal || 0} ₽
+
+
+`;
+
+
+
+});
+
+
+
+text +=
+
+`
+Итоги оплаты:
+
+
+💵 Наличные:
+${s.cash} ₽
+
+
+💳 Перевод:
+${s.transfer} ₽
+
+
+🧾 Терминал:
+${s.terminal} ₽
+
+
+
+Расходы:
+
+`;
+
+
+
+if(s.expenses.length){
+
+
+s.expenses.forEach(e=>{
+
+
+text +=
+
+`${e.name} — ${e.sum} ₽
+`;
+
+
+});
+
+
+}else{
+
+
+text += "Нет расходов";
+
+
+}
+
+
+
+text +=
+
+`
+
+Всего расходов:
+${s.expenseTotal} ₽
+
+
+Остаток налички:
+${s.finalCash} ₽
+`;
+
+
+
+navigator.clipboard.writeText(text);
+
+
+
+alert("Отчёт скопирован");
+
+
+}
 
 </script>
 
