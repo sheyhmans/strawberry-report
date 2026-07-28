@@ -1,7 +1,12 @@
 let clientCount = 1;
 
 
-// Добавление товара
+function formatMoney(number) {
+    return Number(number || 0).toLocaleString("ru-RU");
+}
+
+
+// Добавить товар
 function addProduct(button) {
 
     let products = button.previousElementSibling;
@@ -10,24 +15,19 @@ function addProduct(button) {
 
     product.className = "product";
 
-
     product.innerHTML = `
 
     <label>Название товара</label>
-    <input class="productName" type="text" placeholder="Название товара">
-
+    <input class="productName" type="text">
 
     <label>Количество</label>
-    <input class="productCount" type="text" placeholder="Количество">
-
+    <input class="productCount" type="text">
 
     <label>Сумма товара</label>
-    <input class="productPrice" type="number" placeholder="Сумма">
-
+    <input class="productPrice" type="number">
 
     <label>Дополнение</label>
-    <input class="productInfo" type="text" placeholder="290гр, N122, скидка">
-
+    <input class="productInfo" type="text">
 
     <button onclick="removeProduct(this)">
     ❌ Удалить товар
@@ -35,15 +35,14 @@ function addProduct(button) {
 
     `;
 
-
     products.appendChild(product);
 
 }
 
 
 
-// Удаление товара
-function removeProduct(button) {
+// Удалить товар
+function removeProduct(button){
 
     button.parentElement.remove();
 
@@ -51,14 +50,12 @@ function removeProduct(button) {
 
 
 
-// Добавление клиента
-function addClient() {
+// Добавить клиента
+function addClient(){
 
     clientCount++;
 
-
     let clients = document.getElementById("clients");
-
 
     let client = document.createElement("div");
 
@@ -74,18 +71,14 @@ function addClient() {
 
     <div class="product">
 
-
     <label>Название товара</label>
     <input class="productName" type="text">
-
 
     <label>Количество</label>
     <input class="productCount" type="text">
 
-
     <label>Сумма товара</label>
     <input class="productPrice" type="number">
-
 
     <label>Дополнение</label>
     <input class="productInfo" type="text">
@@ -94,7 +87,6 @@ function addClient() {
     <button onclick="removeProduct(this)">
     ❌ Удалить товар
     </button>
-
 
     </div>
 
@@ -116,12 +108,10 @@ function addClient() {
 
 
     <label>Сумма оплаты</label>
-
     <input class="paymentSum" type="number">
 
 
     <label>Время</label>
-
     <input class="paymentTime" type="text">
 
 
@@ -138,8 +128,8 @@ function addClient() {
 
 
 
-// Удаление клиента
-function removeClient(button) {
+// Удалить клиента
+function removeClient(button){
 
     button.parentElement.remove();
 
@@ -147,9 +137,8 @@ function removeClient(button) {
 
 
 
-// Формирование отчета
-function createReport() {
-
+// Создать отчет
+function createReport(){
 
     let date = document.getElementById("date").value;
 
@@ -161,44 +150,37 @@ function createReport() {
     let report = "";
 
 
-
     report += date + "\n\n";
 
 
     if(colorCash){
-
-        report += "Цвет Касса: " + Number(colorCash).toLocaleString("ru-RU") + "\n";
-
+        report += "Цвет Касса: " + formatMoney(colorCash) + "\n";
     }
 
 
     if(fruitCash){
-
-        report += "Фрукт касса: " + Number(fruitCash).toLocaleString("ru-RU") + "\n\n";
-
+        report += "Фрукт касса: " + formatMoney(fruitCash) + "\n";
     }
 
+
+    report += "\n";
+
+
+    let nal = 0;
+    let transfer = 0;
+    let terminal = 0;
 
 
     let clients = document.querySelectorAll(".client");
 
 
-    let nal = 0;
-
-    let transfer = 0;
-
-    let terminal = 0;
-
-
-
     clients.forEach((client,index)=>{
 
 
-        report += "Клиент: " + (index+1) + "\n";
+        report += "Клиент: " + (index + 1) + "\n";
 
 
         let products = client.querySelectorAll(".product");
-
 
 
         products.forEach(product=>{
@@ -213,19 +195,17 @@ function createReport() {
 
             if(name){
 
+
                 report += name;
 
+
                 if(count){
-
                     report += " - " + count;
-
                 }
 
 
                 if(info){
-
                     report += " (" + info + ")";
-
                 }
 
 
@@ -245,35 +225,28 @@ function createReport() {
         let time = client.querySelector(".paymentTime").value;
 
 
+
         if(payment === "Нал"){
-
             nal += sum;
-
         }
 
 
         if(payment === "Перевод"){
-
             transfer += sum;
-
         }
 
 
         if(payment === "Терминал"){
-
             terminal += sum;
-
         }
 
 
 
-        report += "(" + payment + " " + sum.toLocaleString("ru-RU");
+        report += "(" + payment + " " + formatMoney(sum) + "₽";
 
 
         if(time){
-
             report += " " + time;
-
         }
 
 
@@ -285,7 +258,6 @@ function createReport() {
 
 
     let expenses = document.getElementById("expenses").value;
-
 
 
     if(expenses){
@@ -302,14 +274,14 @@ function createReport() {
 
 
 
-    report += "Нал: " + nal.toLocaleString("ru-RU") + "₽\n";
+    report += "Нал: " + formatMoney(nal) + "₽\n";
 
-    report += "Перевод: " + transfer.toLocaleString("ru-RU") + "₽\n";
+    report += "Перевод: " + formatMoney(transfer) + "₽\n";
 
 
     if(terminal){
 
-        report += "Терминал: " + terminal.toLocaleString("ru-RU") + "₽\n";
+        report += "Терминал: " + formatMoney(terminal) + "₽\n";
 
     }
 
@@ -318,7 +290,59 @@ function createReport() {
 
 
 
-    alert(report);
+    showReport(report);
 
+}
+
+
+
+
+function showReport(text){
+
+
+    let old = document.getElementById("reportWindow");
+
+
+    if(old){
+        old.remove();
+    }
+
+
+    let box = document.createElement("div");
+
+    box.id = "reportWindow";
+
+
+    box.innerHTML = `
+
+    <h2>📋 Отчет</h2>
+
+    <textarea>${text}</textarea>
+
+    <button onclick="copyReport()">
+    📋 Скопировать
+    </button>
+
+    <button onclick="this.parentElement.remove()">
+    Закрыть
+    </button>
+
+    `;
+
+
+    document.body.appendChild(box);
+
+
+}
+
+
+
+function copyReport(){
+
+    let text = document.querySelector("#reportWindow textarea").value;
+
+    navigator.clipboard.writeText(text);
+
+    alert("Отчет скопирован ✅");
 
 }
