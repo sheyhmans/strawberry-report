@@ -587,3 +587,491 @@ updateShift();
 </body>
 
 </html>
+<div class="card">
+
+<h3>
+Клиенты за смену
+</h3>
+
+
+<div id="clientsList">
+
+Клиентов пока нет
+
+</div>
+
+
+</div>
+
+
+
+
+<div class="menu">
+
+
+
+<a href="shift.html" class="menu-card">
+
+<div>
+🛒
+</div>
+
+<h3>
+Продажи
+</h3>
+
+<p>
+Новая покупка
+</p>
+
+</a>
+
+
+
+
+
+<a href="catalog.html" class="menu-card">
+
+<div>
+📦
+</div>
+
+<h3>
+Каталог
+</h3>
+
+<p>
+Товары
+</p>
+
+</a>
+
+
+
+
+
+<a href="history.html" class="menu-card">
+
+<div>
+📋
+</div>
+
+<h3>
+История
+</h3>
+
+<p>
+Отчеты
+</p>
+
+</a>
+
+
+
+
+
+<a href="#" class="menu-card">
+
+<div>
+⚙️
+</div>
+
+<h3>
+Настройки
+</h3>
+
+<p>
+Скоро
+</p>
+
+</a>
+
+
+
+</div>
+
+
+<footer>
+
+Strawberry POS
+
+</footer>
+
+
+</div>
+
+
+
+<script>
+
+
+function startShift(){
+
+
+let active =
+localStorage.getItem("shiftActive");
+
+
+
+if(active==="true"){
+
+finishShiftMain();
+
+return;
+
+}
+
+
+
+localStorage.setItem(
+
+"shiftActive",
+
+"true"
+
+);
+
+
+
+localStorage.setItem(
+
+"shiftStart",
+
+new Date().toLocaleString("ru-RU")
+
+);
+
+
+
+localStorage.removeItem("shiftClients");
+
+
+
+updateShift();
+
+
+}
+
+
+
+
+function finishShiftMain(){
+
+
+if(confirm("Завершить смену?")){
+
+
+location.href="shift.html";
+
+
+}
+
+
+}
+
+
+
+
+
+function updateShift(){
+
+
+let active =
+localStorage.getItem("shiftActive");
+
+
+
+let text =
+document.getElementById("shiftText");
+
+
+
+let desc =
+document.getElementById("shiftDescription");
+
+
+
+let btn =
+document.getElementById("startBtn");
+
+
+
+if(active==="true"){
+
+
+text.innerHTML =
+"Смена активна";
+
+
+desc.innerHTML =
+
+"Начата: "+
+
+(localStorage.getItem("shiftStart") || "");
+
+
+
+btn.innerHTML =
+"✓ Завершить смену";
+
+
+btn.classList.add("active");
+
+
+
+}
+
+else{
+
+
+text.innerHTML =
+"Не начата";
+
+
+desc.innerHTML =
+"Начните смену для учета продаж";
+
+
+btn.innerHTML =
+"▶ Начать смену";
+
+
+btn.classList.remove("active");
+
+
+}
+
+
+}
+
+
+
+
+
+function loadShiftData(){
+
+
+let clients =
+
+JSON.parse(
+
+localStorage.getItem("shiftClients")
+
+) || [];
+
+
+
+let sales=0;
+
+let cash=0;
+
+let transfer=0;
+
+let terminal=0;
+
+let products=0;
+
+
+
+clients.forEach(c=>{
+
+
+c.items.forEach(i=>{
+
+
+sales += i.sum;
+
+products++;
+
+
+});
+
+
+
+if(c.payment){
+
+
+cash += c.payment.cash || 0;
+
+transfer += c.payment.transfer || 0;
+
+terminal += c.payment.terminal || 0;
+
+
+}
+
+
+});
+
+
+
+document.getElementById("salesTotal").innerHTML =
+
+sales+" ₽";
+
+
+
+document.getElementById("clientsTotal").innerHTML =
+
+clients.length;
+
+
+
+document.getElementById("paymentInfo").innerHTML = `
+
+💵 Наличные: ${cash} ₽
+
+<br>
+
+💳 Перевод: ${transfer} ₽
+
+<br>
+
+🧾 Терминал: ${terminal} ₽
+
+`;
+
+
+
+document.getElementById("productCount").innerHTML =
+
+products;
+
+
+
+
+renderClients(clients);
+
+
+
+}
+  function renderClients(clients){
+
+
+let box =
+document.getElementById("clientsList");
+
+
+if(!box)return;
+
+
+
+let html="";
+
+
+
+clients.forEach(c=>{
+
+
+let total=0;
+
+
+c.items.forEach(i=>{
+
+total += i.sum;
+
+});
+
+
+
+html += `
+
+<div class="client">
+
+
+<b>
+
+${c.name}
+
+</b>
+
+
+<br>
+
+
+<span class="small">
+
+Итого: ${total} ₽
+
+</span>
+
+
+<br>
+
+
+<span class="small">
+
+${c.items.map(i=>`
+
+${i.name} ${i.amount}
+
+`).join("<br>")}
+
+</span>
+
+
+<br>
+
+
+<span class="small">
+
+Оплата:
+
+💵 ${c.payment.cash} ₽
+
+💳 ${c.payment.transfer} ₽
+
+🧾 ${c.payment.terminal} ₽
+
+</span>
+
+
+</div>
+
+`;
+
+
+
+});
+
+
+
+box.innerHTML =
+
+html || "Клиентов пока нет";
+
+
+}
+
+
+
+
+
+let products =
+
+JSON.parse(
+
+localStorage.getItem("products")
+
+) || [];
+
+
+
+document.getElementById("productCount").innerHTML =
+
+products.length;
+
+
+
+updateShift();
+
+
+loadShiftData();
+
+
+</script>
+
+
+</body>
+
+</html>
