@@ -21,14 +21,11 @@ background:#09090b;
 color:#fff;
 }
 
-
 .app{
 max-width:430px;
 margin:auto;
 padding:25px 18px 40px;
 }
-
-
 
 .header{
 display:flex;
@@ -36,8 +33,6 @@ align-items:center;
 gap:15px;
 margin-bottom:20px;
 }
-
-
 
 .back{
 width:45px;
@@ -50,42 +45,29 @@ justify-content:center;
 font-size:28px;
 }
 
-
-
 h1{
 margin:0;
 font-size:25px;
 }
-
 
 .header p{
 margin:5px 0 0;
 color:#999;
 }
 
-
-
 .status{
-
 background:#18181b;
 border-radius:20px;
 padding:16px;
 margin-bottom:15px;
-
 }
 
-
-
 .card{
-
 background:#18181b;
 border-radius:24px;
 padding:20px;
 margin-bottom:15px;
-
 }
-
-
 
 input, select{
 
@@ -108,8 +90,6 @@ margin-top:10px;
 
 }
 
-
-
 button{
 
 width:100%;
@@ -127,37 +107,20 @@ margin-top:12px;
 
 }
 
-
-
 .primary{
-
 background:#ff2d55;
-
 color:white;
-
 }
-
-
 
 .green{
-
 background:#30d158;
-
 color:#000;
-
 }
-
-
 
 .red{
-
 background:#ff453a;
-
 color:white;
-
 }
-
-
 
 .client{
 
@@ -171,8 +134,6 @@ margin-top:10px;
 
 }
 
-
-
 .product{
 
 display:flex;
@@ -185,8 +146,6 @@ border-bottom:1px solid #333;
 
 }
 
-
-
 .total{
 
 font-size:30px;
@@ -197,8 +156,6 @@ color:#ff4d6d;
 
 }
 
-
-
 .small{
 
 color:#999;
@@ -206,8 +163,6 @@ color:#999;
 font-size:14px;
 
 }
-
-
 
 .lock{
 
@@ -219,15 +174,11 @@ color:#999;
 
 }
 
-
-
 .payment input{
 
 margin-top:8px;
 
 }
-
-
 
 </style>
 
@@ -258,57 +209,74 @@ margin-top:8px;
 </div>
 
 
-
 <div id="status" class="status"></div>
-
 
 
 <div id="content"></div>
 
 
-
 </div>
 
-  <script>
 
-let active = localStorage.getItem("shiftActive");
+<script>
 
-let products = JSON.parse(localStorage.getItem("products")) || [];
 
-let clients = [];
+let active =
+localStorage.getItem("shiftActive");
 
-let expenses = [];    
+
+let products =
+JSON.parse(localStorage.getItem("products")) || [];
+
+
+let clients =
+JSON.parse(localStorage.getItem("shiftClients")) || [];
+
+
+let expenses =
+JSON.parse(localStorage.getItem("shiftExpenses")) || [];
+
 
 let currentClient = null;
 
-let currentItems = [];
+
+const status =
+document.getElementById("status");
 
 
-
-const status = document.getElementById("status");
-
-const content = document.getElementById("content");
-
+const content =
+document.getElementById("content");
 
 
 
 if(active === "true"){
 
+
 status.innerHTML = `
+
 🟢 <b>Смена активна</b><br>
+
 <span class="small">
+
 ${localStorage.getItem("shiftStart") || ""}
+
 </span>
+
 `;
+
 
 showShift();
 
 
-}else{
+}
+
+else{
 
 
 status.innerHTML = `
+
 🔴 <b>Смена не начата</b>
+
 `;
 
 
@@ -317,6 +285,7 @@ content.innerHTML = `
 <div class="lock">
 
 Сначала начните смену<br>
+
 на главном экране
 
 </div>
@@ -324,8 +293,6 @@ content.innerHTML = `
 `;
 
 }
-
-
 
 
 
@@ -354,23 +321,32 @@ content.innerHTML = `
 </div>
 
 
-
-
-
 <div id="clientBlock"></div>
 
 
+<div class="card">
 
+<h3>
+Клиенты за смену
+</h3>
+
+<div id="clientsList"></div>
+
+</div>
 
 
 <div class="card">
 
 
-<h3>Итоги смены</h3>
+<h3>
+Итоги смены
+</h3>
 
 
 <div class="total" id="shiftTotal">
+
 0 ₽
+
 </div>
 
 
@@ -386,38 +362,19 @@ content.innerHTML = `
 
 </div>
 
-<div class="card">
-
-<h3>Расходы</h3>
-
-<input id="expenseName" placeholder="Название расхода">
-
-<input id="expenseSum" type="number" placeholder="Сумма">
-
-<button class="primary" onclick="addExpense()">
-Добавить расход
-</button>
-
-<div id="expenseList"></div>
-
-</div>
-
 
 `;
 
+renderClientsList();
+updateTotals();
 
 
 }
-
-
-
-
-function createClient(){
+  function createClient(){
 
 
 let name =
 document.getElementById("clientName").value;
-
 
 
 if(!name)return;
@@ -436,18 +393,13 @@ payment:null
 
 
 
-clients.push(currentClient);
-
-
-
 document.getElementById("clientName").value="";
-
 
 
 showClient();
 
-}
 
+}
 
 
 
@@ -457,7 +409,6 @@ function showClient(){
 
 let box =
 document.getElementById("clientBlock");
-
 
 
 box.innerHTML=`
@@ -473,15 +424,17 @@ ${currentClient.name}
 </h3>
 
 
-
 <select id="productSelect" onchange="selectProduct()">
 
+
 <option>
+
 Выберите товар
+
 </option>
 
-</select>
 
+</select>
 
 
 <div id="amountBox"></div>
@@ -500,7 +453,6 @@ ${currentClient.name}
 
 
 <div id="clientSum"></div>
-
 
 
 <div id="paymentBox"></div>
@@ -539,7 +491,6 @@ ${p.name} — ${p.price} ₽/${p.unit}
 
 
 
-
 function selectProduct(){
 
 
@@ -549,7 +500,6 @@ document.getElementById("productSelect").value;
 
 let p =
 products[index];
-
 
 
 let box =
@@ -572,9 +522,8 @@ box.innerHTML=`
 
 `;
 
-
-
 }
+
 
 else if(p.unit==="г"){
 
@@ -586,6 +535,7 @@ box.innerHTML=`
 `;
 
 }
+
 
 else{
 
@@ -599,7 +549,6 @@ box.innerHTML=`
 }
 
 
-
 }
 
 
@@ -608,19 +557,15 @@ box.innerHTML=`
 function addItem(){
 
 
-
 let index =
 document.getElementById("productSelect").value;
-
 
 
 let p =
 products[index];
 
 
-
 if(!p)return;
-
 
 
 let amount=0;
@@ -645,13 +590,11 @@ amount =
 kg + gram/1000;
 
 
-
 text =
 kg+" кг "+gram+" г";
 
 
 }
-
 
 
 else if(p.unit==="г"){
@@ -664,7 +607,6 @@ Number(document.getElementById("gram").value || 0);
 
 amount =
 gram/1000;
-
 
 
 text =
@@ -685,11 +627,11 @@ Number(document.getElementById("count").value || 0);
 amount=count;
 
 
-text=count+" шт";
+text =
+count+" шт";
 
 
 }
-
 
 
 
@@ -712,6 +654,7 @@ sum:sum
 
 renderClient();
 
+
 }
 
 
@@ -727,6 +670,7 @@ document.getElementById("items");
 
 let html="";
 
+
 let total=0;
 
 
@@ -737,6 +681,7 @@ currentClient.items.forEach(i=>{
 total += i.sum;
 
 
+
 html += `
 
 <div class="product">
@@ -744,6 +689,7 @@ html += `
 <span>
 
 ${i.name}<br>
+
 ${i.amount}
 
 </span>
@@ -754,6 +700,7 @@ ${i.amount}
 ${i.sum} ₽
 
 </b>
+
 
 </div>
 
@@ -773,7 +720,9 @@ document.getElementById("clientSum").innerHTML=
 <br>
 
 <h3>
+
 Итого клиента: ${total} ₽
+
 </h3>
 
 `;
@@ -800,7 +749,9 @@ document.getElementById("paymentBox").innerHTML=
 
 
 <h3>
+
 Оплата клиента
+
 </h3>
 
 
@@ -822,17 +773,13 @@ document.getElementById("paymentBox").innerHTML=
 
 </div>
 
-
 `;
 
 }
 
 
 
-
-
 function closeClient(total){
-
 
 
 let cash =
@@ -851,15 +798,12 @@ Number(document.getElementById("terminal").value || 0);
 if(cash+transfer+terminal !== total){
 
 
-alert(
-"Оплата не совпадает с суммой клиента"
-);
-
+alert("Оплата не совпадает с суммой клиента");
 
 return;
 
-}
 
+}
 
 
 
@@ -874,18 +818,17 @@ terminal:terminal
 };
 
 
-// сохраняем клиента в активную смену
 
-let savedClients =
-JSON.parse(localStorage.getItem("shiftClients")) || [];
+clients.push(currentClient);
 
-
-savedClients.push(currentClient);
 
 
 localStorage.setItem(
+
 "shiftClients",
-JSON.stringify(savedClients)
+
+JSON.stringify(clients)
+
 );
 
 
@@ -893,15 +836,101 @@ JSON.stringify(savedClients)
 currentClient=null;
 
 
-
 updateTotals();
 
+renderClientsList();
 
 
 alert("Клиент сохранён");
 
 
 showShift();
+
+
+}
+  function renderClientsList(){
+
+let box =
+document.getElementById("clientsList");
+
+
+if(!box)return;
+
+
+
+let html="";
+
+
+
+clients.forEach(c=>{
+
+
+let total=0;
+
+
+c.items.forEach(i=>{
+
+total += i.sum;
+
+});
+
+
+
+html += `
+
+<div class="client">
+
+
+<b>${c.name}</b>
+
+
+<br><br>
+
+
+${c.items.map(i=>`
+
+${i.name} ${i.amount} — ${i.sum} ₽
+
+`).join("<br>")}
+
+
+<br><br>
+
+
+<b>
+
+Итого: ${total} ₽
+
+</b>
+
+
+<br>
+
+
+<span class="small">
+
+
+Оплата:
+
+💵 ${c.payment.cash} ₽ |
+
+💳 ${c.payment.transfer} ₽ |
+
+🧾 ${c.payment.terminal} ₽
+
+
+</span>
+
+
+</div>
+
+`;
+
+});
+
+
+box.innerHTML =
+html || "Клиентов пока нет";
 
 
 }
@@ -929,7 +958,7 @@ clients.forEach(c=>{
 c.items.forEach(i=>{
 
 
-total+=i.sum;
+total += i.sum;
 
 
 });
@@ -938,11 +967,13 @@ total+=i.sum;
 
 if(c.payment){
 
-cash+=c.payment.cash;
 
-transfer+=c.payment.transfer;
+cash += c.payment.cash || 0;
 
-terminal+=c.payment.terminal;
+transfer += c.payment.transfer || 0;
+
+terminal += c.payment.terminal || 0;
+
 
 }
 
@@ -951,35 +982,35 @@ terminal+=c.payment.terminal;
 
 
 
-
-let box =
+let shiftTotal =
 document.getElementById("shiftTotal");
 
 
 
-if(box)
+if(shiftTotal)
 
-box.innerHTML =
+shiftTotal.innerHTML =
 total+" ₽";
 
 
 
-let p =
+let payments =
 document.getElementById("paymentsTotal");
 
 
 
-if(p)
+if(payments)
 
-p.innerHTML=
 
-`
+payments.innerHTML = `
+
 
 💵 Наличные: ${cash} ₽<br>
 
 💳 Перевод: ${transfer} ₽<br>
 
 🧾 Терминал: ${terminal} ₽
+
 
 `;
 
@@ -988,19 +1019,82 @@ p.innerHTML=
 }
 
 
-function addExpense(){
+
+
+function finishShift(){
+
+
+
+let cash=0;
+
+let transfer=0;
+
+let terminal=0;
+
+let sales=0;
+
+
+
+clients.forEach(c=>{
+
+
+c.items.forEach(i=>{
+
+sales+=i.sum;
+
+});
+
+
+if(c.payment){
+
+cash += c.payment.cash || 0;
+
+transfer += c.payment.transfer || 0;
+
+terminal += c.payment.terminal || 0;
+
+}
+
+
+});
+
+
+
+let haveExpense =
+confirm("Были расходы за смену?");
+
+
+
+let expenseTotal=0;
+
+let shiftExpenses=[];
+
+
+
+if(haveExpense){
+
+
+let more=true;
+
+
+
+while(more){
+
 
 let name =
-document.getElementById("expenseName").value;
+prompt("За что был расход?");
+
+
 
 let sum =
-Number(document.getElementById("expenseSum").value || 0);
+Number(prompt("Сумма расхода") || 0);
 
 
-if(!name || !sum) return;
+
+if(name && sum){
 
 
-expenses.push({
+shiftExpenses.push({
 
 name:name,
 
@@ -1009,122 +1103,94 @@ sum:sum
 });
 
 
-document.getElementById("expenseName").value="";
-document.getElementById("expenseSum").value="";
-
-
-renderExpenses();
+expenseTotal += sum;
 
 
 }
 
 
 
-function renderExpenses(){
+more =
+confirm("Добавить ещё расход?");
 
-let box =
-document.getElementById("expenseList");
-
-
-let html="";
-
-let total=0;
-
-
-expenses.forEach(e=>{
-
-total += e.sum;
-
-
-html += `
-
-<div class="product">
-
-<span>
-${e.name}
-</span>
-
-<b>
-${e.sum} ₽
-</b>
-
-</div>
-
-`;
-
-});
-
-
-html += `
-
-<br>
-
-<b>
-Всего расходов: ${total} ₽
-</b>
-
-`;
-
-
-box.innerHTML=html;
 
 }
 
-function finishShift(){
 
-let totalSales = 0;
-let cash = 0;
-let transfer = 0;
-let terminal = 0;
-
-
-clients.forEach(c=>{
-
-c.items.forEach(i=>{
-
-totalSales += i.sum;
-
-});
-
-
-if(c.payment){
-
-cash += c.payment.cash || 0;
-transfer += c.payment.transfer || 0;
-terminal += c.payment.terminal || 0;
 
 }
 
-});
+
+
+let finalCash =
+cash - expenseTotal;
 
 
 
-let expenseTotal = 0;
+let report={
 
 
-expenses.forEach(e=>{
-
-expenseTotal += e.sum;
-
-});
+date:
+new Date().toLocaleString(),
 
 
+sales:sales,
 
-let finalCash = cash - expenseTotal;
+
+cash:cash,
+
+
+transfer:transfer,
+
+
+terminal:terminal,
+
+
+expenses:shiftExpenses,
+
+
+expenseTotal:expenseTotal,
+
+
+finalCash:finalCash,
+
+
+clients:clients
+
+
+};
+
+
+
+localStorage.setItem(
+
+"lastShiftReport",
+
+JSON.stringify(report)
+
+);
+
+
+
+localStorage.removeItem("shiftActive");
+
+localStorage.removeItem("shiftClients");
 
 
 
 alert(
 
-`Закрытие смены
+`Смена закрыта
 
 
-Продажи: ${totalSales} ₽
+Продажи: ${sales} ₽
 
 
 Наличные: ${cash} ₽
 
-Перевод: ${transfer} ₽
+
+Переводы: ${transfer} ₽
+
 
 Терминал: ${terminal} ₽
 
@@ -1133,15 +1199,23 @@ alert(
 
 
 Остаток налички:
+
 ${finalCash} ₽`
 
 );
 
 
+
+location.reload();
+
+
+
 }
-    </script>
+
+
+
+</script>
 
 </body>
 
 </html>
-  
