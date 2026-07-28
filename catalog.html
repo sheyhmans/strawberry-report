@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Каталог товаров</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body>
+
+
+<div class="app">
+
+
+<h1>📦 Каталог товаров</h1>
+
+
+<div class="card">
+
+
+<label>Название товара</label>
+
+<input id="newName" type="text" placeholder="Например: Ст.клубника в шк">
+
+
+<label>Цена</label>
+
+<input id="newPrice" type="number" placeholder="900">
+
+
+<label>Категория</label>
+
+<select id="newCategory">
+
+<option>🍓 Клубника</option>
+
+<option>🍫 Шоколад</option>
+
+<option>🌸 Цветы</option>
+
+<option>🍍 Фрукты</option>
+
+<option>📦 Другое</option>
+
+</select>
+
+
+
+<button onclick="addCatalogItem()">
+
+➕ Добавить в каталог
+
+</button>
+
+
+</div>
+
+
+
+<div class="card">
+
+
+<h2>Мои товары</h2>
+
+
+<div id="catalogList">
+
+</div>
+
+
+</div>
+
+
+
+<a href="index.html">
+
+<button>
+
+⬅ Назад
+
+</button>
+
+</a>
+
+
+
+</div>
+
+
+
+<script src="app.js"></script>
+
+
+</body>
+
+</html>
