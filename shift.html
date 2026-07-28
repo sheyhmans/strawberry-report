@@ -1219,7 +1219,7 @@ let history =
 
 JSON.parse(
 
-localStorage.getItem("shiftHistory")
+localStorage.getItem("history")
 
 ) || [];
 
@@ -1231,7 +1231,7 @@ history.push(report);
 
 localStorage.setItem(
 
-"shiftHistory",
+"history",
 
 JSON.stringify(history)
 
