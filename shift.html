@@ -1162,11 +1162,25 @@ clients:clients
 
 
 
+let history =
+
+JSON.parse(
+
+localStorage.getItem("shiftHistory")
+
+) || [];
+
+
+
+history.push(report);
+
+
+
 localStorage.setItem(
 
-"lastShiftReport",
+"shiftHistory",
 
-JSON.stringify(report)
+JSON.stringify(history)
 
 );
 
@@ -1176,7 +1190,7 @@ localStorage.removeItem("shiftActive");
 
 localStorage.removeItem("shiftClients");
 
-
+localStorage.removeItem("shiftStart");
 
 alert(
 
