@@ -277,6 +277,8 @@ let products = JSON.parse(localStorage.getItem("products")) || [];
 
 let clients = [];
 
+let expenses = [];    
+
 let currentClient = null;
 
 let currentItems = [];
@@ -381,6 +383,22 @@ content.innerHTML = `
 
 </button>
 
+
+</div>
+
+<div class="card">
+
+<h3>Расходы</h3>
+
+<input id="expenseName" placeholder="Название расхода">
+
+<input id="expenseSum" type="number" placeholder="Сумма">
+
+<button class="primary" onclick="addExpense()">
+Добавить расход
+</button>
+
+<div id="expenseList"></div>
 
 </div>
 
@@ -955,7 +973,87 @@ p.innerHTML=
 }
 
 
+function addExpense(){
 
+let name =
+document.getElementById("expenseName").value;
+
+let sum =
+Number(document.getElementById("expenseSum").value || 0);
+
+
+if(!name || !sum) return;
+
+
+expenses.push({
+
+name:name,
+
+sum:sum
+
+});
+
+
+document.getElementById("expenseName").value="";
+document.getElementById("expenseSum").value="";
+
+
+renderExpenses();
+
+
+}
+
+
+
+function renderExpenses(){
+
+let box =
+document.getElementById("expenseList");
+
+
+let html="";
+
+let total=0;
+
+
+expenses.forEach(e=>{
+
+total += e.sum;
+
+
+html += `
+
+<div class="product">
+
+<span>
+${e.name}
+</span>
+
+<b>
+${e.sum} ₽
+</b>
+
+</div>
+
+`;
+
+});
+
+
+html += `
+
+<br>
+
+<b>
+Всего расходов: ${total} ₽
+</b>
+
+`;
+
+
+box.innerHTML=html;
+
+}
 
 function finishShift(){
 
