@@ -12,67 +12,52 @@
 <style>
 
 *{
-box-sizing:border-box;
-font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",Arial,sans-serif;
+    box-sizing:border-box;
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",Arial,sans-serif;
 }
 
 
 body{
-
-margin:0;
-
-background:#09090b;
-
-color:white;
-
+    margin:0;
+    background:#09090b;
+    color:white;
 }
-
 
 
 .app{
-
-max-width:430px;
-
-margin:auto;
-
-padding:25px 18px;
-
+    max-width:430px;
+    margin:auto;
+    padding:25px 18px 40px;
 }
 
 
 
+/* HEADER */
 
 .header{
 
-display:flex;
-
-align-items:center;
-
-gap:15px;
-
-margin-bottom:25px;
+    display:flex;
+    align-items:center;
+    gap:15px;
+    margin-bottom:30px;
 
 }
-
 
 
 .back{
 
-width:45px;
+    width:45px;
+    height:45px;
 
-height:45px;
+    background:#18181b;
 
-background:#18181b;
+    border-radius:15px;
 
-border-radius:15px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
 
-display:flex;
-
-align-items:center;
-
-justify-content:center;
-
-font-size:25px;
+    font-size:25px;
 
 }
 
@@ -80,36 +65,35 @@ font-size:25px;
 
 h1{
 
-margin:0;
-
-font-size:25px;
+    margin:0;
+    font-size:25px;
 
 }
-
 
 
 .header p{
 
-margin:5px 0;
+    margin:5px 0 0;
 
-color:#999;
+    color:#999;
 
 }
 
 
 
+/* CARDS */
 
 .card{
 
-background:#18181b;
+    background:#18181b;
 
-border-radius:22px;
+    border-radius:24px;
 
-padding:20px;
+    padding:22px;
 
-margin-bottom:15px;
+    margin-bottom:18px;
 
-border:1px solid #252525;
+    border:1px solid #252525;
 
 }
 
@@ -118,95 +102,74 @@ border:1px solid #252525;
 
 label{
 
-color:#999;
+    display:block;
 
-font-size:14px;
+    color:#999;
 
-}
+    font-size:14px;
 
-
-
-
-input{
-
-width:100%;
-
-height:50px;
-
-margin-top:8px;
-
-background:#09090b;
-
-border:1px solid #333;
-
-border-radius:15px;
-
-color:white;
-
-padding:0 15px;
-
-font-size:16px;
+    margin-bottom:10px;
 
 }
 
 
 
-
+input,
 select{
 
-width:100%;
+    width:100%;
 
-height:50px;
+    height:52px;
 
-margin-top:8px;
+    background:#09090b;
 
-background:#09090b;
+    border:1px solid #333;
 
-border:1px solid #333;
+    border-radius:16px;
 
-border-radius:15px;
+    color:white;
 
-color:white;
+    padding:0 16px;
 
-padding:0 15px;
+    font-size:16px;
 
-font-size:16px;
+    margin-bottom:22px;
 
 }
-
 
 
 
 button{
 
-width:100%;
+    width:100%;
 
-height:52px;
+    height:54px;
 
-border:0;
+    border:0;
 
-border-radius:17px;
+    border-radius:18px;
 
-background:#ff2d55;
+    background:#ff2d55;
 
-color:white;
+    color:white;
 
-font-size:17px;
+    font-size:17px;
 
-font-weight:600;
+    font-weight:600;
 
 }
 
 
 
-
 .total{
 
-font-size:28px;
+    font-size:32px;
 
-font-weight:700;
+    font-weight:700;
 
-color:#ff4d6d;
+    color:#ff4d6d;
+
+    margin-top:10px;
 
 }
 
@@ -214,13 +177,15 @@ color:#ff4d6d;
 
 .sale{
 
-display:flex;
+    display:flex;
 
-justify-content:space-between;
+    justify-content:space-between;
 
-padding:15px 0;
+    align-items:center;
 
-border-bottom:1px solid #333;
+    padding:16px 0;
+
+    border-bottom:1px solid #333;
 
 }
 
@@ -228,14 +193,13 @@ border-bottom:1px solid #333;
 
 .empty{
 
-text-align:center;
+    text-align:center;
 
-color:#777;
+    color:#777;
 
-margin:30px;
+    padding:25px 0;
 
 }
-
 
 
 </style>
@@ -244,15 +208,14 @@ margin:30px;
 </head>
 
 
-
 <body>
-
 
 
 <div class="app">
 
 
 <div class="header">
+
 
 <div class="back" onclick="history.back()">
 ‹
@@ -273,7 +236,6 @@ margin:30px;
 
 
 
-
 <div class="card">
 
 
@@ -282,12 +244,11 @@ margin:30px;
 </label>
 
 
-<input id="client" placeholder="Имя клиента (не обязательно)">
+<input id="client" placeholder="Введите имя клиента">
 
 
 
 </div>
-
 
 
 
@@ -300,14 +261,11 @@ margin:30px;
 </label>
 
 
-
 <select id="product">
-
 
 <option>
 Выберите товар
 </option>
-
 
 </select>
 
@@ -379,7 +337,6 @@ margin:30px;
 
 
 
-
 </div>
 
 
@@ -408,8 +365,8 @@ let option=document.createElement("option");
 
 option.value=index;
 
-option.textContent=
-item.name+" - "+item.price+" ₽";
+option.textContent =
+item.name + " — " + item.price + " ₽";
 
 
 select.appendChild(option);
@@ -434,12 +391,12 @@ if(index==="Выберите товар") return;
 let product=products[index];
 
 
-let count=
+let count =
 Number(document.getElementById("count").value);
 
 
 
-let client=
+let client =
 document.getElementById("client").value;
 
 
@@ -448,20 +405,17 @@ let sale={
 
 name:product.name,
 
-price:product.price,
-
 count:count,
 
-client:client,
+sum:product.price * count,
 
-sum:product.price*count
+client:client
 
 };
 
 
 
 sales.push(sale);
-
 
 
 localStorage.setItem(
@@ -479,12 +433,14 @@ showSales();
 
 
 
+
 function showSales(){
 
 
 let box=document.getElementById("sales");
 
 let total=0;
+
 
 
 if(sales.length===0){
@@ -505,10 +461,11 @@ box.innerHTML="";
 sales.forEach(item=>{
 
 
-total+=item.sum;
+total += item.sum;
 
 
-box.innerHTML+=`
+
+box.innerHTML += `
 
 <div class="sale">
 
@@ -527,12 +484,13 @@ ${item.sum} ₽
 `;
 
 
+
 });
 
 
 
-document.getElementById("total").innerHTML=
-total+" ₽";
+document.getElementById("total").innerHTML =
+total + " ₽";
 
 
 }
