@@ -1,138 +1,94 @@
 let catalog = JSON.parse(localStorage.getItem("catalog")) || [];
-
 let history = JSON.parse(localStorage.getItem("history")) || [];
 
-let clientCount = 1;
+let clientCounter = 1;
 
 
-// ==========================
+// =======================
 // СОХРАНЕНИЕ
-// ==========================
+// =======================
 
 function saveCatalog(){
-
-    localStorage.setItem(
-        "catalog",
-        JSON.stringify(catalog)
-    );
-
+    localStorage.setItem("catalog", JSON.stringify(catalog));
 }
 
 
 function saveHistory(){
-
-    localStorage.setItem(
-        "history",
-        JSON.stringify(history)
-    );
-
+    localStorage.setItem("history", JSON.stringify(history));
 }
 
 
-
-// ==========================
+// =======================
 // ФОРМАТ ДЕНЕГ
-// ==========================
+// =======================
 
-function formatMoney(value){
-
-    return Number(value || 0)
-    .toLocaleString("ru-RU");
-
+function money(value){
+    return Number(value || 0).toLocaleString("ru-RU");
 }
 
 
 
-// ==========================
+// =======================
 // КАТАЛОГ
-// ==========================
-
+// =======================
 
 function addCatalogItem(){
 
     let name = document.getElementById("newName").value;
-
-    let price = Number(
-        document.getElementById("newPrice").value
-    );
-
-    let category =
-    document.getElementById("newCategory").value;
-
-
-    let unit =
-    document.getElementById("newUnit").value;
-
+    let price = Number(document.getElementById("newPrice").value);
+    let category = document.getElementById("newCategory").value;
+    let unit = document.getElementById("newUnit").value;
 
 
     if(!name || !price){
-
-        alert("Заполните название и цену");
-
+        alert("Введите название и цену");
         return;
-
     }
 
 
-
     catalog.push({
-
-        name:name,
-
-        price:price,
-
-        category:category,
-
-        unit:unit
-
+        name,
+        price,
+        category,
+        unit
     });
-
 
 
     saveCatalog();
 
+    renderCatalog();
 
 
     document.getElementById("newName").value="";
     document.getElementById("newPrice").value="";
 
-
-    renderCatalog();
-
 }
-
 
 
 
 function renderCatalog(){
 
-    let list =
-    document.getElementById("catalogList");
+    let box=document.getElementById("catalogList");
+
+    if(!box) return;
 
 
-    if(!list) return;
-
-
-
-    list.innerHTML="";
-
+    box.innerHTML="";
 
 
     catalog.forEach((item,index)=>{
 
 
-        let block =
-        document.createElement("div");
+        let div=document.createElement("div");
+
+        div.className="card";
 
 
-        block.className="card";
-
-
-        block.innerHTML=`
+        div.innerHTML=`
 
         <b>${item.name}</b><br>
 
-        Цена: ${formatMoney(item.price)}₽<br>
+        Цена: ${money(item.price)}₽<br>
 
         Ед: ${item.unit}<br>
 
@@ -140,27 +96,22 @@ function renderCatalog(){
 
         <br><br>
 
-        <button onclick="deleteCatalogItem(${index})">
-
+        <button onclick="deleteCatalog(${index})">
         ❌ Удалить
-
         </button>
 
         `;
 
 
-        list.appendChild(block);
-
+        box.appendChild(div);
 
     });
-
 
 }
 
 
 
-
-function deleteCatalogItem(index){
+function deleteCatalog(index){
 
     catalog.splice(index,1);
 
@@ -173,57 +124,49 @@ function deleteCatalogItem(index){
 
 
 
-// ==========================
-// ТОВАРЫ В ПРОДАЖЕ
-// ==========================
+// =======================
+// ТОВАРЫ
+// =======================
 
 
-function loadCatalog(select){
+function fillProducts(){
 
 
-    if(!select) return;
+    document.querySelectorAll(".productSelect")
+    .forEach(select=>{
 
 
-    select.innerHTML="";
+        select.innerHTML="";
 
 
-    let first =
-    document.createElement("option");
+        let first=document.createElement("option");
 
+        first.value="";
 
-    first.value="";
+        first.textContent="Выберите товар";
 
-    first.textContent=
-    "Выберите товар";
-
-
-    select.appendChild(first);
+        select.appendChild(first);
 
 
 
-
-    catalog.forEach((item,index)=>{
-
-
-        let option =
-        document.createElement("option");
+        catalog.forEach((item,index)=>{
 
 
-        option.value=index;
+            let option=document.createElement("option");
+
+            option.value=index;
+
+            option.textContent=
+            item.name+" "+money(item.price)+"₽";
 
 
-        option.textContent =
-        item.name +
-        " — " +
-        formatMoney(item.price) +
-        "₽";
+            select.appendChild(option);
 
 
-        select.appendChild(option);
+        });
 
 
     });
-
 
 }
 
@@ -231,193 +174,133 @@ function loadCatalog(select){
 
 
 function calculateProduct(product){
-    function calculateClientTotal(client){
-
-    let total = 0;
 
 
-    let products = client.querySelectorAll(".product");
+    let select=product.querySelector(".productSelect");
+
+    let quantity=
+    Number(product.querySelector(".quantity").value || 0);
 
 
-    products.forEach(product=>{
+    let custom=
+    Number(product.querySelector(".customPrice").value || 0);
 
 
-        let select = product.querySelector(".productSelect");
 
-        let quantity = Number(
-            product.querySelector(".quantity").value || 0
-        );
+    let item=catalog[select.value];
 
 
-        let item = catalog[select.value];
+    let price=0;
 
 
-        if(item){
+    if(custom){
 
-            total += item.price * quantity;
+        price=custom;
 
-        }
+    }
+    else if(item){
+
+        price=item.price;
+
+    }
+
+
+
+    let total=price*quantity;
+
+
+
+    product.querySelector(".productTotal").textContent=
+    money(total);
+
+
+
+    return total;
+
+}
+
+
+
+function calculateClient(client){
+
+
+    let total=0;
+
+
+    client.querySelectorAll(".product")
+    .forEach(product=>{
+
+
+        total+=calculateProduct(product);
 
 
     });
 
 
-    let payment = client.querySelector(".paymentSum");
 
+    client.querySelector(".clientTotal").textContent=
+    money(total);
 
-    if(payment){
-
-        payment.value = total;
-
-    }
 
 }
 
 
-    let select =
-    product.querySelector(".productSelect");
 
 
-    let quantity =
-    Number(
-        product.querySelector(".quantity").value
-    );
+document.addEventListener("input",function(e){
 
 
-
-    let total =
-    product.querySelector(".productTotal");
+    let client=e.target.closest(".client");
 
 
+    if(client){
 
-    let item =
-    catalog[select.value];
-
-
-
-    if(item){
-
-        total.textContent =
-        formatMoney(item.price * quantity);
+        calculateClient(client);
 
     }
 
-    else{
+});
 
-        total.textContent="0";
 
-    }// ==========================
-// ДОБАВЛЕНИЕ ТОВАРА К КЛИЕНТУ
-// ==========================
+
+document.addEventListener("change",function(e){
+
+
+    let client=e.target.closest(".client");
+
+
+    if(client){
+
+        calculateClient(client);
+
+    }
+
+
+});
+
+
+
+
+// =======================
+// КЛИЕНТЫ
+// =======================
 
 
 function addProduct(button){
 
 
-    let products =
-    button.previousElementSibling;
+    let list=button.previousElementSibling;
 
 
-
-    let product =
-    document.createElement("div");
+    let div=document.createElement("div");
 
 
-    product.className="product";
+    div.className="product";
 
 
+    div.innerHTML=`
 
-    product.innerHTML=`
-
-    <label>Выбрать товар</label>
-
-    <select class="productSelect"></select>
-
-
-    <label>Количество</label>
-
-    <input class="quantity" type="number" value="1">
-
-
-    <label>Дополнение</label>
-
-    <input class="productInfo" type="text"
-    placeholder="290гр, N122, скидка">
-
-
-    <p>
-    Сумма:
-    <span class="productTotal">0</span>₽
-    </p>
-
-
-    <button onclick="removeProduct(this)">
-    ❌ Удалить товар
-    </button>
-
-    `;
-
-
-
-    products.appendChild(product);
-
-
-
-    loadCatalog(
-        product.querySelector(".productSelect")
-    );
-
-
-}
-
-
-
-function removeProduct(button){
-
-    button.parentElement.remove();
-
-}
-
-
-
-
-// ==========================
-// ДОБАВЛЕНИЕ КЛИЕНТА
-// ==========================
-
-
-function addClient(){
-
-
-    clientCount++;
-
-
-    let clients =
-    document.getElementById("clients");
-
-
-
-    let client =
-    document.createElement("div");
-
-
-
-    client.className="client card";
-
-
-
-    client.innerHTML=`
-
-    <h2>Клиент №${clientCount}</h2>
-
-
-    <div class="products">
-
-
-    <div class="product">
-
-
-    <label>Выбрать товар</label>
+    <label>Товар</label>
 
     <select class="productSelect"></select>
 
@@ -432,6 +315,13 @@ function addClient(){
     <input class="productInfo" type="text">
 
 
+    <label>
+    Своя цена
+    </label>
+
+    <input class="customPrice" type="number">
+
+
     <p>
     Сумма:
     <span class="productTotal">0</span>₽
@@ -442,12 +332,68 @@ function addClient(){
     ❌ Удалить товар
     </button>
 
+    `;
+
+
+    list.appendChild(div);
+
+
+    fillProducts();
+
+}
+
+
+
+
+function removeProduct(button){
+
+    button.parentElement.remove();
+
+}
+
+
+
+function addClient(){
+
+
+    clientCounter++;
+
+
+    let clients=document.getElementById("clients");
+
+
+    let div=document.createElement("div");
+
+
+    div.className="client card";
+
+
+    div.innerHTML=`
+
+    <h2>Клиент №${clientCounter}</h2>
+
+
+    <div class="products">
+
+    <div class="product">
+
+    <select class="productSelect"></select>
+
+    <input class="quantity" type="number" value="1">
+
+    <input class="productInfo" type="text">
+
+    <input class="customPrice" type="number">
+
+
+    <p>
+    Сумма:
+    <span class="productTotal">0</span>₽
+    </p>
 
     </div>
 
-
     </div>
-
 
 
     <button onclick="addProduct(this)">
@@ -455,8 +401,10 @@ function addClient(){
     </button>
 
 
-
-    <label>Оплата</label>
+    <h3>
+    Итого:
+    <span class="clientTotal">0</span>₽
+    </h3>
 
 
     <select class="payment">
@@ -470,36 +418,20 @@ function addClient(){
     </select>
 
 
-
-    <label>Сумма оплаты</label>
-
-    <input class="paymentSum" type="number">
-
-
-
-    <label>Время</label>
-
-    <input class="paymentTime" type="text">
-
+    <input class="paymentTime" placeholder="01:27">
 
 
     <button onclick="removeClient(this)">
     ❌ Удалить клиента
     </button>
 
-
     `;
 
 
-
-    clients.appendChild(client);
-
+    clients.appendChild(div);
 
 
-    loadCatalog(
-        client.querySelector(".productSelect")
-    );
-
+    fillProducts();
 
 }
 
@@ -513,168 +445,89 @@ function removeClient(button){
 
 
 
-
-// ==========================
-// АВТОРАСЧЕТ ЦЕНЫ
-// ==========================
-
-
-document.addEventListener("change",function(e){
-
-
-    if(
-    e.target.classList.contains("productSelect") ||
-    e.target.classList.contains("quantity")
-    ){
-
-
-        let product =
-        e.target.closest(".product");
-
-
-        calculateProduct(product);
-        calculateClientTotal(
-    e.target.closest(".client")
-);
-
-
-    }
-
-
-});
-
-
-
-
-// ==========================
-// СОЗДАНИЕ ОТЧЕТА
-// ==========================
+// =======================
+// ОТЧЕТ
+// =======================
 
 
 function createReport(){
 
 
-    let report="";
+    let date=document.getElementById("date").value;
 
 
+    let d=new Date(date);
 
-    let date =
-    document.getElementById("date").value;
 
+    let dateText="";
 
 
     if(date){
 
-
-        let d =
-        new Date(date);
-
-
-
-        let day =
-        String(d.getDate())
-        .padStart(2,"0");
-
-
-        let month =
-        String(d.getMonth()+1)
-        .padStart(2,"0");
-
-
-
-        report += day+"."+month+"\n\n";
-
+        dateText=
+        String(d.getDate()).padStart(2,"0")
+        +"."+
+        String(d.getMonth()+1).padStart(2,"0");
 
     }
 
 
 
-    let color =
-    document.getElementById("colorCash").value;
+    let report=dateText+"\n\n";
 
 
-
-    let fruit =
-    document.getElementById("fruitCash").value;
-
-
-
-    report +=
-    "Цвет Касса: "+
-    formatMoney(color)+"\n";
+    report+="Цвет Касса: "
+    +money(document.getElementById("colorCash").value)
+    +"\n";
 
 
-    report +=
-    "Фрукт касса: "+
-    formatMoney(fruit)+"\n\n";
+    report+="Фрукт касса: "
+    +money(document.getElementById("fruitCash").value)
+    +"\n\n";
 
 
 
     let nal=0;
-
     let transfer=0;
-
     let terminal=0;
 
 
 
-    let clients =
-    document.querySelectorAll(".client");
+    document.querySelectorAll(".client")
+    .forEach((client,index)=>{
+
+
+        report+="Клиент: "+(index+1)+"\n";
 
 
 
-    clients.forEach((client,index)=>{
+        client.querySelectorAll(".product")
+        .forEach(product=>{
 
 
-        report +=
-        "Клиент: "+
-        (index+1)+"\n";
+            let select=product.querySelector(".productSelect");
 
-
-
-        let products =
-        client.querySelectorAll(".product");
-
-
-
-        products.forEach(product=>{
-
-
-            let select =
-            product.querySelector(".productSelect");
-
-
-
-            let item =
-            catalog[select.value];
-
+            let item=catalog[select.value];
 
 
             if(item){
 
 
-                let quantity =
+                let qty=
                 product.querySelector(".quantity").value;
 
 
-
-                let info =
+                let info=
                 product.querySelector(".productInfo").value;
 
 
-
-                report +=
-                item.name+
-                " - "+
-                quantity+
-                item.unit;
-
+                report+=
+                item.name+" - "+qty+item.unit;
 
 
                 if(info){
 
-                    report +=
-                    " ("+info+")";
+                    report+=" ("+info+")";
 
                 }
 
@@ -689,34 +542,29 @@ function createReport(){
 
 
 
-        let payment =
+        let sum=
+        Number(client.querySelector(".clientTotal").textContent.replace(/\s/g,""));
+
+
+
+        let pay=
         client.querySelector(".payment").value;
 
 
 
-        let sum =
-        Number(
-        client.querySelector(".paymentSum").value || 0
-        );
+        if(pay=="Нал") nal+=sum;
+
+        if(pay=="Перевод") transfer+=sum;
+
+        if(pay=="Терминал") terminal+=sum;
 
 
 
-        if(payment=="Нал") nal+=sum;
-
-        if(payment=="Перевод") transfer+=sum;
-
-        if(payment=="Терминал") terminal+=sum;
+        report+="("+pay+" "+money(sum)+"₽";
 
 
-
-        report+="\n("+payment+" "+
-        formatMoney(sum)+"₽";
-
-
-
-        let time =
+        let time=
         client.querySelector(".paymentTime").value;
-
 
 
         if(time){
@@ -726,7 +574,6 @@ function createReport(){
         }
 
 
-
         report+=")\n\n";
 
 
@@ -734,90 +581,141 @@ function createReport(){
 
 
 
-    let expenses =
-    document.getElementById("expenses").value;
+    report+="Расход: "
+    +(document.getElementById("expenses").value || "небыло")
+    +"\n\n";
 
 
+    report+="Нал: "+money(nal)+"₽\n";
 
-    report+="Расход: ";
-
-    report+= expenses ? expenses : "небыло";
-
-
-    report+="\n\n";
-
-
-
-    report+="Нал: "+
-    formatMoney(nal)+"₽\n";
-
-
-    report+="Перевод: "+
-    formatMoney(transfer)+"₽\n";
-
+    report+="Перевод: "+money(transfer)+"₽\n";
 
 
     if(terminal){
 
-        report+="Терминал: "+
-        formatMoney(terminal)+"₽\n";
+        report+="Терминал: "+money(terminal)+"₽\n";
 
     }
 
 
-
     report+="\nПо клубникам:\n";
 
-
-    report+=
-    document.getElementById("strawberryInfo").value;
+    report+=document.getElementById("strawberryInfo").value;
 
 
 
     history.push({
 
-        date:date,
+        date:dateText,
 
         text:report
 
     });
 
 
-
     saveHistory();
 
 
+    document.getElementById("reportResult").style.display="block";
 
-    alert(report);
+    document.getElementById("reportText").value=report;
 
 
 }
 
 
 
+function copyReport(){
 
-// ==========================
-// ЗАГРУЗКА
-// ==========================
+    navigator.clipboard.writeText(
+        document.getElementById("reportText").value
+    );
+
+    alert("Отчет скопирован");
+
+}
 
 
-document.addEventListener("DOMContentLoaded",()=>{
+
+// =======================
+// ИСТОРИЯ
+// =======================
 
 
-    document
-    .querySelectorAll(".productSelect")
-    .forEach(select=>{
+function showHistory(){
 
-        loadCatalog(select);
+
+    let box=document.getElementById("historyList");
+
+
+    if(!box) return;
+
+
+    box.innerHTML="";
+
+
+    history.forEach((item,index)=>{
+
+
+        let div=document.createElement("div");
+
+
+        div.className="card";
+
+
+        div.innerHTML=`
+
+        <b>${item.date}</b>
+
+        <textarea>${item.text}</textarea>
+
+
+        <button onclick="copyOld(${index})">
+        📋 Копировать
+        </button>
+
+        `;
+
+
+        box.appendChild(div);
+
 
     });
 
 
+}
+
+
+
+function copyOld(index){
+
+    navigator.clipboard.writeText(
+        history[index].text
+    );
+
+}
+
+
+
+function clearHistory(){
+
+    history=[];
+
+    saveHistory();
+
+    showHistory();
+
+}
+
+
+
+
+document.addEventListener("DOMContentLoaded",()=>{
 
     renderCatalog();
 
+    fillProducts();
+
+    showHistory();
 
 });
-
-
-}
