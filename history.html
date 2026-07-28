@@ -180,7 +180,7 @@ box.innerHTML="";
 
 
 
-historyData.reverse().forEach(item=>{
+historyData.slice().reverse().forEach(item=>{
 
 
 
@@ -342,7 +342,7 @@ function copyLastReport(){
 
 let historyData =
 JSON.parse(
-localStorage.getItem("shiftHistory")
+localStorage.getItem("history")
 ) || [];
 
 
