@@ -12,33 +12,45 @@
 <style>
 
 *{
-    box-sizing:border-box;
-    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",Arial,sans-serif;
+box-sizing:border-box;
+font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",Arial,sans-serif;
 }
 
 
 body{
-    margin:0;
-    min-height:100vh;
-    background:#09090b;
-    color:white;
+
+margin:0;
+
+background:#09090b;
+
+color:white;
+
 }
+
 
 
 .app{
-    max-width:430px;
-    margin:auto;
-    padding:25px 18px;
+
+max-width:430px;
+
+margin:auto;
+
+padding:25px 18px 40px;
+
 }
+
 
 
 
 .header{
 
-    display:flex;
-    align-items:center;
-    gap:15px;
-    margin-bottom:25px;
+display:flex;
+
+align-items:center;
+
+gap:15px;
+
+margin-bottom:25px;
 
 }
 
@@ -46,30 +58,32 @@ body{
 
 .back{
 
-    width:45px;
-    height:45px;
+width:45px;
 
-    border-radius:15px;
+height:45px;
 
-    background:#18181b;
+background:#18181b;
 
-    display:flex;
+border-radius:15px;
 
-    align-items:center;
+display:flex;
 
-    justify-content:center;
+align-items:center;
 
-    font-size:22px;
+justify-content:center;
+
+font-size:25px;
 
 }
 
 
 
+
 h1{
 
-    margin:0;
+margin:0;
 
-    font-size:25px;
+font-size:25px;
 
 }
 
@@ -77,96 +91,101 @@ h1{
 
 .header p{
 
-    margin:5px 0 0;
+margin:5px 0;
 
-    color:#999;
-
-}
-
-
-
-
-.add-card{
-
-    background:
-    linear-gradient(135deg,#ff2d55,#7a1830);
-
-    border-radius:25px;
-
-    padding:22px;
-
-    margin-bottom:20px;
+color:#999;
 
 }
 
 
 
-.add-card h2{
 
-    margin:0 0 8px;
+.card{
+
+background:#18181b;
+
+border-radius:24px;
+
+padding:20px;
+
+margin-bottom:15px;
+
+}
+
+
+
+input,select{
+
+width:100%;
+
+height:52px;
+
+background:#09090b;
+
+border:1px solid #333;
+
+border-radius:16px;
+
+color:white;
+
+padding:0 15px;
+
+font-size:16px;
+
+margin-top:10px;
+
+margin-bottom:15px;
 
 }
 
-
-
-.add-card p{
-
-    margin:0;
-
-    color:#ffd7df;
-
-}
 
 
 
 button{
 
-    width:100%;
+width:100%;
 
-    height:52px;
+height:52px;
 
-    margin-top:15px;
+border:0;
 
-    border:0;
+border-radius:17px;
 
-    border-radius:16px;
+background:#ff2d55;
 
-    background:white;
+color:white;
 
-    color:#111;
+font-size:16px;
 
-    font-size:16px;
-
-    font-weight:600;
+font-weight:600;
 
 }
-
 
 
 
 .product{
 
-    background:#18181b;
+background:#111;
 
-    border-radius:20px;
+border-radius:18px;
 
-    padding:18px;
+padding:15px;
 
-    margin-bottom:12px;
+margin-top:12px;
 
-    display:flex;
+display:flex;
 
-    justify-content:space-between;
+justify-content:space-between;
 
-    align-items:center;
+align-items:center;
 
 }
 
 
 
-.product-name{
+.name{
 
-    font-size:17px;
+font-size:17px;
 
 }
 
@@ -174,33 +193,29 @@ button{
 
 .price{
 
-    color:#ff4d6d;
+color:#ff4d6d;
 
-    font-weight:600;
+font-weight:600;
 
 }
-
 
 
 
 .empty{
 
-    text-align:center;
+text-align:center;
 
-    color:#777;
+color:#777;
 
-    margin-top:40px;
+padding:25px;
 
 }
-
-
 
 
 </style>
 
 
 </head>
-
 
 
 <body>
@@ -231,16 +246,48 @@ button{
 
 
 
-<div class="add-card">
+<div class="card">
 
-<h2>Добавить товар</h2>
 
-<p>Создайте список товаров для продаж</p>
+<h3>
+Новый товар
+</h3>
+
+
+
+<input id="name" placeholder="Название товара">
+
+
+
+<input id="price" type="number" placeholder="Цена">
+
+
+
+<select id="unit">
+
+<option value="шт">
+Штучный товар (шт)
+</option>
+
+
+<option value="кг">
+Весовой товар (кг)
+</option>
+
+
+<option value="г">
+Весовой товар (г)
+</option>
+
+
+</select>
+
+
 
 
 <button onclick="addProduct()">
 
-＋ Новый товар
+＋ Добавить товар
 
 </button>
 
@@ -250,12 +297,22 @@ button{
 
 
 
+
+
+<div class="card">
+
+
+<h3>
+Список товаров
+</h3>
+
+
 <div id="products">
 
-
 <div class="empty">
-
 Товаров пока нет
+</div>
+
 
 </div>
 
@@ -272,32 +329,63 @@ button{
 <script>
 
 
+let products =
+JSON.parse(localStorage.getItem("products")) || [];
+
+
+
 function addProduct(){
 
-let name = prompt("Название товара");
 
-if(!name) return;
-
-
-let price = prompt("Цена товара");
-
-if(!price) return;
+let name=
+document.getElementById("name").value;
 
 
+let price=
+Number(document.getElementById("price").value);
 
-let products = JSON.parse(localStorage.getItem("products")) || [];
+
+let unit=
+document.getElementById("unit").value;
+
+
+
+if(!name || !price){
+
+alert("Заполните данные");
+
+return;
+
+}
+
 
 
 products.push({
 
 name:name,
 
-price:price
+price:price,
+
+unit:unit
 
 });
 
 
-localStorage.setItem("products",JSON.stringify(products));
+
+localStorage.setItem(
+
+"products",
+
+JSON.stringify(products)
+
+);
+
+
+
+document.getElementById("name").value="";
+
+document.getElementById("price").value="";
+
 
 
 showProducts();
@@ -307,19 +395,20 @@ showProducts();
 
 
 
+
+
 function showProducts(){
 
 
-let box=document.getElementById("products");
-
-
-let products=JSON.parse(localStorage.getItem("products")) || [];
+let box=
+document.getElementById("products");
 
 
 
 if(products.length===0){
 
-box.innerHTML='<div class="empty">Товаров пока нет</div>';
+box.innerHTML=
+'<div class="empty">Товаров пока нет</div>';
 
 return;
 
@@ -334,35 +423,36 @@ box.innerHTML="";
 products.forEach(item=>{
 
 
-box.innerHTML += `
+box.innerHTML+=`
 
 <div class="product">
 
-<div class="product-name">
+
+<div class="name">
 
 ${item.name}
 
 </div>
 
 
+
 <div class="price">
 
-${item.price} ₽
+${item.price} ₽ / ${item.unit}
 
 </div>
+
 
 
 </div>
 
 `;
 
-
-
 });
 
 
-
 }
+
 
 
 showProducts();
@@ -370,7 +460,6 @@ showProducts();
 
 
 </script>
-
 
 
 </body>
