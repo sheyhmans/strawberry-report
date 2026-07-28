@@ -32,7 +32,7 @@ padding:25px 18px 40px;
 display:flex;
 align-items:center;
 gap:15px;
-margin-bottom:25px;
+margin-bottom:20px;
 }
 
 .back{
@@ -59,13 +59,40 @@ color:#999;
 
 
 
+.status{
+
+background:#18181b;
+
+border-radius:20px;
+
+padding:18px;
+
+margin-bottom:18px;
+
+border:1px solid #252525;
+
+}
+
+
+.status b{
+
+color:#30d158;
+
+font-size:18px;
+
+}
+
+
+
 .card{
 
 background:#18181b;
+
 border-radius:24px;
+
 padding:20px;
+
 margin-bottom:15px;
-border:1px solid #252525;
 
 }
 
@@ -74,13 +101,14 @@ border:1px solid #252525;
 input,select{
 
 width:100%;
-height:50px;
+
+height:52px;
 
 background:#09090b;
 
 border:1px solid #333;
 
-border-radius:15px;
+border-radius:16px;
 
 color:white;
 
@@ -99,9 +127,10 @@ margin-bottom:15px;
 button{
 
 width:100%;
+
 height:52px;
 
-border:none;
+border:0;
 
 border-radius:17px;
 
@@ -116,15 +145,19 @@ font-weight:600;
 .primary{
 
 background:#ff2d55;
+
 color:white;
 
 }
 
 
-.secondary{
+.finish{
 
-background:white;
-color:#111;
+background:#ff453a;
+
+color:white;
+
+margin-top:15px;
 
 }
 
@@ -132,33 +165,36 @@ color:#111;
 
 .client{
 
-display:flex;
-justify-content:space-between;
-align-items:center;
+background:#111;
 
 padding:15px;
-
-background:#111;
 
 border-radius:18px;
 
 margin-top:10px;
 
-}
+border:1px solid transparent;
 
+}
 
 
 .client.active{
 
-border:1px solid #ff2d55;
+border-color:#ff2d55;
 
 }
 
 
 
-.client-name{
+.sale{
 
-font-size:17px;
+display:flex;
+
+justify-content:space-between;
+
+padding:12px 0;
+
+border-bottom:1px solid #333;
 
 }
 
@@ -166,7 +202,7 @@ font-size:17px;
 
 .total{
 
-font-size:30px;
+font-size:32px;
 
 font-weight:700;
 
@@ -176,31 +212,26 @@ color:#ff4d6d;
 
 
 
-.sale{
+.lock{
 
-padding:12px 0;
+text-align:center;
 
-border-bottom:1px solid #333;
+padding:30px 10px;
 
-display:flex;
-
-justify-content:space-between;
+color:#999;
 
 }
-
 
 
 .empty{
 
-text-align:center;
-
 color:#777;
+
+text-align:center;
 
 padding:20px;
 
 }
-
-
 
 </style>
 
@@ -223,9 +254,7 @@ padding:20px;
 
 <h1>Продажи</h1>
 
-<p id="shiftStatus">
-Смена не начата
-</p>
+<p>Текущая смена</p>
 
 </div>
 
@@ -233,37 +262,103 @@ padding:20px;
 
 
 
+
+<div class="status">
+
+<div id="statusText">
+
+</div>
+
+</div>
+
+
+
+
+<div id="content">
+
+
+<div class="lock">
+
+Сначала начните смену<br>
+на главном экране
+
+</div>
+
+
+</div>
+
+
+
+</div>
+
+
+
+<script>
+
+
+let active =
+localStorage.getItem("shiftActive");
+
+
+let products =
+JSON.parse(localStorage.getItem("products")) || [];
+
+
+let clients=[];
+
+let currentClient=null;
+
+
+
+let content=document.getElementById("content");
+
+let status=document.getElementById("statusText");
+
+
+
+
+if(active==="true"){
+
+status.innerHTML =
+"🟢 <b>Смена активна</b><br><small>"
++
+(localStorage.getItem("shiftStart") || "")
++
+"</small>";
+
+
+loadShift();
+
+
+}else{
+
+
+status.innerHTML =
+"🔴 Смена не начата";
+
+
+}
+
+
+
+
+
+function loadShift(){
+
+
+content.innerHTML=`
 
 <div class="card">
-
-
-<button class="primary" onclick="startShift()">
-
-▶ Начать смену
-
-</button>
-
-
-</div>
-
-
-
-
-<div class="card">
-
 
 <h3>
 Клиент
 </h3>
 
-
 <input id="clientName" placeholder="Имя клиента">
 
 
-<button class="secondary" onclick="addClient()">
-
+<button class="primary" onclick="addClient()">
 ＋ Добавить клиента
-
 </button>
 
 
@@ -271,8 +366,6 @@ padding:20px;
 
 
 </div>
-
-
 
 
 
@@ -293,15 +386,11 @@ padding:20px;
 </select>
 
 
-
 <input id="count" type="number" value="1">
 
 
-
 <button class="primary" onclick="addProduct()">
-
 Добавить товар клиенту
-
 </button>
 
 
@@ -310,12 +399,10 @@ padding:20px;
 
 
 
-
 <div class="card">
 
-
 <h3>
-Текущий клиент
+Покупка
 </h3>
 
 
@@ -330,9 +417,7 @@ padding:20px;
 
 
 
-
 <div class="card">
-
 
 <h3>
 Итого смена
@@ -340,69 +425,40 @@ padding:20px;
 
 
 <div class="total" id="total">
-
 0 ₽
-
 </div>
 
 
+<button class="finish" onclick="finishShift()">
+Завершить смену
+</button>
+
+
 </div>
 
+`;
 
-
-</div>
-
-
-
-<script>
-
-
-let products =
-JSON.parse(localStorage.getItem("products")) || [];
-
-
-let clients = [];
-
-
-let currentClient = null;
-
-
-let shiftStarted = false;
 
 
 let select=document.getElementById("product");
 
 
-
 products.forEach((item,index)=>{
 
 
-let option=document.createElement("option");
+select.innerHTML+=`
 
-option.value=index;
+<option value="${index}">
+${item.name} — ${item.price} ₽
+</option>
 
-option.textContent =
-item.name+" — "+item.price+" ₽";
-
-
-select.appendChild(option);
-
+`;
 
 });
 
 
-
-
-
-function startShift(){
-
-shiftStarted=true;
-
-document.getElementById("shiftStatus").innerHTML =
-"Смена активна";
-
-
 }
+
 
 
 
@@ -413,7 +469,7 @@ function addClient(){
 let name=document.getElementById("clientName").value;
 
 
-if(!name) return;
+if(!name)return;
 
 
 let client={
@@ -434,9 +490,7 @@ currentClient=client;
 document.getElementById("clientName").value="";
 
 
-showClients();
-
-showCurrent();
+render();
 
 
 }
@@ -445,42 +499,35 @@ showCurrent();
 
 
 
-function showClients(){
+function render(){
 
 
 let box=document.getElementById("clients");
+
+if(!box)return;
 
 
 box.innerHTML="";
 
 
-clients.forEach((client,index)=>{
+clients.forEach((c,i)=>{
 
 
 box.innerHTML+=`
 
-<div class="client ${client===currentClient?'active':''}" onclick="selectClient(${index})">
+<div class="client ${c===currentClient?'active':''}"
+onclick="selectClient(${i})">
 
-<div class="client-name">
-
-${client.name}
-
-</div>
-
-
-<div>
-
-›
-
-</div>
-
+${c.name}
 
 </div>
 
 `;
 
-
 });
+
+
+showCurrent();
 
 
 }
@@ -489,13 +536,11 @@ ${client.name}
 
 
 
-function selectClient(index){
+function selectClient(i){
 
-currentClient=clients[index];
+currentClient=clients[i];
 
-showClients();
-
-showCurrent();
+render();
 
 }
 
@@ -508,22 +553,17 @@ function addProduct(){
 
 if(!currentClient){
 
-alert("Сначала выберите клиента");
+alert("Выберите клиента");
 
 return;
 
 }
 
 
-
-let index=select.value;
-
-
-if(index==="Выберите товар") return;
+let select=document.getElementById("product");
 
 
-
-let product=products[index];
+let product=products[select.value];
 
 
 let count=
@@ -542,10 +582,11 @@ sum:product.price*count
 });
 
 
-showCurrent();
+render();
 
 
 }
+
 
 
 
@@ -554,6 +595,9 @@ function showCurrent(){
 
 
 let box=document.getElementById("current");
+
+if(!box)return;
+
 
 
 if(!currentClient){
@@ -565,11 +609,10 @@ return;
 }
 
 
+let html="";
+
 
 let total=0;
-
-
-let html=`<h3>${currentClient.name}</h3>`;
 
 
 currentClient.items.forEach(item=>{
@@ -599,24 +642,10 @@ ${item.sum} ₽
 });
 
 
-html+=`
-
-<br>
-
-<b>
-Итого клиента: ${total} ₽
-</b>
-
-`;
-
-
-
-box.innerHTML=html;
-
+box.innerHTML=html || "Товаров нет";
 
 
 updateTotal();
-
 
 }
 
@@ -629,11 +658,11 @@ function updateTotal(){
 let total=0;
 
 
-clients.forEach(client=>{
+clients.forEach(c=>{
 
-client.items.forEach(item=>{
+c.items.forEach(i=>{
 
-total+=item.sum;
+total+=i.sum;
 
 });
 
@@ -642,6 +671,75 @@ total+=item.sum;
 
 document.getElementById("total").innerHTML =
 total+" ₽";
+
+
+}
+
+
+
+
+
+function finishShift(){
+
+
+if(clients.length===0){
+
+alert("Нет продаж");
+
+return;
+
+}
+
+
+let history=
+JSON.parse(localStorage.getItem("history")) || [];
+
+
+
+let total=0;
+
+
+clients.forEach(c=>{
+
+c.items.forEach(i=>{
+
+total+=i.sum;
+
+});
+
+});
+
+
+
+history.push({
+
+date:new Date().toLocaleString("ru-RU"),
+
+clients:clients,
+
+total:total
+
+});
+
+
+
+localStorage.setItem(
+"history",
+JSON.stringify(history)
+);
+
+
+
+localStorage.removeItem("shiftActive");
+
+localStorage.removeItem("shiftStart");
+
+
+
+alert("Смена завершена");
+
+
+location.reload();
 
 
 }
