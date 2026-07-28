@@ -231,6 +231,47 @@ function loadCatalog(select){
 
 
 function calculateProduct(product){
+    function calculateClientTotal(client){
+
+    let total = 0;
+
+
+    let products = client.querySelectorAll(".product");
+
+
+    products.forEach(product=>{
+
+
+        let select = product.querySelector(".productSelect");
+
+        let quantity = Number(
+            product.querySelector(".quantity").value || 0
+        );
+
+
+        let item = catalog[select.value];
+
+
+        if(item){
+
+            total += item.price * quantity;
+
+        }
+
+
+    });
+
+
+    let payment = client.querySelector(".paymentSum");
+
+
+    if(payment){
+
+        payment.value = total;
+
+    }
+
+}
 
 
     let select =
@@ -492,6 +533,9 @@ document.addEventListener("change",function(e){
 
 
         calculateProduct(product);
+        calculateClientTotal(
+    e.target.closest(".client")
+);
 
 
     }
