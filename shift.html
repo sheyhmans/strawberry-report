@@ -874,6 +874,21 @@ terminal:terminal
 };
 
 
+// сохраняем клиента в активную смену
+
+let savedClients =
+JSON.parse(localStorage.getItem("shiftClients")) || [];
+
+
+savedClients.push(currentClient);
+
+
+localStorage.setItem(
+"shiftClients",
+JSON.stringify(savedClients)
+);
+
+
 
 currentClient=null;
 
