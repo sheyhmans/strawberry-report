@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Продажи | Strawberry POS</title>
+
+
+<style>
+
+*{
+box-sizing:border-box;
+font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",Arial,sans-serif;
+}
+
+
+body{
+
+margin:0;
+
+background:#09090b;
+
+color:white;
+
+}
+
+
+
+.app{
+
+max-width:430px;
+
+margin:auto;
+
+padding:25px 18px;
+
+}
+
+
+
+
+.header{
+
+display:flex;
+
+align-items:center;
+
+gap:15px;
+
+margin-bottom:25px;
+
+}
+
+
+
+.back{
+
+width:45px;
+
+height:45px;
+
+background:#18181b;
+
+border-radius:15px;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+font-size:25px;
+
+}
+
+
+
+h1{
+
+margin:0;
+
+font-size:25px;
+
+}
+
+
+
+.header p{
+
+margin:5px 0;
+
+color:#999;
+
+}
+
+
+
+
+.card{
+
+background:#18181b;
+
+border-radius:22px;
+
+padding:20px;
+
+margin-bottom:15px;
+
+border:1px solid #252525;
+
+}
+
+
+
+
+label{
+
+color:#999;
+
+font-size:14px;
+
+}
+
+
+
+
+input{
+
+width:100%;
+
+height:50px;
+
+margin-top:8px;
+
+background:#09090b;
+
+border:1px solid #333;
+
+border-radius:15px;
+
+color:white;
+
+padding:0 15px;
+
+font-size:16px;
+
+}
+
+
+
+
+select{
+
+width:100%;
+
+height:50px;
+
+margin-top:8px;
+
+background:#09090b;
+
+border:1px solid #333;
+
+border-radius:15px;
+
+color:white;
+
+padding:0 15px;
+
+font-size:16px;
+
+}
+
+
+
+
+button{
+
+width:100%;
+
+height:52px;
+
+border:0;
+
+border-radius:17px;
+
+background:#ff2d55;
+
+color:white;
+
+font-size:17px;
+
+font-weight:600;
+
+}
+
+
+
+
+.total{
+
+font-size:28px;
+
+font-weight:700;
+
+color:#ff4d6d;
+
+}
+
+
+
+.sale{
+
+display:flex;
+
+justify-content:space-between;
+
+padding:15px 0;
+
+border-bottom:1px solid #333;
+
+}
+
+
+
+.empty{
+
+text-align:center;
+
+color:#777;
+
+margin:30px;
+
+}
+
+
+
+</style>
+
+
+</head>
+
+
+
+<body>
+
+
+
+<div class="app">
+
+
+<div class="header">
+
+<div class="back" onclick="history.back()">
+‹
+</div>
+
+
+<div>
+
+<h1>Продажи</h1>
+
+<p>Текущая смена</p>
+
+</div>
+
+
+</div>
+
+
+
+
+
+<div class="card">
+
+
+<label>
+Клиент
+</label>
+
+
+<input id="client" placeholder="Имя клиента (не обязательно)">
+
+
+
+</div>
+
+
+
+
+
+<div class="card">
+
+
+<label>
+Товар
+</label>
+
+
+
+<select id="product">
+
+
+<option>
+Выберите товар
+</option>
+
+
+</select>
+
+
+
+<label>
+Количество
+</label>
+
+
+<input id="count" type="number" value="1">
+
+
+
+<button onclick="addSale()">
+
+Добавить продажу
+
+</button>
+
+
+</div>
+
+
+
+
+
+<div class="card">
+
+
+<label>
+Сумма смены
+</label>
+
+
+<div class="total" id="total">
+
+0 ₽
+
+</div>
+
+
+</div>
+
+
+
+
+
+<div class="card">
+
+
+<h3>
+Продажи сегодня
+</h3>
+
+
+<div id="sales">
+
+<div class="empty">
+Продаж пока нет
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+</div>
+
+
+
+
+<script>
+
+
+let products =
+JSON.parse(localStorage.getItem("products")) || [];
+
+
+let sales =
+JSON.parse(localStorage.getItem("sales")) || [];
+
+
+
+let select=document.getElementById("product");
+
+
+
+products.forEach((item,index)=>{
+
+
+let option=document.createElement("option");
+
+option.value=index;
+
+option.textContent=
+item.name+" - "+item.price+" ₽";
+
+
+select.appendChild(option);
+
+
+});
+
+
+
+
+
+function addSale(){
+
+
+let index=select.value;
+
+
+if(index==="Выберите товар") return;
+
+
+
+let product=products[index];
+
+
+let count=
+Number(document.getElementById("count").value);
+
+
+
+let client=
+document.getElementById("client").value;
+
+
+
+let sale={
+
+name:product.name,
+
+price:product.price,
+
+count:count,
+
+client:client,
+
+sum:product.price*count
+
+};
+
+
+
+sales.push(sale);
+
+
+
+localStorage.setItem(
+"sales",
+JSON.stringify(sales)
+);
+
+
+
+showSales();
+
+
+}
+
+
+
+
+function showSales(){
+
+
+let box=document.getElementById("sales");
+
+let total=0;
+
+
+if(sales.length===0){
+
+box.innerHTML=
+'<div class="empty">Продаж пока нет</div>';
+
+return;
+
+}
+
+
+
+box.innerHTML="";
+
+
+
+sales.forEach(item=>{
+
+
+total+=item.sum;
+
+
+box.innerHTML+=`
+
+<div class="sale">
+
+<span>
+${item.name} × ${item.count}
+</span>
+
+
+<b>
+${item.sum} ₽
+</b>
+
+
+</div>
+
+`;
+
+
+});
+
+
+
+document.getElementById("total").innerHTML=
+total+" ₽";
+
+
+}
+
+
+
+showSales();
+
+
+
+</script>
+
+
+
+</body>
+
+</html>
