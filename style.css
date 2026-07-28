@@ -3,234 +3,282 @@
     font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", Arial, sans-serif;
 }
 
-
 body {
-
     margin: 0;
     min-height: 100vh;
-
     background: #111;
-
     color: white;
-
 }
-
 
 
 .app {
-
-    max-width: 500px;
-
+    max-width: 520px;
     margin: auto;
-
     padding: 20px;
-
 }
 
 
+/* HEADER */
 
 .header {
-
-    text-align: center;
-
-    padding: 30px 0;
-
+    text-align:center;
+    padding:25px 0;
 }
-
 
 
 .header h1 {
-
-    margin: 0;
-
-    font-size: 32px;
-
-    color: #ff3b5c;
-
+    margin:0;
+    font-size:32px;
+    color:#ff3b5c;
 }
-
 
 
 .header p {
-
-    color: #aaa;
-
-    margin-top: 8px;
-
+    color:#aaa;
 }
 
 
+/* MENU */
 
 .menu {
-
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 15px;
-
+    display:flex;
+    flex-direction:column;
+    gap:15px;
 }
-
 
 
 .menu-card {
 
-    display: flex;
+    display:flex;
+    align-items:center;
+    gap:20px;
 
-    align-items: center;
+    background:#1c1c1e;
 
-    gap: 20px;
+    padding:20px;
 
-    background: #1c1c1e;
+    border-radius:20px;
 
-    padding: 20px;
+    text-decoration:none;
 
-    border-radius: 20px;
+    color:white;
 
-    text-decoration: none;
-
-    color: white;
-
-    border: 1px solid #333;
-
-    transition: .2s;
+    border:1px solid #333;
 
 }
-
-
-
-.menu-card:active {
-
-    transform: scale(.97);
-
-}
-
 
 
 .menu-card span {
-
-    font-size: 40px;
-
+    font-size:40px;
 }
-
 
 
 .menu-card h2 {
-
-    margin: 0;
-
-    font-size: 20px;
-
+    margin:0;
 }
-
 
 
 .menu-card p {
-
-    margin: 5px 0 0;
-
-    color: #aaa;
-
+    margin:5px 0 0;
+    color:#aaa;
 }
 
 
-
-footer {
-
-    text-align: center;
-
-    margin-top: 40px;
-
-    color: #666;
-
-    font-size: 14px;
-
-}
-
-
-
-/* Кнопки */
-
-button {
-
-    width: 100%;
-
-    padding: 15px;
-
-    border-radius: 15px;
-
-    border: none;
-
-    background: #ff3b5c;
-
-    color: white;
-
-    font-size: 17px;
-
-}
-
-
-
-/* Поля */
-
-input, select, textarea {
-
-    width: 100%;
-
-    padding: 14px;
-
-    margin-top: 8px;
-
-    background: #1c1c1e;
-
-    border: 1px solid #333;
-
-    border-radius: 12px;
-
-    color: white;
-
-    font-size: 16px;
-
-}
-
-
-
-/* Карточки */
+/* КАРТОЧКИ */
 
 .card {
 
-    background: #1c1c1e;
+    background:#1c1c1e;
 
-    border-radius: 20px;
+    border-radius:20px;
 
-    padding: 15px;
+    padding:16px;
 
-    margin-bottom: 15px;
+    margin-bottom:15px;
 
 }
 
 
 
-/* Красные акценты */
+/* INPUT */
+
+input,
+select,
+textarea {
+
+    width:100%;
+
+    padding:14px;
+
+    margin-top:8px;
+
+    background:#1c1c1e;
+
+    border:1px solid #333;
+
+    border-radius:12px;
+
+    color:white;
+
+    font-size:16px;
+
+}
+
+
+
+/* ВСЕ КНОПКИ ПО УМОЛЧАНИЮ */
+
+button {
+
+    padding:14px 18px;
+
+    border:none;
+
+    border-radius:14px;
+
+    background:#ff3b5c;
+
+    color:white;
+
+    font-size:16px;
+
+    cursor:pointer;
+
+}
+
+
+
+/* ОСНОВНЫЕ КНОПКИ */
+
+.primary-btn {
+
+    width:100%;
+
+}
+
+
+
+/* ГРУППА КНОПОК */
+
+.button-group {
+
+    display:flex;
+
+    gap:10px;
+
+    flex-wrap:wrap;
+
+}
+
+
+.button-group button {
+
+    flex:1;
+
+}
+
+
+
+/* ИСТОРИЯ */
+
+.history-card {
+
+    background:#1c1c1e;
+
+    border-radius:20px;
+
+    padding:16px;
+
+    margin-bottom:15px;
+
+}
+
+
+.history-card h3 {
+
+    margin-top:0;
+
+}
+
+
+.history-actions {
+
+    display:flex;
+
+    gap:10px;
+
+    margin-top:15px;
+
+}
+
+
+.history-actions button {
+
+    flex:1;
+
+    min-width:0;
+
+}
+
+
+
+/* ОТЧЕТ */
+
+.report-box {
+
+    background:#000;
+
+    border-radius:15px;
+
+    padding:15px;
+
+    white-space:pre-wrap;
+
+    line-height:1.5;
+
+}
+
+
+
+/* ЦВЕТА */
 
 .red {
 
-    color: #ff3b5c;
+    color:#ff3b5c;
 
 }
-
 
 
 .green {
 
-    color: #34c759;
+    color:#34c759;
+
+}
+
+
+.blue {
+
+    color:#0a84ff;
+
+}
+
+
+.gray {
+
+    color:#aaa;
 
 }
 
 
 
-.blue {
+/* FOOTER */
 
-    color: #0a84ff;
+footer {
+
+    text-align:center;
+
+    margin-top:40px;
+
+    color:#666;
 
 }
