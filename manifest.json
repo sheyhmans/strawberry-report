@@ -1,16 +1,25 @@
 {
-  "name": "STRAWBERRY — Отчет смены",
-  "short_name": "STRAWBERRY",
-  "start_url": "./",
+  "name": "Strawberry POS",
+  "short_name": "Strawberry POS",
+  "description": "Учет ночной смены Strawberry",
+  "start_url": "index.html",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#2e7d32",
-  "lang": "ru",
+  "background_color": "#111111",
+  "theme_color": "#ff3b5c",
+  "orientation": "portrait",
+
   "icons": [
-  {
-    "src": "IMG_1949.png",
-    "sizes": "512x512",
-    "type": "image/png"
-  }
-]
+    {
+      "src": "assets/logo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+
+  "lang": "ru"
 }
