@@ -540,8 +540,11 @@ function createReport(){
                 product.querySelector(".productInfo").value;
 
 
-                report+=
-                item.name+" - "+qty+item.unit;
+                report +=
+item.name +
+" - " +
+qty +
+(item.unit ? item.unit : "шт");
 
 
                 if(info){
