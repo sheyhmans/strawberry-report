@@ -423,6 +423,13 @@ ${currentClient.name}
 
 </h3>
 
+<button 
+class="red"
+onclick="deleteCurrentClient()">
+
+Удалить клиента
+
+</button>
 
 <select id="productSelect" onchange="selectProduct()">
 
@@ -659,7 +666,22 @@ renderClient();
 
 
 
+function deleteCurrentClient(){
 
+
+if(confirm("Удалить клиента?")){
+
+
+currentClient=null;
+
+
+document.getElementById("clientBlock").innerHTML="";
+
+
+}
+
+
+}
 
 function renderClient(){
 
@@ -695,11 +717,27 @@ ${i.amount}
 </span>
 
 
+<div>
+
 <b>
-
 ${i.sum} ₽
-
 </b>
+
+<br>
+
+<button 
+style="
+background:#ff453a;
+height:30px;
+font-size:12px;
+"
+onclick="deleteClientItem(${currentClient.items.indexOf(i)})">
+
+Удалить
+
+</button>
+
+</div>
 
 
 </div>
@@ -737,7 +775,22 @@ showPayment(total);
 
 
 
+function deleteClientItem(index){
 
+
+if(confirm("Удалить этот товар?")){
+
+
+currentClient.items.splice(index,1);
+
+
+renderClient();
+
+
+}
+
+
+}
 function showPayment(total){
 
 
