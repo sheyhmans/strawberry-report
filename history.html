@@ -340,15 +340,10 @@ box.innerHTML=
 
 function copyLastReport(){
 
-
 let historyData =
-
 JSON.parse(
-
 localStorage.getItem("shiftHistory")
-
 ) || [];
-
 
 
 if(historyData.length===0){
@@ -359,6 +354,123 @@ return;
 
 }
 
+
+let s =
+historyData[historyData.length-1];
+
+
+let text = "";
+
+
+text += `Отчёт смены ${s.date}\n\n`;
+
+
+text += `Клиенты:\n\n`;
+
+
+s.clients.forEach((c,index)=>{
+
+
+let sum = 0;
+
+
+text += `${index+1}. ${c.name}\n`;
+
+
+c.items.forEach(i=>{
+
+sum += i.sum;
+
+text += `${i.name} ${i.amount} — ${i.sum} ₽\n`;
+
+});
+
+
+text += `Итого: ${sum} ₽\n`;
+
+
+text += `Оплата: `;
+
+
+let pay=[];
+
+
+if(c.payment.cash)
+pay.push(`наличные ${c.payment.cash}`);
+
+
+if(c.payment.transfer)
+pay.push(`перевод ${c.payment.transfer}`);
+
+
+if(c.payment.terminal)
+pay.push(`терминал ${c.payment.terminal}`);
+
+
+text += pay.join(" / ");
+
+
+text += "\n\n";
+
+
+});
+
+
+
+text += `----------------\n\n`;
+
+
+text += `ИТОГО:\n\n`;
+
+
+text += `Продажи: ${s.sales} ₽\n\n`;
+
+
+text += `Наличные: ${s.cash} ₽\n`;
+
+text += `Перевод: ${s.transfer} ₽\n`;
+
+text += `Терминал: ${s.terminal} ₽\n\n`;
+
+
+
+text += `Расходы:\n`;
+
+
+if(s.expenses.length){
+
+
+s.expenses.forEach(e=>{
+
+
+text += `${e.name} — ${e.sum} ₽\n`;
+
+
+});
+
+
+}else{
+
+
+text += `Нет расходов\n`;
+
+
+}
+
+
+
+text += `\nРасходы всего: ${s.expenseTotal} ₽\n`;
+
+text += `Остаток налички: ${s.finalCash} ₽`;
+
+
+
+navigator.clipboard.writeText(text);
+
+
+alert("Отчёт скопирован");
+
+}
 
 
 let s =
