@@ -19,7 +19,6 @@
 
 body{
     margin:0;
-    min-height:100vh;
     background:#09090b;
     color:white;
 }
@@ -28,29 +27,38 @@ body{
 .app{
     max-width:430px;
     margin:auto;
-    padding:25px 18px;
+    padding:25px 18px 40px;
 }
 
 
 
 .header{
+
     display:flex;
     align-items:center;
     gap:15px;
     margin-bottom:25px;
+
 }
+
 
 
 .logo{
+
     width:58px;
     height:58px;
     border-radius:20px;
+
     background:#ff2d55;
+
     display:flex;
     align-items:center;
     justify-content:center;
+
     font-size:32px;
+
 }
+
 
 
 h1{
@@ -59,10 +67,15 @@ h1{
 }
 
 
+
 .header p{
+
     margin:5px 0 0;
+
     color:#999;
+
 }
+
 
 
 
@@ -75,26 +88,39 @@ h1{
 
     padding:25px;
 
-    margin-bottom:20px;
+    margin-bottom:18px;
 
 }
+
 
 
 .main-card span{
+
     color:#ffd7df;
+
 }
+
 
 
 .main-card h2{
+
     font-size:30px;
+
     margin:10px 0;
+
 }
+
 
 
 .main-card p{
+
     margin:0;
+
     color:#ffd7df;
+
 }
+
+
 
 
 
@@ -102,9 +128,9 @@ h1{
 
     width:100%;
 
-    border:none;
-
     height:55px;
+
+    border:0;
 
     border-radius:18px;
 
@@ -122,6 +148,8 @@ h1{
 
 
 
+
+
 .stats{
 
     display:grid;
@@ -133,6 +161,7 @@ h1{
     margin-bottom:25px;
 
 }
+
 
 
 
@@ -171,6 +200,7 @@ h1{
 
 
 
+
 .menu{
 
     display:grid;
@@ -191,7 +221,13 @@ h1{
 
     padding:20px;
 
-    height:130px;
+    height:135px;
+
+    text-decoration:none;
+
+    color:white;
+
+    border:1px solid #252525;
 
 }
 
@@ -208,8 +244,6 @@ h1{
 .card h3{
 
     margin:12px 0 0;
-
-    font-size:17px;
 
 }
 
@@ -238,6 +272,7 @@ footer{
 }
 
 
+
 </style>
 
 
@@ -249,6 +284,7 @@ footer{
 
 
 <div class="app">
+
 
 
 <div class="header">
@@ -272,15 +308,27 @@ footer{
 
 
 
+
 <div class="main-card">
 
-<span>Текущая смена</span>
 
-<h2>Не начата</h2>
+<span>
+Текущая смена
+</span>
 
-<p>Начните смену для учета продаж</p>
+
+<h2>
+Не начата
+</h2>
+
+
+<p>
+Начните смену для учета продаж
+</p>
+
 
 </div>
+
 
 
 
@@ -289,6 +337,7 @@ footer{
 ▶ Начать смену
 
 </button>
+
 
 
 
@@ -320,13 +369,16 @@ footer{
 
 <small>Товары</small>
 
-<b>0</b>
+<b id="productCount">
+0
+</b>
 
 </div>
 
 
 
 </div>
+
 
 
 
@@ -334,54 +386,88 @@ footer{
 <div class="menu">
 
 
-<div class="card">
 
-<div>🛒</div>
+<a href="shift.html" class="card">
 
-<h3>Продажи</h3>
+<div>
+🛒
+</div>
 
-<p>Новая покупка</p>
+<h3>
+Продажи
+</h3>
+
+<p>
+Новая покупка
+</p>
+
+</a>
+
+
+
+
+
+<a href="catalog.html" class="card">
+
+<div>
+📦
+</div>
+
+<h3>
+Каталог
+</h3>
+
+<p>
+Товары
+</p>
+
+</a>
+
+
+
+
+
+<a href="history.html" class="card">
+
+<div>
+📋
+</div>
+
+<h3>
+История
+</h3>
+
+<p>
+Отчеты
+</p>
+
+</a>
+
+
+
+
+
+<a href="#" class="card">
+
+<div>
+⚙️
+</div>
+
+<h3>
+Настройки
+</h3>
+
+<p>
+Скоро
+</p>
+
+</a>
+
+
 
 </div>
 
 
-
-<div class="card">
-
-<div>📦</div>
-
-<h3>Каталог</h3>
-
-<p>Товары</p>
-
-</div>
-
-
-
-<div class="card">
-
-<div>📋</div>
-
-<h3>История</h3>
-
-<p>Отчеты</p>
-
-</div>
-
-
-
-<div class="card">
-
-<div>⚙️</div>
-
-<h3>Настройки</h3>
-
-<p>Система</p>
-
-</div>
-
-
-</div>
 
 
 
@@ -394,6 +480,23 @@ Strawberry POS
 
 
 </div>
+
+
+
+<script>
+
+
+let products =
+JSON.parse(localStorage.getItem("products")) || [];
+
+
+document.getElementById("productCount").innerHTML =
+products.length;
+
+
+
+</script>
+
 
 
 </body>
