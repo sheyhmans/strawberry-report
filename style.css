@@ -5,112 +5,362 @@
 
 
 body {
-    margin: 0;
-    min-height: 100vh;
-    background: #111;
-    color: white;
+
+    margin:0;
+
+    min-height:100vh;
+
+    background:
+    radial-gradient(circle at top, #2b1018 0%, #0b0b0d 45%, #000 100%);
+
+    color:white;
+
 }
+
 
 
 .app {
-    max-width: 500px;
-    margin: auto;
-    padding: 20px;
-}
 
+    max-width:430px;
 
+    margin:auto;
 
-/* ЛОГОТИП */
-
-.logo {
-    width: 120px;
-    height: 120px;
-    object-fit: contain;
-    border-radius: 25px;
-}
-
-
-
-.header {
-    text-align: center;
-    padding: 30px 0;
-}
-
-
-.header h1 {
-    margin: 15px 0 5px;
-    font-size: 32px;
-    color: #ff3b5c;
-}
-
-
-.header p {
-    color: #aaa;
-}
-
-
-
-/* МЕНЮ */
-
-.menu {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-
-
-.menu-card {
-
-    display: flex;
-    align-items: center;
-
-    gap: 20px;
-
-    padding: 20px;
-
-    background: #1c1c1e;
-
-    border-radius: 20px;
-
-    text-decoration: none;
-
-    color: white;
-
-    border: 1px solid #333;
+    padding:20px;
 
 }
 
 
 
-.icon {
-    font-size: 40px;
+
+/* HEADER */
+
+.top-header {
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:25px;
+
 }
 
 
 
-.menu-card h2 {
-    margin: 0;
-    font-size: 20px;
+.brand {
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
 }
 
 
 
-.menu-card p {
-    margin: 5px 0 0;
-    color: #aaa;
+.brand-logo {
+
+    width:55px;
+
+    height:55px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    background:
+    linear-gradient(145deg,#ff375f,#ff6b81);
+
+    border-radius:18px;
+
+    font-size:28px;
+
+    box-shadow:0 8px 25px rgba(255,55,95,.35);
+
 }
 
 
 
-/* НИЗ */
+.brand h1 {
+
+    margin:0;
+
+    font-size:24px;
+
+    letter-spacing:-.5px;
+
+}
+
+
+
+.brand p {
+
+    margin:4px 0 0;
+
+    color:#999;
+
+    font-size:14px;
+
+}
+
+
+
+.profile {
+
+    width:38px;
+
+    height:38px;
+
+    border-radius:50%;
+
+    background:#1c1c1e;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    color:#34c759;
+
+}
+
+
+
+
+
+/* SHIFT */
+
+.shift-card {
+
+    background:
+
+    linear-gradient(
+    135deg,
+    rgba(255,55,95,.25),
+    rgba(255,255,255,.05)
+    );
+
+    border:1px solid rgba(255,255,255,.1);
+
+    border-radius:26px;
+
+    padding:22px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:25px;
+
+}
+
+
+
+.shift-info span {
+
+    color:#aaa;
+
+    font-size:14px;
+
+}
+
+
+
+.shift-info h2 {
+
+    margin:8px 0;
+
+    font-size:24px;
+
+}
+
+
+
+.shift-info p {
+
+    margin:0;
+
+    color:#aaa;
+
+    font-size:13px;
+
+}
+
+
+
+.shift-icon {
+
+    font-size:45px;
+
+}
+
+
+
+
+
+/* STATS */
+
+.title-row h3 {
+
+    margin:0 0 12px;
+
+}
+
+
+
+.stats {
+
+    display:grid;
+
+    grid-template-columns:repeat(3,1fr);
+
+    gap:10px;
+
+    margin-bottom:25px;
+
+}
+
+
+
+.stat-card {
+
+    background:#18181b;
+
+    border:1px solid #29292d;
+
+    border-radius:18px;
+
+    padding:15px 10px;
+
+}
+
+
+
+.stat-card span {
+
+    display:block;
+
+    color:#999;
+
+    font-size:12px;
+
+}
+
+
+
+.stat-card strong {
+
+    display:block;
+
+    margin-top:8px;
+
+    font-size:20px;
+
+}
+
+
+
+
+
+/* MENU */
+
+.menu-grid {
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:15px;
+
+}
+
+
+
+.app-card {
+
+    text-decoration:none;
+
+    color:white;
+
+    background:
+
+    linear-gradient(
+    145deg,
+    #1c1c1f,
+    #111
+    );
+
+    border:1px solid #29292d;
+
+    border-radius:24px;
+
+    padding:20px;
+
+    min-height:150px;
+
+    transition:.2s;
+
+}
+
+
+
+.app-card:active {
+
+    transform:scale(.96);
+
+}
+
+
+
+.card-icon {
+
+    font-size:38px;
+
+    margin-bottom:15px;
+
+}
+
+
+
+.app-card h3 {
+
+    margin:0;
+
+    font-size:18px;
+
+}
+
+
+
+.app-card p {
+
+    margin:6px 0 0;
+
+    color:#999;
+
+    font-size:13px;
+
+}
+
+
+
+
 
 footer {
 
     text-align:center;
 
-    margin-top:40px;
+    margin-top:35px;
 
-    color:#666;
+    color:#555;
+
+    font-size:13px;
 
 }
