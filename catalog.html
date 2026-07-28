@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Каталог | Strawberry POS</title>
+
+
+<style>
+
+*{
+    box-sizing:border-box;
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",Arial,sans-serif;
+}
+
+
+body{
+    margin:0;
+    min-height:100vh;
+    background:#09090b;
+    color:white;
+}
+
+
+.app{
+    max-width:430px;
+    margin:auto;
+    padding:25px 18px;
+}
+
+
+
+.header{
+
+    display:flex;
+    align-items:center;
+    gap:15px;
+    margin-bottom:25px;
+
+}
+
+
+
+.back{
+
+    width:45px;
+    height:45px;
+
+    border-radius:15px;
+
+    background:#18181b;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-size:22px;
+
+}
+
+
+
+h1{
+
+    margin:0;
+
+    font-size:25px;
+
+}
+
+
+
+.header p{
+
+    margin:5px 0 0;
+
+    color:#999;
+
+}
+
+
+
+
+.add-card{
+
+    background:
+    linear-gradient(135deg,#ff2d55,#7a1830);
+
+    border-radius:25px;
+
+    padding:22px;
+
+    margin-bottom:20px;
+
+}
+
+
+
+.add-card h2{
+
+    margin:0 0 8px;
+
+}
+
+
+
+.add-card p{
+
+    margin:0;
+
+    color:#ffd7df;
+
+}
+
+
+
+button{
+
+    width:100%;
+
+    height:52px;
+
+    margin-top:15px;
+
+    border:0;
+
+    border-radius:16px;
+
+    background:white;
+
+    color:#111;
+
+    font-size:16px;
+
+    font-weight:600;
+
+}
+
+
+
+
+.product{
+
+    background:#18181b;
+
+    border-radius:20px;
+
+    padding:18px;
+
+    margin-bottom:12px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+}
+
+
+
+.product-name{
+
+    font-size:17px;
+
+}
+
+
+
+.price{
+
+    color:#ff4d6d;
+
+    font-weight:600;
+
+}
+
+
+
+
+.empty{
+
+    text-align:center;
+
+    color:#777;
+
+    margin-top:40px;
+
+}
+
+
+
+
+</style>
+
+
+</head>
+
+
+
+<body>
+
+
+<div class="app">
+
+
+<div class="header">
+
+
+<div class="back" onclick="history.back()">
+‹
+</div>
+
+
+<div>
+
+<h1>Каталог</h1>
+
+<p>Товары и цены</p>
+
+</div>
+
+
+</div>
+
+
+
+
+<div class="add-card">
+
+<h2>Добавить товар</h2>
+
+<p>Создайте список товаров для продаж</p>
+
+
+<button onclick="addProduct()">
+
+＋ Новый товар
+
+</button>
+
+
+</div>
+
+
+
+
+<div id="products">
+
+
+<div class="empty">
+
+Товаров пока нет
+
+</div>
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+<script>
+
+
+function addProduct(){
+
+let name = prompt("Название товара");
+
+if(!name) return;
+
+
+let price = prompt("Цена товара");
+
+if(!price) return;
+
+
+
+let products = JSON.parse(localStorage.getItem("products")) || [];
+
+
+products.push({
+
+name:name,
+
+price:price
+
+});
+
+
+localStorage.setItem("products",JSON.stringify(products));
+
+
+showProducts();
+
+
+}
+
+
+
+function showProducts(){
+
+
+let box=document.getElementById("products");
+
+
+let products=JSON.parse(localStorage.getItem("products")) || [];
+
+
+
+if(products.length===0){
+
+box.innerHTML='<div class="empty">Товаров пока нет</div>';
+
+return;
+
+}
+
+
+
+box.innerHTML="";
+
+
+
+products.forEach(item=>{
+
+
+box.innerHTML += `
+
+<div class="product">
+
+<div class="product-name">
+
+${item.name}
+
+</div>
+
+
+<div class="price">
+
+${item.price} ₽
+
+</div>
+
+
+</div>
+
+`;
+
+
+
+});
+
+
+
+}
+
+
+showProducts();
+
+
+
+</script>
+
+
+
+</body>
+
+</html>
