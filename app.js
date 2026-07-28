@@ -731,7 +731,125 @@ function clearHistory(){
 
 
 
+// =======================
+// СОХРАНЕНИЕ ТЕКУЩЕЙ СМЕНЫ
+// =======================
 
+
+function saveCurrentShift(){
+
+    let data = {
+
+        date:
+        document.getElementById("date")?.value || "",
+
+
+        colorCash:
+        document.getElementById("colorCash")?.value || "",
+
+
+        fruitCash:
+        document.getElementById("fruitCash")?.value || "",
+
+
+        expenses:
+        document.getElementById("expenses")?.value || "",
+
+
+        strawberryInfo:
+        document.getElementById("strawberryInfo")?.value || "",
+
+
+        clients:
+        document.getElementById("clients")?.innerHTML || ""
+
+    };
+
+
+    localStorage.setItem(
+        "currentShift",
+        JSON.stringify(data)
+    );
+
+
+    alert("Смена сохранена 💾");
+
+}
+
+
+
+
+function loadCurrentShift(){
+
+    let saved =
+    localStorage.getItem("currentShift");
+
+
+    if(!saved){
+
+        alert("Сохраненной смены нет");
+
+        return;
+
+    }
+
+
+
+    let data =
+    JSON.parse(saved);
+
+
+
+    if(document.getElementById("date"))
+    document.getElementById("date").value=data.date;
+
+
+
+    if(document.getElementById("colorCash"))
+    document.getElementById("colorCash").value=data.colorCash;
+
+
+
+    if(document.getElementById("fruitCash"))
+    document.getElementById("fruitCash").value=data.fruitCash;
+
+
+
+    if(document.getElementById("expenses"))
+    document.getElementById("expenses").value=data.expenses;
+
+
+
+    if(document.getElementById("strawberryInfo"))
+    document.getElementById("strawberryInfo").value=data.strawberryInfo;
+
+
+
+    if(document.getElementById("clients")){
+
+        document.getElementById("clients").innerHTML=data.clients;
+
+        fillProducts();
+
+    }
+
+
+
+    alert("Смена восстановлена 🔄");
+
+}
+
+
+
+
+function clearCurrentShift(){
+
+    localStorage.removeItem("currentShift");
+
+
+    alert("Сохраненная смена удалена 🗑");
+
+}
 document.addEventListener("DOMContentLoaded",()=>{
 
     renderCatalog();
