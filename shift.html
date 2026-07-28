@@ -12,103 +12,83 @@
 <style>
 
 *{
-    box-sizing:border-box;
-    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",Arial,sans-serif;
+box-sizing:border-box;
+font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",Arial,sans-serif;
 }
 
 
 body{
-    margin:0;
-    background:#09090b;
-    color:white;
+margin:0;
+background:#09090b;
+color:white;
 }
 
 
 .app{
-    max-width:430px;
-    margin:auto;
-    padding:25px 18px 40px;
+max-width:430px;
+margin:auto;
+padding:25px 18px 40px;
 }
 
 
-
-/* HEADER */
-
 .header{
-
-    display:flex;
-    align-items:center;
-    gap:15px;
-    margin-bottom:30px;
-
+display:flex;
+align-items:center;
+gap:15px;
+margin-bottom:30px;
 }
 
 
 .back{
-
-    width:45px;
-    height:45px;
-
-    background:#18181b;
-
-    border-radius:15px;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    font-size:25px;
-
+width:45px;
+height:45px;
+background:#18181b;
+border-radius:15px;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:25px;
 }
 
 
-
 h1{
-
-    margin:0;
-    font-size:25px;
-
+margin:0;
+font-size:25px;
 }
 
 
 .header p{
-
-    margin:5px 0 0;
-
-    color:#999;
-
+margin:5px 0;
+color:#999;
 }
 
 
-
-/* CARDS */
 
 .card{
 
-    background:#18181b;
+background:#18181b;
 
-    border-radius:24px;
+border-radius:24px;
 
-    padding:22px;
+padding:22px;
 
-    margin-bottom:18px;
+margin-bottom:18px;
 
-    border:1px solid #252525;
+border:1px solid #252525;
 
 }
-
 
 
 
 label{
 
-    display:block;
+display:block;
 
-    color:#999;
+color:#999;
 
-    font-size:14px;
+font-size:14px;
 
-    margin-bottom:10px;
+margin-bottom:10px;
 
 }
 
@@ -117,23 +97,23 @@ label{
 input,
 select{
 
-    width:100%;
+width:100%;
 
-    height:52px;
+height:52px;
 
-    background:#09090b;
+background:#09090b;
 
-    border:1px solid #333;
+border:1px solid #333;
 
-    border-radius:16px;
+border-radius:16px;
 
-    color:white;
+color:white;
 
-    padding:0 16px;
+padding:0 16px;
 
-    font-size:16px;
+font-size:16px;
 
-    margin-bottom:22px;
+margin-bottom:20px;
 
 }
 
@@ -141,21 +121,39 @@ select{
 
 button{
 
-    width:100%;
+width:100%;
 
-    height:54px;
+height:54px;
 
-    border:0;
+border:none;
 
-    border-radius:18px;
+border-radius:18px;
 
-    background:#ff2d55;
+font-size:17px;
 
-    color:white;
+font-weight:600;
 
-    font-size:17px;
+}
 
-    font-weight:600;
+
+
+.add{
+
+background:#ff2d55;
+
+color:white;
+
+}
+
+
+
+.finish{
+
+background:white;
+
+color:#111;
+
+margin-top:10px;
 
 }
 
@@ -163,13 +161,11 @@ button{
 
 .total{
 
-    font-size:32px;
+font-size:32px;
 
-    font-weight:700;
+font-weight:700;
 
-    color:#ff4d6d;
-
-    margin-top:10px;
+color:#ff4d6d;
 
 }
 
@@ -177,15 +173,13 @@ button{
 
 .sale{
 
-    display:flex;
+display:flex;
 
-    justify-content:space-between;
+justify-content:space-between;
 
-    align-items:center;
+padding:15px 0;
 
-    padding:16px 0;
-
-    border-bottom:1px solid #333;
+border-bottom:1px solid #333;
 
 }
 
@@ -193,11 +187,11 @@ button{
 
 .empty{
 
-    text-align:center;
+text-align:center;
 
-    color:#777;
+color:#777;
 
-    padding:25px 0;
+padding:25px 0;
 
 }
 
@@ -208,14 +202,15 @@ button{
 </head>
 
 
+
 <body>
 
 
 <div class="app">
 
 
-<div class="header">
 
+<div class="header">
 
 <div class="back" onclick="history.back()">
 ‹
@@ -230,7 +225,6 @@ button{
 
 </div>
 
-
 </div>
 
 
@@ -244,7 +238,7 @@ button{
 </label>
 
 
-<input id="client" placeholder="Введите имя клиента">
+<input id="client" placeholder="Имя клиента">
 
 
 
@@ -280,11 +274,12 @@ button{
 
 
 
-<button onclick="addSale()">
+<button class="add" onclick="addSale()">
 
 Добавить продажу
 
 </button>
+
 
 
 </div>
@@ -302,14 +297,11 @@ button{
 
 
 <div class="total" id="total">
-
 0 ₽
-
 </div>
 
 
 </div>
-
 
 
 
@@ -332,12 +324,21 @@ button{
 </div>
 
 
+
+<button class="finish" onclick="finishShift()">
+
+Завершить смену
+
+</button>
+
+
 </div>
 
 
 
 
 </div>
+
 
 
 
@@ -354,7 +355,8 @@ JSON.parse(localStorage.getItem("sales")) || [];
 
 
 
-let select=document.getElementById("product");
+let select =
+document.getElementById("product");
 
 
 
@@ -366,7 +368,7 @@ let option=document.createElement("option");
 option.value=index;
 
 option.textContent =
-item.name + " — " + item.price + " ₽";
+item.name+" — "+item.price+" ₽";
 
 
 select.appendChild(option);
@@ -401,21 +403,18 @@ document.getElementById("client").value;
 
 
 
-let sale={
+sales.push({
 
 name:product.name,
 
 count:count,
 
-sum:product.price * count,
+client:client,
 
-client:client
+sum:product.price*count
 
-};
+});
 
-
-
-sales.push(sale);
 
 
 localStorage.setItem(
@@ -433,20 +432,21 @@ showSales();
 
 
 
-
 function showSales(){
 
 
 let box=document.getElementById("sales");
 
-let total=0;
 
+let total=0;
 
 
 if(sales.length===0){
 
 box.innerHTML=
 '<div class="empty">Продаж пока нет</div>';
+
+document.getElementById("total").innerHTML="0 ₽";
 
 return;
 
@@ -461,8 +461,7 @@ box.innerHTML="";
 sales.forEach(item=>{
 
 
-total += item.sum;
-
+total+=item.sum;
 
 
 box.innerHTML += `
@@ -478,27 +477,93 @@ ${item.name} × ${item.count}
 ${item.sum} ₽
 </b>
 
-
 </div>
 
 `;
 
-
-
 });
 
 
-
 document.getElementById("total").innerHTML =
-total + " ₽";
+total+" ₽";
 
 
 }
 
 
 
+
+
+function finishShift(){
+
+
+if(sales.length===0){
+
+alert("Нет продаж для завершения");
+
+return;
+
+}
+
+
+
+let total=0;
+
+let items=0;
+
+
+
+sales.forEach(item=>{
+
+total+=item.sum;
+
+items+=item.count;
+
+});
+
+
+
+let history =
+JSON.parse(localStorage.getItem("history")) || [];
+
+
+
+history.push({
+
+date:new Date().toLocaleDateString("ru-RU"),
+
+total:total,
+
+items:items
+
+});
+
+
+
+localStorage.setItem(
+"history",
+JSON.stringify(history)
+);
+
+
+
+localStorage.removeItem("sales");
+
+
+
+sales=[];
+
+
 showSales();
 
+
+alert("Смена сохранена");
+
+}
+
+
+
+showSales();
 
 
 </script>
