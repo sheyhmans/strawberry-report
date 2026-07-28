@@ -131,9 +131,14 @@ function deleteCatalog(index){
 
 function fillProducts(){
 
+    catalog = JSON.parse(localStorage.getItem("catalog")) || [];
+
 
     document.querySelectorAll(".productSelect")
     .forEach(select=>{
+
+
+        let currentValue = select.value;
 
 
         select.innerHTML="";
@@ -154,16 +159,28 @@ function fillProducts(){
 
             let option=document.createElement("option");
 
+
             option.value=index;
 
-            option.textContent=
-            item.name+" "+money(item.price)+"₽";
+
+            option.textContent =
+            item.name +
+            " " +
+            money(item.price) +
+            "₽";
 
 
             select.appendChild(option);
 
 
         });
+
+
+        if(currentValue){
+
+            select.value=currentValue;
+
+        }
 
 
     });
