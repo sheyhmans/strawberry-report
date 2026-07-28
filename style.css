@@ -1,0 +1,116 @@
+* {
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", Arial, sans-serif;
+}
+
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: #111;
+    color: white;
+}
+
+
+.app {
+    max-width: 500px;
+    margin: auto;
+    padding: 20px;
+}
+
+
+
+/* ЛОГОТИП */
+
+.logo {
+    width: 120px;
+    height: 120px;
+    object-fit: contain;
+    border-radius: 25px;
+}
+
+
+
+.header {
+    text-align: center;
+    padding: 30px 0;
+}
+
+
+.header h1 {
+    margin: 15px 0 5px;
+    font-size: 32px;
+    color: #ff3b5c;
+}
+
+
+.header p {
+    color: #aaa;
+}
+
+
+
+/* МЕНЮ */
+
+.menu {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+
+
+.menu-card {
+
+    display: flex;
+    align-items: center;
+
+    gap: 20px;
+
+    padding: 20px;
+
+    background: #1c1c1e;
+
+    border-radius: 20px;
+
+    text-decoration: none;
+
+    color: white;
+
+    border: 1px solid #333;
+
+}
+
+
+
+.icon {
+    font-size: 40px;
+}
+
+
+
+.menu-card h2 {
+    margin: 0;
+    font-size: 20px;
+}
+
+
+
+.menu-card p {
+    margin: 5px 0 0;
+    color: #aaa;
+}
+
+
+
+/* НИЗ */
+
+footer {
+
+    text-align:center;
+
+    margin-top:40px;
+
+    color:#666;
+
+}
