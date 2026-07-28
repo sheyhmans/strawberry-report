@@ -145,41 +145,92 @@ margin-top:40px;
 
 
 let historyData =
-JSON.parse(localStorage.getItem("history")) || [];
+
+JSON.parse(
+
+localStorage.getItem("shiftHistory")
+
+) || [];
 
 
 
-let box=document.getElementById("history");
+let box =
+
+document.getElementById("history");
 
 
 
-if(historyData.length>0){
+if(historyData.length > 0){
 
 
 box.innerHTML="";
 
 
-historyData.forEach(item=>{
+
+historyData.reverse().forEach(item=>{
 
 
-box.innerHTML += `
+
+let clientsText="";
 
 
-<div class="report">
 
-<h3>
-${item.date}
-</h3>
+item.clients.forEach(c=>{
 
 
-<p>
-Продажи: ${item.total} ₽
-</p>
+let sum=0;
 
 
-<p>
-Товаров: ${item.items}
-</p>
+c.items.forEach(i=>{
+
+sum += i.sum;
+
+});
+
+
+
+clientsText += `
+
+
+<div style="margin-top:15px;padding:12px;background:#111;border-radius:15px;">
+
+
+<b>
+${c.name}
+</b>
+
+
+<br>
+
+
+${c.items.map(i=>
+
+`${i.name} — ${i.amount} — ${i.sum} ₽`
+
+).join("<br>")}
+
+
+<br><br>
+
+
+Итого клиента:
+${sum} ₽
+
+
+<br>
+
+
+Оплата:
+
+💵 ${c.payment?.cash || 0} ₽
+
+<br>
+
+💳 ${c.payment?.transfer || 0} ₽
+
+<br>
+
+🧾 ${c.payment?.terminal || 0} ₽
 
 
 </div>
@@ -188,11 +239,91 @@ ${item.date}
 `;
 
 
+
 });
 
 
-}
 
+
+box.innerHTML += `
+
+
+<div class="report">
+
+
+<h3>
+${item.date}
+</h3>
+
+
+<p>
+Продажи: ${item.sales} ₽
+</p>
+
+
+<p>
+💵 Наличные: ${item.cash} ₽
+</p>
+
+
+<p>
+💳 Перевод: ${item.transfer} ₽
+</p>
+
+
+<p>
+🧾 Терминал: ${item.terminal} ₽
+</p>
+
+
+
+<p>
+Расходы: ${item.expenseTotal} ₽
+</p>
+
+
+
+<p>
+<b>
+Остаток налички: ${item.finalCash} ₽
+</b>
+</p>
+
+
+
+<h3>
+Клиенты:
+</h3>
+
+
+${clientsText}
+
+
+</div>
+
+
+`;
+
+
+
+});
+
+
+
+}else{
+
+
+box.innerHTML=
+
+`
+<div class="empty">
+Смен пока нет
+</div>
+`;
+
+
+
+}
 
 
 </script>
