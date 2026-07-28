@@ -27,6 +27,7 @@ margin:auto;
 padding:25px 18px 40px;
 }
 
+
 .header{
 display:flex;
 align-items:center;
@@ -45,6 +46,7 @@ justify-content:center;
 font-size:25px;
 }
 
+
 h1{
 margin:0;
 font-size:25px;
@@ -55,17 +57,35 @@ margin:5px 0;
 color:#999;
 }
 
+
+
+.status{
+
+background:#18181b;
+border-radius:20px;
+padding:18px;
+margin-bottom:15px;
+border:1px solid #252525;
+
+}
+
+
+
 .card{
+
 background:#18181b;
 border-radius:24px;
 padding:20px;
 margin-bottom:15px;
+
 }
+
+
 
 input,select{
 
 width:100%;
-height:50px;
+height:52px;
 
 background:#09090b;
 
@@ -85,6 +105,8 @@ margin-bottom:12px;
 
 }
 
+
+
 button{
 
 width:100%;
@@ -100,49 +122,54 @@ font-weight:600;
 
 }
 
+
+
 .primary{
+
 background:#ff2d55;
 color:white;
+
 }
+
+
 
 .finish{
+
 background:#ff453a;
 color:white;
-margin-top:15px;
-}
-
-
-.status{
-
-background:#18181b;
-padding:15px;
-border-radius:18px;
-margin-bottom:15px;
 
 }
+
 
 
 .client{
 
 background:#111;
+
 padding:15px;
+
 border-radius:18px;
+
 margin-top:10px;
 
-}
-
-
-
-.active{
-
-border:1px solid #ff2d55;
+border:1px solid transparent;
 
 }
+
+
+
+.client.active{
+
+border-color:#ff2d55;
+
+}
+
 
 
 .sale{
 
 display:flex;
+
 justify-content:space-between;
 
 padding:12px 0;
@@ -169,11 +196,22 @@ color:#ff4d6d;
 
 text-align:center;
 
+padding:35px 10px;
+
 color:#999;
 
-padding:30px;
+}
+
+
+
+.small{
+
+color:#999;
+
+font-size:14px;
 
 }
+
 
 
 </style>
@@ -189,7 +227,10 @@ padding:30px;
 
 <div class="header">
 
-<div class="back" onclick="history.back()">‹</div>
+<div class="back" onclick="history.back()">
+‹
+</div>
+
 
 <div>
 
@@ -202,20 +243,22 @@ padding:30px;
 </div>
 
 
-<div class="status" id="status"></div>
 
-
-
-<div id="content"></div>
-
-
+<div class="status" id="status">
 
 </div>
 
 
 
-<script>
+<div id="content">
 
+</div>
+
+
+
+</div>
+
+  <script>
 
 let active =
 localStorage.getItem("shiftActive");
@@ -225,33 +268,46 @@ let products =
 JSON.parse(localStorage.getItem("products")) || [];
 
 
-let clients=[];
+let clients = [];
 
-let currentClient=null;
+let currentClient = null;
 
 
 
-if(active==="true"){
+let status =
+document.getElementById("status");
 
-document.getElementById("status").innerHTML=
-"🟢 Смена активна";
 
-load();
+let content =
+document.getElementById("content");
+
+
+
+
+if(active === "true"){
+
+status.innerHTML = `
+🟢 <b>Смена активна</b><br>
+<span class="small">
+Начало: ${localStorage.getItem("shiftStart") || ""}
+</span>
+`;
+
+loadShift();
 
 
 }else{
 
 
-document.getElementById("status").innerHTML=
+status.innerHTML =
 "🔴 Смена не начата";
 
 
-document.getElementById("content").innerHTML=
-`
+content.innerHTML = `
 
 <div class="lock">
 
-Начните смену<br>
+Сначала начните смену<br>
 на главном экране
 
 </div>
@@ -264,28 +320,36 @@ document.getElementById("content").innerHTML=
 
 
 
-function load(){
+function loadShift(){
 
 
-document.getElementById("content").innerHTML=`
+content.innerHTML = `
+
 
 <div class="card">
 
-<h3>Клиент</h3>
+
+<h3>
+Клиент
+</h3>
+
 
 <input id="clientName" placeholder="Имя клиента">
 
 
 <button class="primary" onclick="addClient()">
 
-Добавить клиента
+＋ Добавить клиента
 
 </button>
 
 
+
 <div id="clients"></div>
 
+
 </div>
+
 
 
 
@@ -293,7 +357,9 @@ document.getElementById("content").innerHTML=`
 <div class="card">
 
 
-<h3>Товар</h3>
+<h3>
+Товар
+</h3>
 
 
 <select id="product" onchange="changeUnit()">
@@ -308,9 +374,10 @@ document.getElementById("content").innerHTML=`
 <div id="weightBox"></div>
 
 
+
 <button class="primary" onclick="addProduct()">
 
-Добавить товар
+Добавить товар клиенту
 
 </button>
 
@@ -320,9 +387,15 @@ document.getElementById("content").innerHTML=`
 
 
 
+
 <div class="card">
 
-<h3>Покупка</h3>
+
+<h3>
+Покупка
+
+</h3>
+
 
 <div id="current">
 
@@ -335,39 +408,49 @@ document.getElementById("content").innerHTML=`
 
 
 
+
+
 <div class="card">
 
 
-<h3>Итого смена</h3>
+<h3>
+Итого смена
+
+</h3>
 
 
 <div class="total" id="total">
-
 0 ₽
-
 </div>
 
 
-<button class="finish" onclick="finishShift()">
+<button class="finish" onclick="openFinish()">
 
 Завершить смену
 
 </button>
 
 
+<div id="finishBox"></div>
+
+
 </div>
+
+
 
 `;
 
 
 
-let select=document.getElementById("product");
+let select =
+document.getElementById("product");
 
 
 
 products.forEach((p,i)=>{
 
-select.innerHTML+=`
+
+select.innerHTML += `
 
 <option value="${i}">
 
@@ -388,32 +471,38 @@ ${p.name} — ${p.price} ₽/${p.unit}
 function changeUnit(){
 
 
-let product=
-products[document.getElementById("product").value];
+let index =
+document.getElementById("product").value;
 
 
-let box=document.getElementById("weightBox");
+let p =
+products[index];
+
+
+let box =
+document.getElementById("weightBox");
 
 
 
-if(!product)return;
+if(!p) return;
 
 
 
-if(product.unit==="кг"){
+if(p.unit==="кг"){
+
 
 box.innerHTML=`
 
 <input id="kg" type="number" placeholder="Килограммы">
 
-
 <input id="gram" type="number" placeholder="Граммы">
 
 `;
 
 }
 
-else if(product.unit==="г"){
+
+else if(p.unit==="г"){
 
 
 box.innerHTML=`
@@ -424,12 +513,12 @@ box.innerHTML=`
 
 }
 
+
 else{
 
 
-box.innerHTML=
+box.innerHTML=`
 
-`
 <input id="count" type="number" value="1" placeholder="Количество">
 
 `;
@@ -437,9 +526,7 @@ box.innerHTML=
 }
 
 
-
 }
-
 
 
 
@@ -447,14 +534,16 @@ box.innerHTML=
 function addClient(){
 
 
-let name=
+let name =
 document.getElementById("clientName").value;
 
 
-if(!name)return;
+
+if(!name) return;
 
 
-let c={
+
+let client={
 
 name:name,
 
@@ -463,15 +552,20 @@ items:[]
 };
 
 
-clients.push(c);
 
-currentClient=c;
+clients.push(client);
+
+
+currentClient=client;
+
 
 
 document.getElementById("clientName").value="";
 
 
+
 render();
+
 
 }
 
@@ -481,18 +575,26 @@ render();
 function render(){
 
 
-let box=document.getElementById("clients");
+let box =
+document.getElementById("clients");
+
+
+
+if(!box)return;
+
 
 
 box.innerHTML="";
 
 
+
 clients.forEach((c,i)=>{
 
 
-box.innerHTML+=`
+box.innerHTML += `
 
 <div class="client ${c===currentClient?'active':''}"
+
 onclick="selectClient(${i})">
 
 ${c.name}
@@ -511,14 +613,18 @@ showCurrent();
 
 
 
+
 function selectClient(i){
 
-currentClient=clients[i];
+
+currentClient =
+clients[i];
+
 
 render();
 
-}
 
+}
 
 
 
@@ -526,9 +632,10 @@ render();
 function addProduct(){
 
 
+
 if(!currentClient){
 
-alert("Выберите клиента");
+alert("Сначала выберите клиента");
 
 return;
 
@@ -536,97 +643,85 @@ return;
 
 
 
-let index=
+let index =
 document.getElementById("product").value;
 
 
-let p=products[index];
 
+let p =
+products[index];
+
+
+
+let text="";
 
 let quantity=0;
-
-let title="";
 
 
 
 if(p.unit==="кг"){
 
 
-let kg=
+let kg =
 Number(document.getElementById("kg").value || 0);
 
 
-let g=
+let gram =
 Number(document.getElementById("gram").value || 0);
 
 
 
-quantity=kg+(g/1000);
+quantity =
+kg + gram/1000;
 
 
-title=
-kg+" кг "+g+" г";
+
+text =
+kg+" кг "+gram+" г";
 
 
 }
+
 
 
 else if(p.unit==="г"){
 
 
-let g=
-Number(document.getElementById("gram").value);
+
+let gram =
+Number(document.getElementById("gram").value || 0);
 
 
-quantity=g/1000;
+quantity =
+gram/1000;
 
 
-title=
-g+" г";
+text =
+gram+" г";
 
 
 }
 
+
 else{
 
 
-let count=
-Number(document.getElementById("count").value);
+let count =
+Number(document.getElementById("count").value || 0);
 
 
 quantity=count;
 
 
-title=
-count+" шт";
+text=count+" шт";
 
 
 }
 
 
 
-let sum;
-
-
-
-if(p.unit==="кг"){
-
-sum=p.price*quantity;
-
-}
-
-else if(p.unit==="г"){
-
-sum=p.price*quantity;
-
-}
-
-else{
-
-sum=p.price*quantity;
-
-}
-
+let sum =
+Math.round(p.price * quantity);
 
 
 
@@ -634,15 +729,16 @@ currentClient.items.push({
 
 name:p.name,
 
-quantity:title,
+quantity:text,
 
-sum:Math.round(sum)
+sum:sum
 
 });
 
 
 
 showCurrent();
+
 
 
 }
@@ -653,7 +749,9 @@ showCurrent();
 function showCurrent(){
 
 
-let box=document.getElementById("current");
+let box =
+document.getElementById("current");
+
 
 
 if(!currentClient){
@@ -666,35 +764,41 @@ return;
 
 
 
-let html="<h3>"+currentClient.name+"</h3>";
+let html =
+"<h3>"+currentClient.name+"</h3>";
 
 
 
-let clientTotal=0;
+let total=0;
 
 
 
-currentClient.items.forEach(i=>{
+currentClient.items.forEach(item=>{
 
 
-clientTotal+=i.sum;
+total += item.sum;
 
 
-html+=`
+
+html += `
 
 <div class="sale">
 
 <span>
 
-${i.name}<br>
-${i.quantity}
+${item.name}<br>
+
+${item.quantity}
 
 </span>
 
 
 <b>
-${i.sum} ₽
+
+${item.sum} ₽
+
 </b>
+
 
 </div>
 
@@ -703,13 +807,14 @@ ${i.sum} ₽
 });
 
 
+html +=
 
-html+=
-"<br>Итого клиента: "+clientTotal+" ₽";
+"<br><b>Итого клиента: "+total+" ₽</b>";
 
 
 
 box.innerHTML=html;
+
 
 
 updateTotal();
@@ -727,18 +832,24 @@ function updateTotal(){
 let total=0;
 
 
+
 clients.forEach(c=>{
+
 
 c.items.forEach(i=>{
 
-total+=i.sum;
+
+total += i.sum;
+
 
 });
 
+
 });
 
 
-document.getElementById("total").innerHTML=
+
+document.getElementById("total").innerHTML =
 total+" ₽";
 
 
@@ -747,18 +858,130 @@ total+" ₽";
 
 
 
+function openFinish(){
+
+
+document.getElementById("finishBox").innerHTML=`
+
+<br>
+
+
+<input id="cash" type="number" placeholder="Наличные">
+
+
+<input id="transfer" type="number" placeholder="Перевод">
+
+
+<input id="expense" type="number" placeholder="Расходы">
+
+
+<input id="comment" placeholder="Комментарий">
+
+
+<button class="primary" onclick="finishShift()">
+
+Сохранить смену
+
+</button>
+
+
+`;
+
+
+
+}
+
+
+
 
 function finishShift(){
 
-alert("Смена завершена");
+
+
+let total=0;
+
+
+
+clients.forEach(c=>{
+
+
+c.items.forEach(i=>{
+
+
+total += i.sum;
+
+
+});
+
+
+});
+
+
+
+let history =
+JSON.parse(localStorage.getItem("history")) || [];
+
+
+
+history.push({
+
+
+date:new Date().toLocaleString("ru-RU"),
+
+
+start:
+localStorage.getItem("shiftStart"),
+
+
+end:
+new Date().toLocaleString("ru-RU"),
+
+
+clients:clients,
+
+
+total:total,
+
+
+cash:Number(document.getElementById("cash").value || 0),
+
+
+transfer:Number(document.getElementById("transfer").value || 0),
+
+
+expense:Number(document.getElementById("expense").value || 0),
+
+
+comment:
+document.getElementById("comment").value
+
+
+
+});
+
+
+
+localStorage.setItem(
+"history",
+JSON.stringify(history)
+);
+
+
 
 localStorage.removeItem("shiftActive");
 
 localStorage.removeItem("shiftStart");
 
-location.reload();
+
+
+alert("Смена сохранена");
+
+
+location.href="history.html";
+
 
 }
+
 
 
 </script>
