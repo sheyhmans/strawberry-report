@@ -8,7 +8,6 @@
 
 <title>Продажи | Strawberry POS</title>
 
-
 <style>
 
 *{
@@ -16,13 +15,11 @@ box-sizing:border-box;
 font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",Arial,sans-serif;
 }
 
-
 body{
 margin:0;
 background:#09090b;
 color:white;
 }
-
 
 .app{
 max-width:430px;
@@ -35,9 +32,8 @@ padding:25px 18px 40px;
 display:flex;
 align-items:center;
 gap:15px;
-margin-bottom:30px;
+margin-bottom:25px;
 }
-
 
 .back{
 width:45px;
@@ -56,7 +52,6 @@ margin:0;
 font-size:25px;
 }
 
-
 .header p{
 margin:5px 0;
 color:#999;
@@ -67,53 +62,35 @@ color:#999;
 .card{
 
 background:#18181b;
-
 border-radius:24px;
-
-padding:22px;
-
-margin-bottom:18px;
-
+padding:20px;
+margin-bottom:15px;
 border:1px solid #252525;
 
 }
 
 
 
-label{
-
-display:block;
-
-color:#999;
-
-font-size:14px;
-
-margin-bottom:10px;
-
-}
-
-
-
-input,
-select{
+input,select{
 
 width:100%;
-
-height:52px;
+height:50px;
 
 background:#09090b;
 
 border:1px solid #333;
 
-border-radius:16px;
+border-radius:15px;
 
 color:white;
 
-padding:0 16px;
+padding:0 15px;
 
 font-size:16px;
 
-margin-bottom:20px;
+margin-top:10px;
+
+margin-bottom:15px;
 
 }
 
@@ -122,14 +99,13 @@ margin-bottom:20px;
 button{
 
 width:100%;
-
-height:54px;
+height:52px;
 
 border:none;
 
-border-radius:18px;
+border-radius:17px;
 
-font-size:17px;
+font-size:16px;
 
 font-weight:600;
 
@@ -137,21 +113,34 @@ font-weight:600;
 
 
 
-.add{
+.primary{
 
 background:#ff2d55;
-
 color:white;
 
 }
 
 
-
-.finish{
+.secondary{
 
 background:white;
-
 color:#111;
+
+}
+
+
+
+.client{
+
+display:flex;
+justify-content:space-between;
+align-items:center;
+
+padding:15px;
+
+background:#111;
+
+border-radius:18px;
 
 margin-top:10px;
 
@@ -159,9 +148,25 @@ margin-top:10px;
 
 
 
+.client.active{
+
+border:1px solid #ff2d55;
+
+}
+
+
+
+.client-name{
+
+font-size:17px;
+
+}
+
+
+
 .total{
 
-font-size:32px;
+font-size:30px;
 
 font-weight:700;
 
@@ -173,13 +178,13 @@ color:#ff4d6d;
 
 .sale{
 
+padding:12px 0;
+
+border-bottom:1px solid #333;
+
 display:flex;
 
 justify-content:space-between;
-
-padding:15px 0;
-
-border-bottom:1px solid #333;
 
 }
 
@@ -191,16 +196,15 @@ text-align:center;
 
 color:#777;
 
-padding:25px 0;
+padding:20px;
 
 }
 
 
+
 </style>
 
-
 </head>
-
 
 
 <body>
@@ -209,19 +213,19 @@ padding:25px 0;
 <div class="app">
 
 
-
 <div class="header">
 
 <div class="back" onclick="history.back()">
 ‹
 </div>
 
-
 <div>
 
 <h1>Продажи</h1>
 
-<p>Текущая смена</p>
+<p id="shiftStatus">
+Смена не начата
+</p>
 
 </div>
 
@@ -233,13 +237,37 @@ padding:25px 0;
 <div class="card">
 
 
-<label>
+<button class="primary" onclick="startShift()">
+
+▶ Начать смену
+
+</button>
+
+
+</div>
+
+
+
+
+<div class="card">
+
+
+<h3>
 Клиент
-</label>
+</h3>
 
 
-<input id="client" placeholder="Имя клиента">
+<input id="clientName" placeholder="Имя клиента">
 
+
+<button class="secondary" onclick="addClient()">
+
+＋ Добавить клиента
+
+</button>
+
+
+<div id="clients"></div>
 
 
 </div>
@@ -247,12 +275,13 @@ padding:25px 0;
 
 
 
+
 <div class="card">
 
 
-<label>
+<h3>
 Товар
-</label>
+</h3>
 
 
 <select id="product">
@@ -265,21 +294,15 @@ padding:25px 0;
 
 
 
-<label>
-Количество
-</label>
-
-
 <input id="count" type="number" value="1">
 
 
 
-<button class="add" onclick="addSale()">
+<button class="primary" onclick="addProduct()">
 
-Добавить продажу
+Добавить товар клиенту
 
 </button>
-
 
 
 </div>
@@ -291,13 +314,15 @@ padding:25px 0;
 <div class="card">
 
 
-<label>
-Сумма смены
-</label>
+<h3>
+Текущий клиент
+</h3>
 
 
-<div class="total" id="total">
-0 ₽
+<div id="current">
+
+Клиент не выбран
+
 </div>
 
 
@@ -310,36 +335,22 @@ padding:25px 0;
 
 
 <h3>
-Продажи сегодня
+Итого смена
 </h3>
 
 
-<div id="sales">
+<div class="total" id="total">
 
-<div class="empty">
-Продаж пока нет
-</div>
-
+0 ₽
 
 </div>
-
-
-
-<button class="finish" onclick="finishShift()">
-
-Завершить смену
-
-</button>
 
 
 </div>
 
 
 
-
 </div>
-
-
 
 
 
@@ -350,13 +361,16 @@ let products =
 JSON.parse(localStorage.getItem("products")) || [];
 
 
-let sales =
-JSON.parse(localStorage.getItem("sales")) || [];
+let clients = [];
 
 
+let currentClient = null;
 
-let select =
-document.getElementById("product");
+
+let shiftStarted = false;
+
+
+let select=document.getElementById("product");
 
 
 
@@ -380,7 +394,126 @@ select.appendChild(option);
 
 
 
-function addSale(){
+function startShift(){
+
+shiftStarted=true;
+
+document.getElementById("shiftStatus").innerHTML =
+"Смена активна";
+
+
+}
+
+
+
+
+function addClient(){
+
+
+let name=document.getElementById("clientName").value;
+
+
+if(!name) return;
+
+
+let client={
+
+name:name,
+
+items:[]
+
+};
+
+
+clients.push(client);
+
+
+currentClient=client;
+
+
+document.getElementById("clientName").value="";
+
+
+showClients();
+
+showCurrent();
+
+
+}
+
+
+
+
+
+function showClients(){
+
+
+let box=document.getElementById("clients");
+
+
+box.innerHTML="";
+
+
+clients.forEach((client,index)=>{
+
+
+box.innerHTML+=`
+
+<div class="client ${client===currentClient?'active':''}" onclick="selectClient(${index})">
+
+<div class="client-name">
+
+${client.name}
+
+</div>
+
+
+<div>
+
+›
+
+</div>
+
+
+</div>
+
+`;
+
+
+});
+
+
+}
+
+
+
+
+
+function selectClient(index){
+
+currentClient=clients[index];
+
+showClients();
+
+showCurrent();
+
+}
+
+
+
+
+
+function addProduct(){
+
+
+if(!currentClient){
+
+alert("Сначала выберите клиента");
+
+return;
+
+}
+
 
 
 let index=select.value;
@@ -393,38 +526,23 @@ if(index==="Выберите товар") return;
 let product=products[index];
 
 
-let count =
+let count=
 Number(document.getElementById("count").value);
 
 
 
-let client =
-document.getElementById("client").value;
-
-
-
-sales.push({
+currentClient.items.push({
 
 name:product.name,
 
 count:count,
-
-client:client,
 
 sum:product.price*count
 
 });
 
 
-
-localStorage.setItem(
-"sales",
-JSON.stringify(sales)
-);
-
-
-
-showSales();
+showCurrent();
 
 
 }
@@ -432,21 +550,15 @@ showSales();
 
 
 
-function showSales(){
+function showCurrent(){
 
 
-let box=document.getElementById("sales");
+let box=document.getElementById("current");
 
 
-let total=0;
+if(!currentClient){
 
-
-if(sales.length===0){
-
-box.innerHTML=
-'<div class="empty">Продаж пока нет</div>';
-
-document.getElementById("total").innerHTML="0 ₽";
+box.innerHTML="Клиент не выбран";
 
 return;
 
@@ -454,17 +566,19 @@ return;
 
 
 
-box.innerHTML="";
+let total=0;
 
 
+let html=`<h3>${currentClient.name}</h3>`;
 
-sales.forEach(item=>{
+
+currentClient.items.forEach(item=>{
 
 
 total+=item.sum;
 
 
-box.innerHTML += `
+html+=`
 
 <div class="sale">
 
@@ -477,9 +591,51 @@ ${item.name} × ${item.count}
 ${item.sum} ₽
 </b>
 
+
 </div>
 
 `;
+
+});
+
+
+html+=`
+
+<br>
+
+<b>
+Итого клиента: ${total} ₽
+</b>
+
+`;
+
+
+
+box.innerHTML=html;
+
+
+
+updateTotal();
+
+
+}
+
+
+
+
+function updateTotal(){
+
+
+let total=0;
+
+
+clients.forEach(client=>{
+
+client.items.forEach(item=>{
+
+total+=item.sum;
+
+});
 
 });
 
@@ -492,82 +648,7 @@ total+" ₽";
 
 
 
-
-
-function finishShift(){
-
-
-if(sales.length===0){
-
-alert("Нет продаж для завершения");
-
-return;
-
-}
-
-
-
-let total=0;
-
-let items=0;
-
-
-
-sales.forEach(item=>{
-
-total+=item.sum;
-
-items+=item.count;
-
-});
-
-
-
-let history =
-JSON.parse(localStorage.getItem("history")) || [];
-
-
-
-history.push({
-
-date:new Date().toLocaleDateString("ru-RU"),
-
-total:total,
-
-items:items
-
-});
-
-
-
-localStorage.setItem(
-"history",
-JSON.stringify(history)
-);
-
-
-
-localStorage.removeItem("sales");
-
-
-
-sales=[];
-
-
-showSales();
-
-
-alert("Смена сохранена");
-
-}
-
-
-
-showSales();
-
-
 </script>
-
 
 
 </body>
