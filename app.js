@@ -58,6 +58,8 @@ function addCatalogItem(){
 
     renderCatalog();
 
+    fillProducts();
+
 
     document.getElementById("newName").value="";
     document.getElementById("newPrice").value="";
