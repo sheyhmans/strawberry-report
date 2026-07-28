@@ -25,7 +25,7 @@ color:white;
 .app{
 max-width:430px;
 margin:auto;
-padding:25px 18px 40px;
+padding:25px 18px 110px;
 }
 
 
@@ -286,6 +286,44 @@ margin-top:35px;
 
 }
 
+.bottom-nav{
+
+position:fixed;
+bottom:15px;
+left:50%;
+transform:translateX(-50%);
+
+width:calc(100% - 30px);
+max-width:400px;
+
+height:75px;
+
+background:#18181b;
+
+border-radius:25px;
+
+display:flex;
+justify-content:space-around;
+align-items:center;
+
+}
+
+
+.bottom-nav a{
+
+text-decoration:none;
+color:#999;
+
+font-size:12px;
+
+display:flex;
+flex-direction:column;
+align-items:center;
+
+gap:5px;
+
+}
+  
 </style>
 
 </head>
@@ -423,84 +461,32 @@ margin-top:35px;
 
 
 
-<div class="menu">
+<div class="bottom-nav">
 
+<a href="index.html">
+🏠
+<span>Главная</span>
+</a>
 
-
-<a href="shift.html" class="menu-card">
-
-<div>
+<a href="shift.html">
 🛒
-</div>
-
-<h3>
-Продажи
-</h3>
-
-<p>
-Новая покупка
-</p>
-
+<span>Продажи</span>
 </a>
 
-
-
-
-<a href="catalog.html" class="menu-card">
-
-<div>
+<a href="catalog.html">
 📦
-</div>
-
-<h3>
-Каталог
-</h3>
-
-<p>
-Товары
-</p>
-
+<span>Каталог</span>
 </a>
 
-
-
-
-<a href="history.html" class="menu-card">
-
-<div>
+<a href="history.html">
 📋
-</div>
-
-<h3>
-История
-</h3>
-
-<p>
-Отчеты
-</p>
-
+<span>История</span>
 </a>
 
-
-
-
-<a href="#" class="menu-card">
-
-<div>
+<a href="#">
 ⚙️
-</div>
-
-<h3>
-Настройки
-</h3>
-
-<p>
-Скоро
-</p>
-
+<span>Настройки</span>
 </a>
-
-
 
 </div>
 
