@@ -420,13 +420,15 @@ box.innerHTML="";
 
 
 
-products.forEach(item=>{
+products.forEach((item,index)=>{
 
 
 box.innerHTML+=`
 
 <div class="product">
 
+
+<div>
 
 <div class="name">
 
@@ -435,13 +437,47 @@ ${item.name}
 </div>
 
 
-
 <div class="price">
 
 ${item.price} ₽ / ${item.unit}
 
 </div>
 
+</div>
+
+
+
+<div style="width:90px;">
+
+
+<button 
+onclick="editProduct(${index})"
+style="
+height:35px;
+font-size:13px;
+margin-bottom:5px;
+">
+
+✏️
+
+</button>
+
+
+
+<button 
+onclick="deleteProduct(${index})"
+style="
+height:35px;
+font-size:13px;
+background:#ff453a;
+">
+
+🗑
+
+</button>
+
+
+</div>
 
 
 </div>
@@ -454,7 +490,84 @@ ${item.price} ₽ / ${item.unit}
 }
 
 
+function deleteProduct(index){
 
+
+if(confirm("Удалить этот товар?")){
+
+
+products.splice(index,1);
+
+
+localStorage.setItem(
+"products",
+JSON.stringify(products)
+);
+
+
+showProducts();
+
+
+}
+
+
+}
+
+
+
+function editProduct(index){
+
+
+let item = products[index];
+
+
+let name = prompt(
+"Название товара",
+item.name
+);
+
+
+if(!name)return;
+
+
+
+let price = prompt(
+"Цена",
+item.price
+);
+
+
+if(!price)return;
+
+
+
+products[index]={
+
+name:name,
+
+price:Number(price),
+
+unit:item.unit
+
+};
+
+
+
+localStorage.setItem(
+
+"products",
+
+JSON.stringify(products)
+
+);
+
+
+
+showProducts();
+
+
+}
+  
 showProducts();
 
 
