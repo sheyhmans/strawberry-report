@@ -3,79 +3,92 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Strawberry POS 3.3</title>
+    <title>Strawberry POS Premium</title>
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
     <style>
         :root {
-            --bg-main: #F2F2F7;
+            --bg-main: #F5F5F7;
             --bg-card: #FFFFFF;
-            --text-main: #000000;
-            --text-sub: #8E8E93;
-            --border: rgba(0, 0, 0, 0.1);
-            --accent-blue: #007AFF;
-            --accent-red: #FF3B30;
+            --text-main: #1D1D1F;
+            --text-sub: #86868B;
+            --border: rgba(0, 0, 0, 0.08);
+            --accent: #0071E3;
             --accent-green: #34C759;
+            --accent-red: #FF3B30;
+            --accent-orange: #FF9500;
             --pad-bg: #FFFFFF;
             --btn-bg: #F2F2F7;
             --btn-active: #E5E5EA;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
         }
 
         [data-theme="dark"] {
             --bg-main: #000000;
             --bg-card: #1C1C1E;
-            --text-main: #FFFFFF;
+            --text-main: #F5F5F7;
             --text-sub: #98989D;
-            --border: rgba(255, 255, 255, 0.15);
-            --accent-blue: #0A84FF;
-            --accent-red: #FF453A;
+            --border: rgba(255, 255, 255, 0.12);
+            --accent: #0A84FF;
             --accent-green: #32D74B;
+            --accent-red: #FF453A;
+            --accent-orange: #FF9F0A;
             --pad-bg: #1C1C1E;
             --btn-bg: #2C2C2E;
             --btn-active: #3A3A3C;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
         }
 
         * {
             box-sizing: border-box; margin: 0; padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", sans-serif;
             -webkit-tap-highlight-color: transparent; user-select: none;
         }
 
         body {
             background: var(--bg-main); color: var(--text-main);
             height: 100dvh; display: flex; flex-direction: column; overflow: hidden;
-            transition: background 0.3s;
+            transition: background 0.3s ease;
         }
 
-        /* ТОП ПАНЕЛЬ */
+        /* ТОП НАВИГАЦИЯ */
         .top-nav {
             display: flex; justify-content: space-between; align-items: center;
             padding: max(12px, env(safe-area-inset-top)) 16px 8px 16px;
+            background: var(--bg-main); z-index: 5;
         }
         .top-group { display: flex; gap: 8px; }
         .icon-btn {
             background: var(--bg-card); border: 1px solid var(--border);
-            color: var(--text-main); width: 38px; height: 38px; border-radius: 12px;
-            display: flex; justify-content: center; align-items: center; font-size: 16px;
-            cursor: pointer; transition: 0.15s; box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+            color: var(--text-main); width: 40px; height: 40px; border-radius: 14px;
+            display: flex; justify-content: center; align-items: center; font-size: 17px;
+            cursor: pointer; transition: all 0.2s; box-shadow: var(--shadow);
         }
-        .icon-btn:active { transform: scale(0.9); background: var(--btn-active); }
+        .icon-btn:active { transform: scale(0.92); background: var(--btn-active); }
 
-        /* ЧЕК (ВЕРХ) */
+        /* ЗОНА ЧЕКА */
         .receipt-zone {
-            flex: 1; padding: 0 16px 10px 16px; display: flex; flex-direction: column;
+            flex: 1; padding: 4px 16px 12px 16px; display: flex; flex-direction: column;
             overflow: hidden;
         }
 
         .client-header {
-            display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;
+            display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;
+            background: var(--bg-card); padding: 8px 12px; border-radius: 16px; border: 1px solid var(--border);
+            box-shadow: var(--shadow);
         }
-        .client-nav { display: flex; gap: 6px; align-items: center; }
-        .client-name { font-size: 18px; font-weight: 700; }
-        
+        .client-nav { display: flex; gap: 8px; align-items: center; }
+        .client-name { font-size: 15px; font-weight: 600; }
+        .client-add-btn {
+            background: var(--accent); color: #fff; border: none; width: 32px; height: 32px;
+            border-radius: 10px; font-size: 18px; font-weight: 600; display: flex; align-items: center; justify-content: center;
+            cursor: pointer; transition: transform 0.1s;
+        }
+        .client-add-btn:active { transform: scale(0.9); }
+
         .items-list {
-            flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 6px;
+            flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 8px;
             padding-bottom: 6px; scroll-behavior: smooth;
         }
         .items-list::-webkit-scrollbar { display: none; }
@@ -83,42 +96,44 @@
         .item-row {
             display: flex; justify-content: space-between; align-items: center;
             background: var(--bg-card); border: 1px solid var(--border);
-            padding: 10px 14px; border-radius: 14px;
-            box-shadow: 0 1px 6px rgba(0,0,0,0.02);
+            padding: 12px 14px; border-radius: 16px; box-shadow: var(--shadow);
+            animation: fadeIn 0.2s ease;
         }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
         
-        .item-info { flex: 1; }
+        .item-info { flex: 1; padding-right: 8px; }
         .item-info h4 { font-size: 15px; font-weight: 600; margin-bottom: 2px; }
-        .item-price { font-size: 14px; font-weight: 700; color: var(--text-sub); }
+        .item-price { font-size: 13px; font-weight: 600; color: var(--text-sub); }
         
         .qty-control {
-            display: flex; align-items: center; gap: 8px;
-            background: var(--btn-bg); padding: 4px; border-radius: 10px;
+            display: flex; align-items: center; gap: 6px;
+            background: var(--btn-bg); padding: 4px; border-radius: 12px;
         }
         .qty-btn {
-            background: var(--bg-card); border: none; width: 28px; height: 28px;
-            border-radius: 7px; font-size: 16px; font-weight: 600; color: var(--text-main);
+            background: var(--bg-card); border: none; width: 30px; height: 30px;
+            border-radius: 9px; font-size: 15px; font-weight: 600; color: var(--text-main);
             display: flex; justify-content: center; align-items: center;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.1); cursor: pointer;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05); cursor: pointer; transition: transform 0.1s;
         }
-        .qty-btn:active { transform: scale(0.9); }
+        .qty-btn:active { transform: scale(0.85); }
         .qty-btn.del { color: var(--accent-red); }
-        .qty-val { font-size: 14px; font-weight: 700; min-width: 30px; text-align: center; }
+        .qty-val { font-size: 13px; font-weight: 700; min-width: 32px; text-align: center; }
 
-        .total-block { text-align: right; margin-top: auto; padding-top: 6px; }
-        .total-block .label { font-size: 12px; color: var(--text-sub); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
-        .total-block .sum { font-size: 32px; font-weight: 800; color: var(--text-main); line-height: 1; margin-top: 2px; }
+        .total-block { text-align: right; margin-top: auto; padding-top: 8px; }
+        .total-block .label { font-size: 11px; color: var(--text-sub); font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; }
+        .total-block .sum { font-size: 34px; font-weight: 800; color: var(--text-main); line-height: 1.1; margin-top: 2px; letter-spacing: -0.5px; }
         .discount-badge {
             display: inline-block; background: var(--accent-red); color: #fff;
-            padding: 3px 6px; border-radius: 6px; font-size: 11px; font-weight: 700; margin-bottom: 2px;
+            padding: 3px 8px; border-radius: 8px; font-size: 11px; font-weight: 700; margin-bottom: 2px;
         }
 
-        /* КОМПАКТНАЯ ПАНЕЛЬ УПРАВЛЕНИЯ (НИЗ) */
+        /* НИЖНЯЯ ПАНЕЛЬ УПРАВЛЕНИЯ */
         .smart-pad {
             background: var(--pad-bg); border-top: 1px solid var(--border);
-            height: 42vh; min-height: 310px; display: flex; flex-direction: column;
+            height: 44vh; min-height: 320px; display: flex; flex-direction: column;
             padding: 12px 12px max(12px, env(safe-area-inset-bottom));
-            box-shadow: 0 -4px 16px rgba(0,0,0,0.04); z-index: 10;
+            box-shadow: 0 -10px 30px rgba(0,0,0,0.05); z-index: 10;
+            border-top-left-radius: 24px; border-top-right-radius: 24px;
         }
 
         .pad-section { display: none; flex: 1; flex-direction: column; }
@@ -126,7 +141,7 @@
 
         .catalog-grid {
             display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;
-            overflow-y: auto; flex: 1; align-content: start; padding-bottom: 6px;
+            overflow-y: auto; flex: 1; align-content: start; padding-bottom: 4px;
         }
         .catalog-grid::-webkit-scrollbar { display: none; }
 
@@ -136,46 +151,593 @@
         }
 
         .pad-btn {
-            background: var(--btn-bg); border: none; border-radius: 14px; height: 64px;
+            background: var(--btn-bg); border: none; border-radius: 16px; height: 68px;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            color: var(--text-main); cursor: pointer; transition: transform 0.1s; position: relative;
+            color: var(--text-main); cursor: pointer; transition: all 0.15s; position: relative;
         }
-        .pad-btn:active { background: var(--btn-active); transform: scale(0.95); }
+        .pad-btn:active { background: var(--btn-active); transform: scale(0.96); }
         .pad-btn .icon { font-size: 22px; margin-bottom: 2px; }
-        .pad-btn .name { font-size: 11px; font-weight: 600; text-align: center; line-height: 1.1; padding: 0 2px; color: var(--text-sub); }
+        .pad-btn .name { font-size: 11px; font-weight: 600; text-align: center; line-height: 1.2; padding: 0 2px; color: var(--text-main); }
         
-        .pad-btn.action { background: rgba(0, 122, 255, 0.08); }
-        .pad-btn.action .name { color: var(--accent-blue); font-weight: 700;}
+        .pad-btn.action { background: rgba(0, 113, 227, 0.08); }
+        .pad-btn.action .name { color: var(--accent); }
         .pad-btn.pay { background: rgba(52, 199, 89, 0.08); }
-        .pad-btn.pay .name { color: var(--accent-green); font-weight: 700;}
+        .pad-btn.pay .name { color: var(--accent-green); }
 
-        /* Кнопка настройки товара в каталоге */
         .catalog-edit-badge {
-            position: absolute; top: 4px; right: 4px; width: 20px; height: 20px;
+            position: absolute; top: 5px; right: 5px; width: 22px; height: 22px;
             background: var(--bg-card); border-radius: 50%; font-size: 10px;
-            display: flex; align-items: center; justify-content: center; box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
-        /* Цифровая клавиатура */
+        /* ЦИФРОВАЯ КЛАВИАТУРА */
         .numpad-display {
-            background: var(--btn-bg); border-radius: 14px; padding: 12px; text-align: center;
-            margin-bottom: 8px; font-size: 20px; font-weight: 700; color: var(--text-main);
+            background: var(--btn-bg); border-radius: 16px; padding: 14px; text-align: center;
+            margin-bottom: 8px; font-size: 18px; font-weight: 700; color: var(--text-main);
+            border: 1px solid var(--border);
         }
         .num-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; flex: 1; }
         .num-btn {
-            background: var(--btn-bg); border: none; border-radius: 14px;
-            font-size: 20px; font-weight: 500; color: var(--text-main);
+            background: var(--btn-bg); border: none; border-radius: 16px;
+            font-size: 20px; font-weight: 600; color: var(--text-main);
+            transition: background 0.1s;
         }
-        .num-btn:active { background: var(--btn-active); }
-        .num-btn.done { background: var(--accent-green); color: #fff; font-weight: 700; }
-        .num-btn.cancel { background: var(--accent-red); color: #fff; font-size: 15px; font-weight: 600; }
+        .num-btn:active { background: var(--btn-active); transform: scale(0.96); }
+        .num-btn.done { background: var(--accent-green); color: #fff; }
+        .num-btn.cancel { background: var(--accent-red); color: #fff; font-size: 15px; }
 
         /* МОДАЛЬНЫЕ ОКНА */
         .overlay {
-            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5);
-            backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); z-index: 100;
+            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); z-index: 100;
             justify-content: center; align-items: center; padding: 16px;
         }
         .modal-card {
-            background: var(--bg-card); width: 100%; max-width: 400px; border-radius: 20px;
-            padding: 20px; border
+            background: var(--bg-card); width: 100%; max-width: 400px; border-radius: 24px;
+            padding: 20px; border: 1px solid var(--border); box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            max-height: 85vh; display: flex; flex-direction: column;
+            animation: modalIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        @keyframes modalIn { from { opacity: 0; transform: scale(0.95) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+        
+        .modal-title { font-size: 18px; font-weight: 700; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; }
+        .modal-body { overflow-y: auto; flex: 1; padding-bottom: 6px; }
+        .modal-body::-webkit-scrollbar { display: none; }
+
+        .input-group { margin-bottom: 14px; }
+        .input-group label { display: block; font-size: 11px; font-weight: 700; color: var(--text-sub); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .input-group input, .input-group select {
+            width: 100%; background: var(--btn-bg); border: 1px solid var(--border); color: var(--text-main);
+            padding: 12px 14px; border-radius: 14px; font-size: 15px; outline: none; font-weight: 500;
+        }
+        
+        .big-btn {
+            width: 100%; border: none; padding: 14px; border-radius: 16px;
+            font-size: 16px; font-weight: 600; margin-top: 6px; cursor: pointer; transition: transform 0.1s;
+        }
+        .big-btn:active { transform: scale(0.98); }
+        .big-btn.green { background: var(--accent-green); color: #fff; }
+        .big-btn.red { background: rgba(255,59,48,0.1); color: var(--accent-red); }
+        .big-btn.outline { background: var(--btn-bg); color: var(--text-main); border: 1px solid var(--border); }
+
+        .report-view { 
+            background: var(--btn-bg); padding: 14px; border-radius: 14px; 
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; 
+            font-size: 12px; line-height: 1.5; color: var(--text-main); white-space: pre-wrap; 
+            margin-bottom: 12px; border: 1px solid var(--border); max-height: 50vh; overflow-y: auto;
+        }
+    </style>
+</head>
+<body data-theme="light">
+
+    <div class="top-nav">
+        <div class="icon-btn" onclick="toggleTheme()" id="themeBtn">🌙</div>
+        <div class="top-group">
+            <div class="icon-btn" onclick="openModal('modalSettings')">⚙️</div>
+            <div class="icon-btn" onclick="openReport()">📄</div>
+        </div>
+    </div>
+
+    <div class="receipt-zone">
+        <div class="client-header">
+            <div class="client-nav">
+                <div class="icon-btn" style="width:32px; height:32px; border-radius:10px;" onclick="prevClient()">←</div>
+                <div class="client-name" id="clientName">Клиент 1</div>
+                <div class="icon-btn" style="width:32px; height:32px; border-radius:10px;" onclick="nextClient()">→</div>
+            </div>
+            <button class="client-add-btn" onclick="addClient()" title="Новый клиент">+</button>
+        </div>
+
+        <div class="items-list" id="receiptItems"></div>
+
+        <div class="total-block">
+            <div id="discountBadge" class="discount-badge" style="display:none;"></div>
+            <div class="label" id="payMethodLabel">К ОПЛАТЕ (НАЛ)</div>
+            <div class="sum" id="totalSum">0 ₽</div>
+        </div>
+    </div>
+
+    <!-- ПАНЕЛЬ УПРАВЛЕНИЯ -->
+    <div class="smart-pad">
+        
+        <!-- Каталог -->
+        <div class="pad-section active" id="padMain">
+            <div class="catalog-grid" id="catalogGrid"></div>
+            <div class="action-row">
+                <button class="pad-btn action" onclick="showPad('padDiscount')"><div class="icon">🏷️</div><div class="name">Скидка</div></button>
+                <button class="pad-btn action" onclick="setNowTime()"><div class="icon">🕒</div><div class="name">Время</div></button>
+                <button class="pad-btn pay" onclick="showPad('padPay')"><div class="icon">💳</div><div class="name">Оплата</div></button>
+            </div>
+        </div>
+
+        <!-- Нумпад (для веса / доставки) -->
+        <div class="pad-section" id="padNumpad">
+            <div class="numpad-display" id="numpadDisplay">0</div>
+            <div class="num-grid">
+                <button class="num-btn" onclick="typeNum('1')">1</button>
+                <button class="num-btn" onclick="typeNum('2')">2</button>
+                <button class="num-btn" onclick="typeNum('3')">3</button>
+                <button class="num-btn" onclick="typeNum('4')">4</button>
+                <button class="num-btn" onclick="typeNum('5')">5</button>
+                <button class="num-btn" onclick="typeNum('6')">6</button>
+                <button class="num-btn" onclick="typeNum('7')">7</button>
+                <button class="num-btn" onclick="typeNum('8')">8</button>
+                <button class="num-btn" onclick="typeNum('9')">9</button>
+                <button class="num-btn cancel" onclick="closePads()">Отмена</button>
+                <button class="num-btn" onclick="typeNum('0')">0</button>
+                <button class="num-btn done" onclick="confirmNumpad()">Ввод</button>
+            </div>
+        </div>
+
+        <!-- Скидка -->
+        <div class="pad-section" id="padDiscount">
+            <div class="numpad-display" style="color:var(--accent-red);">Выберите скидку</div>
+            <div class="num-grid" style="grid-template-columns: repeat(2, 1fr);">
+                <button class="num-btn" onclick="applyDiscount(0)">0% (Без скидки)</button>
+                <button class="num-btn" onclick="applyDiscount(5)">5%</button>
+                <button class="num-btn" onclick="applyDiscount(10)">10%</button>
+                <button class="num-btn" onclick="applyDiscount(15)">15%</button>
+                <button class="num-btn" onclick="applyDiscount(20)">20%</button>
+                <button class="num-btn cancel" onclick="closePads()">Назад</button>
+            </div>
+        </div>
+
+        <!-- Оплата -->
+        <div class="pad-section" id="padPay">
+            <div class="numpad-display">Способ оплаты</div>
+            <div class="num-grid" style="grid-template-columns: repeat(2, 1fr);">
+                <button class="num-btn" style="color:var(--accent-green);" onclick="applyPay('Нал')">💵 Нал</button>
+                <button class="num-btn" style="color:var(--accent);" onclick="applyPay('Перевод')">📱 Перевод</button>
+                <button class="num-btn" style="color:var(--accent-orange);" onclick="applyPay('Терминал')">💳 Терминал</button>
+                <button class="num-btn" style="color:var(--accent-red);" onclick="applyPay('Долг')">📝 В долг</button>
+                <button class="num-btn cancel" style="grid-column: span 2;" onclick="closePads()">Назад</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- МОДАЛКА ТОВАРА В КАТАЛОГЕ -->
+    <div class="overlay" id="modalCatalogItem">
+        <div class="modal-card">
+            <div class="modal-title"><span id="catalogModalTitle">Товар</span> <div class="icon-btn" style="width:32px; height:32px; border-radius:10px;" onclick="closeModal('modalCatalogItem')">✕</div></div>
+            <div class="modal-body">
+                <input type="hidden" id="editCatalogId">
+                <div class="input-group">
+                    <label>Название товара</label>
+                    <input type="text" id="catalogItemName" placeholder="Например: Клубника (кг)">
+                </div>
+                <div class="input-group">
+                    <label>Цена (за шт или за кг в ₽)</label>
+                    <input type="number" id="catalogItemPrice" placeholder="600">
+                </div>
+                <div class="input-group">
+                    <label>Тип товара</label>
+                    <select id="catalogItemType">
+                        <option value="piece">Штучный (фиксированная цена)</option>
+                        <option value="weight">Весовой (ввод граммов при клике)</option>
+                        <option value="delivery">Доставка (произвольная сумма)</option>
+                    </select>
+                </div>
+                <button class="big-btn green" onclick="saveCatalogItem()">Сохранить товар</button>
+                <button class="big-btn red" id="deleteCatalogBtn" style="display:none; margin-top:8px;" onclick="deleteCatalogItem()">Удалить из каталога</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- НАСТРОЙКИ СМЕНЫ -->
+    <div class="overlay" id="modalSettings">
+        <div class="modal-card">
+            <div class="modal-title">Настройки смены <div class="icon-btn" style="width:32px; height:32px; border-radius:10px;" onclick="closeModal('modalSettings')">✕</div></div>
+            <div class="modal-body">
+                <div class="input-group">
+                    <label>Дата смены</label>
+                    <input type="text" id="inpDate" oninput="saveCore()">
+                </div>
+                <div class="input-group">
+                    <label>Касса на старте</label>
+                    <input type="text" id="inpCash" oninput="saveCore()">
+                </div>
+                <div class="input-group">
+                    <label>Заметка / Авто клиента</label>
+                    <input type="text" id="inpClientNote" placeholder="Например: Toyota 777" oninput="updateClientMeta()">
+                </div>
+                <button class="big-btn red" onclick="clearCurrentShift()">🚨 Сбросить смену (Удалить всё)</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ОТЧЕТ -->
+    <div class="overlay" id="modalReport">
+        <div class="modal-card">
+            <div class="modal-title">Итоговый отчёт <div class="icon-btn" style="width:32px; height:32px; border-radius:10px;" onclick="closeModal('modalReport')">✕</div></div>
+            <div class="modal-body">
+                <div class="report-view" id="reportOutput"></div>
+                <button class="big-btn green" onclick="copyReport()">📋 Скопировать отчёт</button>
+                <button class="big-btn outline" style="margin-top:8px;" onclick="closeModal('modalReport')">Закрыть</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let defaultCatalog = [
+            { id: 1, name: "Клубника ШК", icon: "🍓", price: 900, type: "piece" },
+            { id: 2, name: "Ананас ШК", icon: "🍍", price: 1200, type: "piece" },
+            { id: 3, name: "Роза", icon: "🌹", price: 250, type: "piece" },
+            { id: 4, name: "Клубника (кг)", icon: "⚖️", price: 600, type: "weight" },
+            { id: 5, name: "Голубика (кг)", icon: "🫐", price: 1500, type: "weight" },
+            { id: 6, name: "Доставка", icon: "🚗", price: 0, type: "delivery" }
+        ];
+
+        let catalog = [...defaultCatalog];
+
+        let app = {
+            theme: 'light',
+            shift: {
+                date: '', cash: '10.000',
+                clients: [{ id: 1, note: '', items: [], pay: 'Нал', discount: 0, time: '' }]
+            }
+        };
+        let activeIndex = 0;
+        let currentInputStr = "";
+        let activeProductForNumpad = null;
+
+        function init() {
+            const savedApp = localStorage.getItem('pos_v3_4');
+            if (savedApp) {
+                try {
+                    app = JSON.parse(savedApp);
+                    if(!app.shift.clients || app.shift.clients.length === 0) resetShiftData();
+                } catch(e) { resetShiftData(); }
+            } else {
+                app.shift.date = getAutoDate();
+            }
+            
+            const savedCatalog = localStorage.getItem('pos_catalog_v3_4');
+            if(savedCatalog) {
+                try { catalog = JSON.parse(savedCatalog); } catch(e) {}
+            }
+
+            applyTheme();
+            syncInputsToApp();
+            renderCatalog();
+            renderReceipt();
+        }
+
+        function getAutoDate() {
+            const d = new Date(), t = new Date(d); t.setDate(d.getDate() + 1);
+            const f = x => String(x.getDate()).padStart(2,'0') + '.' + String(x.getMonth()+1).padStart(2,'0');
+            return `${f(d)}-${f(t)}`;
+        }
+
+        function applyTheme() {
+            document.body.setAttribute('data-theme', app.theme);
+            document.getElementById('themeBtn').innerText = app.theme === 'dark' ? '☀️' : '🌙';
+        }
+        function toggleTheme() {
+            app.theme = app.theme === 'dark' ? 'light' : 'dark';
+            applyTheme(); saveCore();
+        }
+
+        function saveCore() {
+            app.shift.date = document.getElementById('inpDate').value || app.shift.date;
+            app.shift.cash = document.getElementById('inpCash').value || app.shift.cash;
+            localStorage.setItem('pos_v3_4', JSON.stringify(app));
+        }
+
+        function saveCatalog() {
+            localStorage.setItem('pos_catalog_v3_4', JSON.stringify(catalog));
+        }
+
+        function syncInputsToApp() {
+            document.getElementById('inpDate').value = app.shift.date;
+            document.getElementById('inpCash').value = app.shift.cash;
+        }
+
+        function getC() { return app.shift.clients[activeIndex]; }
+        function nextClient() { if(activeIndex < app.shift.clients.length - 1) { activeIndex++; renderReceipt(); } }
+        function prevClient() { if(activeIndex > 0) { activeIndex--; renderReceipt(); } }
+        function addClient() {
+            app.shift.clients.push({ id: Date.now(), note: '', items: [], pay: 'Нал', discount: 0, time: '' });
+            activeIndex = app.shift.clients.length - 1;
+            renderReceipt(); saveCore();
+        }
+        function updateClientMeta() {
+            getC().note = document.getElementById('inpClientNote').value;
+            saveCore(); renderReceipt();
+        }
+
+        function renderCatalog() {
+            const grid = document.getElementById('catalogGrid');
+            grid.innerHTML = '';
+            
+            catalog.forEach(item => {
+                let priceLabel = item.type === 'delivery' ? 'Ввод ₽' : (item.type === 'weight' ? `${item.price}₽/кг` : `${item.price}₽`);
+                grid.innerHTML += `
+                    <button class="pad-btn" onclick="handleProductClick(${item.id})">
+                        <div class="catalog-edit-badge" onclick="event.stopPropagation(); openEditCatalogItem(${item.id})" title="Изменить">⚙️</div>
+                        <div class="icon">${item.icon || '📦'}</div>
+                        <div class="name">${item.name}<br><span style="opacity:0.5; font-size:10px">${priceLabel}</span></div>
+                    </button>`;
+            });
+
+            grid.innerHTML += `
+                <button class="pad-btn action" onclick="openAddCatalogItem()">
+                    <div class="icon">➕</div>
+                    <div class="name">Товар<br><span style="opacity:0.5; font-size:10px">новый</span></div>
+                </button>
+            `;
+        }
+
+        function openAddCatalogItem() {
+            document.getElementById('catalogModalTitle').innerText = "Новый товар";
+            document.getElementById('editCatalogId').value = "";
+            document.getElementById('catalogItemName').value = "";
+            document.getElementById('catalogItemPrice').value = "";
+            document.getElementById('catalogItemType').value = "piece";
+            document.getElementById('deleteCatalogBtn').style.display = "none";
+            openModal('modalCatalogItem');
+        }
+
+        function openEditCatalogItem(id) {
+            const item = catalog.find(x => x.id === id);
+            if(!item) return;
+            document.getElementById('catalogModalTitle').innerText = "Изменить товар";
+            document.getElementById('editCatalogId').value = item.id;
+            document.getElementById('catalogItemName').value = item.name;
+            document.getElementById('catalogItemPrice').value = item.price;
+            document.getElementById('catalogItemType').value = item.type;
+            document.getElementById('deleteCatalogBtn').style.display = "block";
+            openModal('modalCatalogItem');
+        }
+
+        function saveCatalogItem() {
+            const editId = document.getElementById('editCatalogId').value;
+            const name = document.getElementById('catalogItemName').value.trim();
+            const price = parseInt(document.getElementById('catalogItemPrice').value);
+            const type = document.getElementById('catalogItemType').value;
+
+            if(!name || isNaN(price)) { alert('Заполни название и цену'); return; }
+
+            let icon = type === 'weight' ? '⚖️' : (type === 'delivery' ? '🚗' : '📦');
+
+            if(editId) {
+                let item = catalog.find(x => x.id == editId);
+                if(item) { item.name = name; item.price = price; item.type = type; item.icon = icon; }
+            } else {
+                catalog.push({ id: Date.now(), name: name, icon: icon, price: price, type: type });
+            }
+
+            saveCatalog();
+            closeModal('modalCatalogItem');
+            renderCatalog();
+        }
+
+        function deleteCatalogItem() {
+            const editId = document.getElementById('editCatalogId').value;
+            if(!editId) return;
+            if(confirm('Удалить товар из каталога?')) {
+                catalog = catalog.filter(x => x.id != editId);
+                saveCatalog();
+                closeModal('modalCatalogItem');
+                renderCatalog();
+            }
+        }
+
+        function handleProductClick(id) {
+            const item = catalog.find(x => x.id === id);
+            if(!item) return;
+            const c = getC();
+
+            if (item.type === 'piece') {
+                let existing = c.items.find(i => i.catalogId === item.id && i.type === 'piece');
+                if (existing) {
+                    existing.qty += 1;
+                    existing.sum = existing.qty * existing.price;
+                } else {
+                    c.items.push({ uniqueId: Date.now() + Math.random(), catalogId: item.id, icon: item.icon, name: item.name, qty: 1, unit: 'шт', price: item.price, sum: item.price, type: 'piece' });
+                }
+                saveCore(); renderReceipt();
+            } else {
+                activeProductForNumpad = item;
+                currentInputStr = "";
+                updateNumpadDisplay();
+                showPad('padNumpad');
+            }
+        }
+
+        function changeQty(uniqueId, delta) {
+            let c = getC();
+            let index = c.items.findIndex(i => i.uniqueId === uniqueId);
+            if(index === -1) return;
+
+            let item = c.items[index];
+            if (item.type === 'piece') {
+                item.qty += delta;
+                if (item.qty <= 0) c.items.splice(index, 1);
+                else item.sum = item.qty * item.price;
+            } else {
+                c.items.splice(index, 1);
+            }
+            saveCore(); renderReceipt();
+        }
+
+        function renderReceipt() {
+            const c = getC();
+            document.getElementById('clientName').innerText = c.note ? `Клиент ${activeIndex + 1} (${c.note})` : `Клиент ${activeIndex + 1}`;
+            document.getElementById('inpClientNote').value = c.note || '';
+            document.getElementById('payMethodLabel').innerText = `К ОПЛАТЕ (${c.pay})`;
+            
+            const badge = document.getElementById('discountBadge');
+            if(c.discount > 0) { badge.style.display = 'inline-block'; badge.innerText = `СКИДКА ${c.discount}%`; }
+            else { badge.style.display = 'none'; }
+
+            const list = document.getElementById('receiptItems');
+            list.innerHTML = '';
+            let rawSum = 0;
+
+            if (!c.items || c.items.length === 0) {
+                list.innerHTML = `<div style="text-align:center; padding:40px 20px; color:var(--text-sub); font-size:14px;">Выберите товар в каталоге снизу 👇</div>`;
+            } else {
+                c.items.forEach((it) => {
+                    if(!it.uniqueId) it.uniqueId = Math.random();
+                    rawSum += it.sum;
+                    
+                    let controlsHTML = it.type === 'piece' ? `
+                        <button class="qty-btn ${it.qty === 1 ? 'del' : ''}" onclick="changeQty(${it.uniqueId}, -1)">${it.qty === 1 ? '✕' : '-'}</button>
+                        <span class="qty-val">${it.qty} ${it.unit}</span>
+                        <button class="qty-btn" onclick="changeQty(${it.uniqueId}, 1)">+</button>
+                    ` : `
+                        <span class="qty-val" style="margin-right:6px;">${it.qty} ${it.unit}</span>
+                        <button class="qty-btn del" onclick="changeQty(${it.uniqueId}, -1)">✕</button>
+                    `;
+
+                    list.innerHTML += `
+                        <div class="item-row">
+                            <div class="item-info">
+                                <h4>${it.icon || '📦'} ${it.name}</h4>
+                                <div class="item-price">${it.sum.toLocaleString('ru-RU')} ₽</div>
+                            </div>
+                            <div class="qty-control">${controlsHTML}</div>
+                        </div>`;
+                });
+                setTimeout(() => list.scrollTop = list.scrollHeight, 50);
+            }
+
+            const finalSum = Math.round(rawSum * (1 - c.discount / 100));
+            document.getElementById('totalSum').innerText = finalSum > 0 ? `${finalSum.toLocaleString('ru-RU')} ₽` : '0 ₽';
+        }
+
+        function showPad(id) {
+            document.querySelectorAll('.pad-section').forEach(el => el.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+        }
+        function closePads() { showPad('padMain'); }
+
+        function typeNum(num) {
+            if (currentInputStr.length < 6) currentInputStr += num;
+            updateNumpadDisplay();
+        }
+        function updateNumpadDisplay() {
+            const val = parseInt(currentInputStr) || 0;
+            const display = document.getElementById('numpadDisplay');
+            if(!activeProductForNumpad) return;
+            
+            if (activeProductForNumpad.type === 'weight') {
+                const sum = Math.round((val / 1000) * activeProductForNumpad.price);
+                display.innerText = `${val} г = ${sum.toLocaleString('ru-RU')} ₽`;
+            } else if (activeProductForNumpad.type === 'delivery') {
+                display.innerText = `Доставка: ${val.toLocaleString('ru-RU')} ₽`;
+            }
+        }
+        function confirmNumpad() {
+            const val = parseInt(currentInputStr) || 0;
+            if (val > 0 && activeProductForNumpad) {
+                if (activeProductForNumpad.type === 'weight') {
+                    const sum = Math.round((val / 1000) * activeProductForNumpad.price);
+                    getC().items.push({ uniqueId: Date.now() + Math.random(), catalogId: activeProductForNumpad.id, icon: activeProductForNumpad.icon, name: activeProductForNumpad.name, qty: val, unit: 'г', price: activeProductForNumpad.price, sum: sum, type: 'weight' });
+                } else if (activeProductForNumpad.type === 'delivery') {
+                    getC().items.push({ uniqueId: Date.now() + Math.random(), catalogId: activeProductForNumpad.id, icon: activeProductForNumpad.icon, name: activeProductForNumpad.name, qty: 1, unit: '', price: val, sum: val, type: 'delivery' });
+                }
+                saveCore(); renderReceipt();
+            }
+            closePads();
+        }
+
+        function setNowTime() { getC().time = new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}); saveCore(); renderReceipt(); }
+        function applyDiscount(val) { getC().discount = val; saveCore(); renderReceipt(); closePads(); }
+        function applyPay(val) { getC().pay = val; saveCore(); renderReceipt(); closePads(); }
+
+        function openModal(id) { document.getElementById(id).style.display = 'flex'; }
+        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+
+        // ПРЕМИАЛЬНЫЙ ФОРМАТ ОТЧЕТА
+        function generateReportText() {
+            let txt = `🍓 ОТЧЕТ ПО СМЕНЕ\n📅 Дата: ${app.shift.date}\n💵 Касса на старте: ${app.shift.cash}\n`;
+            txt += `──────────────────\n\n`;
+            
+            let totalCash = 0;
+            let totalCard = 0;
+            let activeClientsCount = 0;
+
+            app.shift.clients.forEach((c, idx) => {
+                if(!c.items || c.items.length === 0) return;
+                activeClientsCount++;
+                
+                let rawSum = 0;
+                let clientTitle = c.note ? `Клиент #${idx+1} (${c.note})` : `Клиент #${idx+1}`;
+                if(c.time) clientTitle += ` [${c.time}]`;
+                
+                txt += `👤 ${clientTitle}\n`;
+                
+                c.items.forEach(it => { 
+                    txt += `  • ${it.name} — ${it.qty} ${it.unit} = ${it.sum.toLocaleString('ru-RU')} ₽\n`; 
+                    rawSum += it.sum; 
+                });
+                
+                let finalSum = Math.round(rawSum * (1 - c.discount / 100));
+
+                if (c.discount > 0) {
+                    txt += `  🏷️ Скидка: ${c.discount}%\n`;
+                }
+                txt += `  💳 Оплата: ${c.pay} — ${finalSum.toLocaleString('ru-RU')} ₽\n\n`;
+                
+                if(c.pay === 'Нал') totalCash += finalSum;
+                else totalCard += finalSum;
+            });
+
+            txt += `──────────────────\n`;
+            txt += `📊 ИТОГО ЗА СМЕНУ:\n`;
+            txt += `💵 Наличные: ${totalCash.toLocaleString('ru-RU')} ₽\n`;
+            txt += `📱 Безнал / Перевод: ${totalCard.toLocaleString('ru-RU')} ₽\n`;
+            txt += `💰 Общая выручка: ${(totalCash + totalCard).toLocaleString('ru-RU')} ₽\n`;
+            
+            return txt;
+        }
+
+        function openReport() {
+            document.getElementById('reportOutput').innerText = generateReportText();
+            openModal('modalReport');
+        }
+
+        function copyReport() {
+            navigator.clipboard.writeText(generateReportText()).then(()=>alert('✅ Отчет скопирован!')).catch(()=>alert('Ошибка копирования'));
+        }
+
+        function resetShiftData() {
+            app.shift.date = getAutoDate();
+            app.shift.cash = '10.000';
+            app.shift.clients = [{ id: Date.now(), note: '', items: [], pay: 'Нал', discount: 0, time: '' }];
+            activeIndex = 0;
+            syncInputsToApp(); saveCore(); renderReceipt();
+        }
+
+        function clearCurrentShift() {
+            if(confirm('🚨 Точно удалить все данные смены?')) {
+                resetShiftData();
+                closeModal('modalSettings');
+            }
+        }
+
+        window.onload = init;
+    </script>
+</body>
+</html>
