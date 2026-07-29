@@ -130,8 +130,8 @@
             padding: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center;
             cursor: pointer; text-align: center; position: relative; height: 100%;
         }
-        .product-tile .icon { font-size: 24px; margin-bottom: 2px; }
-        .product-tile .name { font-size: 13px; font-weight: 700; color: var(--text-main); line-height: 1.1; margin-bottom: 2px;}
+        .product-tile .icon { font-size: 22px; margin-bottom: 2px; }
+        .product-tile .name { font-size: 12px; font-weight: 700; color: var(--text-main); line-height: 1.1; margin-bottom: 2px;}
         .product-tile .price { font-size: 11px; font-weight: 600; color: var(--text-muted); }
         .product-tile.add-tile { border: 2px dashed var(--primary); background: rgba(79, 70, 229, 0.05); }
         .product-tile.add-tile .name { color: var(--primary); }
@@ -227,15 +227,23 @@
         <div class="catalog-container" id="catalogGrid"></div>
     </div>
 
-    <!-- МОДАЛКА ВЕСА / ДОСТАВКИ -->
+    <!-- МОДАЛКА ВЕСА / ДОСТАВКИ / БУКЕТА -->
     <div class="overlay" id="modalWeight">
         <div class="modal">
             <div class="modal-title"><span id="weightModalTitle">Значение</span> <div class="btn-icon" style="width:30px; height:30px; font-size:12px;" onclick="closeModal('modalWeight')">✕</div></div>
+            
+            <div id="bouquetFields" style="display:none;">
+                <label style="font-size:13px; font-weight:700; color:var(--text-muted); display:block; margin-bottom:4px;">Номер букета</label>
+                <input type="text" class="input-box" id="bouquetNumInput" placeholder="Например: №5">
+                <label style="font-size:13px; font-weight:700; color:var(--text-muted); display:block; margin-bottom:4px;">Цена (₽)</label>
+            </div>
+
             <div class="preset-weights" id="weightPresetsContainer">
                 <div class="preset-btn" onclick="selectWeightPreset(250)">250 г</div>
                 <div class="preset-btn" onclick="selectWeightPreset(500)">500 г</div>
                 <div class="preset-btn" onclick="selectWeightPreset(1000)">1 кг</div>
             </div>
+            
             <input type="number" class="input-box" id="weightInput" placeholder="Число...">
             <button class="btn-action primary" onclick="confirmWeightItem()">Добавить в чек</button>
         </div>
@@ -271,6 +279,7 @@
                 <option value="piece">Штучный</option>
                 <option value="weight">Весовой (в граммах)</option>
                 <option value="delivery">Произвольная доставка</option>
+                <option value="bouquet">Цветочный букет (с номером)</option>
             </select>
             <button class="btn-action primary" onclick="saveNewProduct()">Добавить в каталог</button>
         </div>
@@ -286,6 +295,7 @@
                 <option value="piece">Штучный</option>
                 <option value="weight">Весовой (в граммах)</option>
                 <option value="delivery">Произвольная доставка</option>
+                <option value="bouquet">Цветочный букет (с номером)</option>
             </select>
             <button class="btn-action primary" onclick="saveCatalogEdits()">💾 Сохранить</button>
             <button class="btn-action secondary" style="color:var(--accent-red); margin-top:10px; text-align:center;" onclick="deleteFromCatalog()">🗑️ Удалить</button>
@@ -359,11 +369,17 @@
 
     <script>
         let catalog = [
-            { id: 1, name: "Клубника ШК", icon: "🍓", price: 900, type: "piece" },
-            { id: 2, name: "Ананас ШК", icon: "🍍", price: 1200, type: "piece" },
-            { id: 3, name: "Роза", icon: "🌹", price: 250, type: "piece" },
-            { id: 4, name: "Клубника (кг)", icon: "⚖️", price: 600, type: "weight" },
-            { id: 5, name: "Доставка", icon: "🚗", price: 0, type: "delivery" }
+            { id: 1, name: "Ст.клубника в шк", icon: "🍓", price: 900, type: "piece" },
+            { id: 2, name: "Ст.гранат в шк", icon: "🍎", price: 1100, type: "piece" },
+            { id: 3, name: "Ст. Ананас", icon: "🍍", price: 450, type: "piece" },
+            { id: 4, name: "Ст.роксы", icon: "🧊", price: 1100, type: "piece" },
+            { id: 5, name: "Ст.фруктовый", icon: "🍇", price: 600, type: "piece" },
+            { id: 6, name: "Ст.фрукт.экзотик", icon: "🥭", price: 750, type: "piece" },
+            { id: 7, name: "Ст.банана в шк", icon: "🍌", price: 450, type: "piece" },
+            { id: 8, name: "Franui", icon: "🍫", price: 1300, type: "piece" },
+            { id: 9, name: "Frambini", icon: "🍬", price: 1050, type: "piece" },
+            { id: 10, name: "Цветочный букет", icon: "💐", price: 0, type: "bouquet" },
+            { id: 11, name: "Доставка", icon: "🚗", price: 0, type: "delivery" }
         ];
 
         let state = {
@@ -381,9 +397,9 @@
 
         function init() {
             try {
-                const saved = localStorage.getItem('pos_state_v10');
+                const saved = localStorage.getItem('pos_state_v11');
                 if (saved) state = JSON.parse(saved);
-                const savedCat = localStorage.getItem('pos_cat_v10');
+                const savedCat = localStorage.getItem('pos_cat_v11');
                 if (savedCat) catalog = JSON.parse(savedCat);
             } catch(e) {}
 
@@ -393,8 +409,8 @@
             renderActiveClient();
         }
 
-        function saveData() { try { localStorage.setItem('pos_state_v10', JSON.stringify(state)); } catch(e) {} }
-        function saveCatalog() { try { localStorage.setItem('pos_cat_v10', JSON.stringify(catalog)); } catch(e) {} }
+        function saveData() { try { localStorage.setItem('pos_state_v11', JSON.stringify(state)); } catch(e) {} }
+        function saveCatalog() { try { localStorage.setItem('pos_cat_v11', JSON.stringify(catalog)); } catch(e) {} }
 
         function applyTheme() {
             document.body.setAttribute('data-theme', state.theme);
@@ -493,7 +509,7 @@
             const grid = document.getElementById('catalogGrid');
             grid.innerHTML = '';
             catalog.forEach(item => {
-                let priceSub = item.type === 'delivery' ? 'Ввод ₽' : (item.type === 'weight' ? `${item.price}₽/кг` : `${item.price}₽`);
+                let priceSub = (item.type === 'delivery' || item.type === 'bouquet') ? 'Ввод ₽' : (item.type === 'weight' ? `${item.price}₽/кг` : `${item.price}₽`);
                 grid.innerHTML += `
                     <div class="product-tile" onclick="handleCatalogClick(${item.id})">
                         <div class="edit-prod-btn" onclick="openEditCatalogModal(${item.id}, event)">✏️</div>
@@ -529,7 +545,7 @@
                 item.price = parseInt(document.getElementById('editCatPrice').value) || 0;
                 let newType = document.getElementById('editCatType').value;
                 item.type = newType;
-                item.icon = newType === 'weight' ? '⚖️' : (newType === 'delivery' ? '🚗' : '📦');
+                item.icon = newType === 'weight' ? '⚖️' : (newType === 'delivery' ? '🚗' : (newType === 'bouquet' ? '💐' : '📦'));
                 saveCatalog(); renderCatalog(); closeModal('modalEditCatalog');
             }
         }
@@ -550,7 +566,7 @@
             catalog.push({
                 id: Date.now(),
                 name: name,
-                icon: type === 'weight' ? '⚖️' : (type === 'delivery' ? '🚗' : '📦'),
+                icon: type === 'weight' ? '⚖️' : (type === 'delivery' ? '🚗' : (type === 'bouquet' ? '💐' : '📦')),
                 price: price,
                 type: type
             });
@@ -575,11 +591,22 @@
                 saveData(); renderActiveClient();
             } else {
                 activeProductForModal = item;
-                document.getElementById('weightModalTitle').innerText = item.type === 'weight' ? `Вес: ${item.name}` : `Сумма доставки`;
+                const isBouquet = (item.type === 'bouquet');
+                
+                document.getElementById('weightModalTitle').innerText = isBouquet ? `Цветочный букет` : (item.type === 'weight' ? `Вес: ${item.name}` : `Сумма доставки`);
+                document.getElementById('bouquetFields').style.display = isBouquet ? 'block' : 'none';
+                document.getElementById('bouquetNumInput').value = '';
                 document.getElementById('weightInput').value = '';
                 document.getElementById('weightPresetsContainer').style.display = item.type === 'weight' ? 'grid' : 'none';
+                
                 openModal('modalWeight');
-                setTimeout(() => document.getElementById('weightInput').focus(), 100);
+                setTimeout(() => {
+                    if(isBouquet) {
+                        document.getElementById('bouquetNumInput').focus();
+                    } else {
+                        document.getElementById('weightInput').focus();
+                    }
+                }, 100);
             }
         }
 
@@ -587,14 +614,21 @@
 
         function confirmWeightItem() {
             const val = parseInt(document.getElementById('weightInput').value) || 0;
-            if(val <= 0 || !activeProductForModal) return;
+            if(!activeProductForModal) return;
             const cli = getCurClient();
 
             if (activeProductForModal.type === 'weight') {
+                if(val <= 0) return;
                 let sum = Math.round((val / 1000) * activeProductForModal.price);
                 cli.items.push({ uid: Date.now() + Math.random(), catalogId: activeProductForModal.id, icon: activeProductForModal.icon, name: activeProductForModal.name, qty: val, unit: 'г', price: activeProductForModal.price, sum: sum, type: 'weight' });
             } else if (activeProductForModal.type === 'delivery') {
+                if(val <= 0) return;
                 cli.items.push({ uid: Date.now() + Math.random(), catalogId: activeProductForModal.id, icon: activeProductForModal.icon, name: activeProductForModal.name, qty: 1, unit: '', price: val, sum: val, type: 'delivery' });
+            } else if (activeProductForModal.type === 'bouquet') {
+                let bNum = document.getElementById('bouquetNumInput').value.trim();
+                if(!bNum || val <= 0) return alert('Введите номер букета и цену');
+                let fullName = `${activeProductForModal.name} (${bNum})`;
+                cli.items.push({ uid: Date.now() + Math.random(), catalogId: activeProductForModal.id, icon: activeProductForModal.icon, name: fullName, qty: 1, unit: '', price: val, sum: val, type: 'bouquet' });
             }
 
             saveData(); renderActiveClient(); closeModal('modalWeight');
@@ -624,7 +658,7 @@
             if(!item) return;
             editingItemUid = uid;
             document.getElementById('editItemTitle').innerText = `Изменить: ${item.name}`;
-            document.getElementById('editItemInput').value = item.qty;
+            document.getElementById('editItemInput').value = (item.type === 'piece') ? item.qty : item.sum;
             openModal('modalEditItem');
             setTimeout(() => document.getElementById('editItemInput').focus(), 100);
         }
@@ -635,12 +669,13 @@
             const cli = getCurClient();
             let item = cli.items.find(i => i.uid === editingItemUid);
             if(item) {
-                item.qty = val;
                 if(item.type === 'weight') {
+                    item.qty = val;
                     item.sum = Math.round((val / 1000) * item.price);
                 } else if(item.type === 'piece') {
+                    item.qty = val;
                     item.sum = val * item.price;
-                } else if(item.type === 'delivery') {
+                } else if(item.type === 'delivery' || item.type === 'bouquet') {
                     item.sum = val;
                     item.price = val;
                 }
@@ -684,7 +719,7 @@
                         <span style="font-size:14px; font-weight:800; min-width:20px; text-align:center;">${it.qty}</span>
                         <button class="mini-btn" onclick="changeQty(${it.uid}, 1, event)">+</button>
                     ` : `
-                        <span style="font-size:13px; font-weight:700; margin-right:4px;">${it.qty}${it.unit}</span>
+                        <span style="font-size:13px; font-weight:700; margin-right:4px;">${it.qty ? it.qty + it.unit : ''}</span>
                         <button class="mini-btn del" onclick="changeQty(${it.uid}, -1, event)">✕</button>
                     `;
 
@@ -736,7 +771,8 @@
                 let sub = 0;
 
                 cli.items.forEach(it => {
-                    txt += `• ${it.name} (${it.qty}${it.unit}) — ${it.sum} руб\n`;
+                    let desc = it.qty ? `(${it.qty}${it.unit})` : '';
+                    txt += `• ${it.name} ${desc} — ${it.sum} руб\n`;
                     sub += it.sum;
                     if(it.type === 'delivery') {
                         totalDeliveryExpenses += it.sum;
