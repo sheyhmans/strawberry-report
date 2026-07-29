@@ -2,259 +2,256 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Отчет Смены 🍓</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Strawberry Report</title>
+    
+    <!-- Настройки для работы как приложение на iPhone (PWA) -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Отчёты">
+    <link rel="apple-touch-icon" href="https://img.icons8.com/emoji/192/strawberry-emoji.png">
+
     <style>
         :root {
-            --glass-bg: rgba(255, 255, 255, 0.07);
-            --glass-border: rgba(255, 255, 255, 0.12);
-            --glass-card: rgba(30, 41, 59, 0.7);
-            --accent-green: #34d399;
-            --accent-blue: #60a5fa;
-            --accent-red: #f87171;
-            --text-main: #f8fafc;
-            --text-sub: #94a3b8;
+            --bg: #000000;
+            --card: #121212;
+            --card-border: #262626;
+            --accent: #0095f6; /* Instagram Blue */
+            --accent-green: #10b981;
+            --text-main: #f5f5f5;
+            --text-sub: #a8a8a8;
+            --danger: #ed4956;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
-            background-attachment: fixed;
+            background-color: var(--bg);
             color: var(--text-main);
             padding: 12px;
-            padding-bottom: 110px;
-            min-height: 100vh;
+            padding-bottom: 100px;
+            padding-top: max(12px, env(safe-area-inset-top));
         }
 
-        /* iOS Glass Card */
-        .glass-panel {
-            background: var(--glass-card);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid var(--glass-border);
-            border-radius: 18px;
-            padding: 14px;
-            margin-bottom: 12px;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-        }
-
-        .header {
+        /* Шапка */
+        .app-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 14px;
+            padding: 8px 4px 14px 4px;
         }
 
-        .header h1 {
-            font-size: 20px;
+        .app-header h1 {
+            font-size: 22px;
             font-weight: 700;
-            background: linear-gradient(90deg, #34d399, #60a5fa);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
         }
 
-        .btn-glass-sm {
+        .btn-reset {
             background: rgba(255, 255, 255, 0.1);
-            border: 1px solid var(--glass-border);
             color: var(--text-sub);
-            padding: 6px 12px;
+            border: none;
+            padding: 6px 14px;
             border-radius: 20px;
             font-size: 12px;
-            backdrop-filter: blur(10px);
+            font-weight: 600;
+            transition: transform 0.1s;
         }
 
-        .row { display: flex; gap: 10px; }
+        .btn-reset:active { transform: scale(0.95); }
+
+        /* Карточка Инстаграм */
+        .ig-card {
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 14px;
+            margin-bottom: 12px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .row { display: flex; gap: 8px; }
         .row > div { flex: 1; }
 
         label {
             display: block;
             font-size: 11px;
+            font-weight: 600;
             color: var(--text-sub);
-            margin-bottom: 5px;
+            margin-bottom: 6px;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.3px;
         }
 
         input, textarea {
             width: 100%;
-            background: rgba(15, 23, 42, 0.6);
-            border: 1px solid var(--glass-border);
+            background: #000;
+            border: 1px solid var(--card-border);
             color: #fff;
             padding: 10px 12px;
-            border-radius: 12px;
+            border-radius: 10px;
             font-size: 14px;
             outline: none;
-            transition: border 0.2s;
+            transition: border-color 0.2s;
         }
 
         input:focus, textarea:focus {
-            border-color: var(--accent-blue);
+            border-color: var(--accent);
         }
 
-        /* Витрина выбора товаров в стиле iOS */
-        .products-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        /* Лента быстрых товаров (Stories Style) */
+        .stories-bar {
+            display: flex;
             gap: 8px;
-            margin-top: 6px;
+            overflow-x: auto;
+            padding-bottom: 6px;
+            margin-bottom: 4px;
+            scrollbar-width: none;
         }
 
-        .product-chip {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--glass-border);
-            border-radius: 12px;
-            padding: 8px 10px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            gap: 6px;
-        }
+        .stories-bar::-webkit-scrollbar { display: none; }
 
-        .product-title {
-            font-size: 12px;
+        .story-chip {
+            background: #1a1a1a;
+            border: 1px solid var(--card-border);
+            color: var(--text-main);
+            padding: 8px 14px;
+            border-radius: 25px;
+            font-size: 13px;
             font-weight: 500;
-            color: #e2e8f0;
-        }
-
-        .stepper {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 8px;
-            padding: 2px 4px;
-        }
-
-        .stepper-btn {
-            background: rgba(255, 255, 255, 0.15);
-            border: none;
-            color: #fff;
-            width: 24px;
-            height: 24px;
-            border-radius: 6px;
-            font-size: 14px;
-            font-weight: bold;
+            white-space: nowrap;
             cursor: pointer;
+            transition: all 0.15s ease;
             display: flex;
             align-items: center;
-            justify-content: center;
+            gap: 4px;
         }
 
-        .stepper-btn:active {
-            background: var(--accent-blue);
+        .story-chip:active {
+            transform: scale(0.92);
+            background: var(--accent);
+            color: #fff;
         }
 
-        .stepper-val {
-            font-size: 12px;
-            font-weight: 600;
+        .story-chip.add-btn {
+            border: 1px dashed var(--accent);
+            color: var(--accent);
+            background: rgba(0, 149, 246, 0.1);
         }
 
         /* Карточка клиента */
         .client-card {
-            background: rgba(15, 23, 42, 0.5);
-            border: 1px solid var(--glass-border);
-            border-radius: 14px;
-            padding: 12px;
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 14px;
             margin-bottom: 12px;
         }
 
-        .client-header {
+        .client-head {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
         }
 
-        .client-header strong {
-            font-size: 14px;
-            color: var(--accent-blue);
+        .client-head strong {
+            font-size: 15px;
+            color: #fff;
         }
 
-        /* iOS Segmented Control */
-        .ios-segmented {
+        /* Instagram Segmented Control */
+        .ig-segmented {
             display: flex;
-            background: rgba(0, 0, 0, 0.4);
+            background: #000;
             padding: 3px;
             border-radius: 10px;
+            border: 1px solid var(--card-border);
             margin-bottom: 8px;
-            border: 1px solid var(--glass-border);
         }
 
-        .segmented-btn {
+        .ig-seg-btn {
             flex: 1;
             text-align: center;
-            padding: 6px 0;
+            padding: 7px 0;
             font-size: 12px;
+            font-weight: 500;
             color: var(--text-sub);
-            border-radius: 7px;
+            border-radius: 8px;
             cursor: pointer;
             transition: all 0.2s;
         }
 
-        .segmented-btn.active {
-            background: rgba(255, 255, 255, 0.2);
+        .ig-seg-btn.active {
+            background: #262626;
             color: #fff;
             font-weight: 600;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
         }
 
         .btn-add-client {
-            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            background: var(--accent);
             color: #fff;
             border: none;
-            padding: 12px;
-            border-radius: 14px;
-            font-weight: 600;
+            padding: 14px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 14px;
             width: 100%;
-            margin-bottom: 12px;
-            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+            margin-bottom: 14px;
+            transition: transform 0.1s;
         }
 
+        .btn-add-client:active { transform: scale(0.98); }
+
         .btn-time {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid var(--glass-border);
+            background: #262626;
             color: #fff;
-            padding: 0 10px;
-            border-radius: 12px;
-            font-size: 12px;
+            border: none;
+            padding: 0 12px;
+            border-radius: 10px;
+            font-size: 13px;
         }
 
         .preview {
-            background: rgba(0, 0, 0, 0.6);
+            background: #000;
             color: var(--accent-green);
-            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+            font-family: monospace;
             padding: 10px;
             border-radius: 10px;
             font-size: 12px;
             white-space: pre-wrap;
             max-height: 140px;
             overflow-y: auto;
-            border: 1px solid rgba(52, 211, 153, 0.2);
+            border: 1px solid var(--card-border);
         }
 
-        /* Fixed Bottom Bar Liquid Glass */
+        /* Нижняя панель */
         .bottom-bar {
             position: fixed;
             bottom: 0;
             left: 0;
             right: 0;
-            background: rgba(15, 23, 42, 0.75);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-top: 1px solid var(--glass-border);
-            padding: 12px 16px;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-top: 1px solid var(--card-border);
+            padding: 12px 16px max(12px, env(safe-area-inset-bottom)) 16px;
             z-index: 100;
         }
 
         .btn-copy {
-            background: linear-gradient(135deg, #10b981, #059669);
+            background: var(--accent-green);
             color: #fff;
             border: none;
             padding: 14px;
@@ -262,19 +259,63 @@
             font-weight: 700;
             font-size: 15px;
             width: 100%;
-            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.4);
+            transition: transform 0.1s;
+        }
+
+        .btn-copy:active { transform: scale(0.98); }
+
+        /* Всплывающее окно количества */
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(5px);
+            z-index: 200;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 20px;
+            width: 100%;
+            max-width: 320px;
+            text-align: center;
+        }
+
+        .qty-picker {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 16px;
+            margin: 16px 0;
+        }
+
+        .qty-btn {
+            background: #262626;
+            color: #fff;
+            border: none;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            font-size: 20px;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <h1>🍓 Strawberry Report</h1>
-        <button class="btn-glass-sm" onclick="resetShift()">🔄 Сбросить</button>
+    <div class="app-header">
+        <h1>🍓 Отчёты</h1>
+        <button class="btn-reset" onclick="resetShift()">Сброс смены</button>
     </div>
 
     <!-- ДАТА И КАССА -->
-    <div class="glass-panel">
+    <div class="ig-card">
         <div class="row">
             <div>
                 <label>Даты смены</label>
@@ -287,25 +328,25 @@
         </div>
     </div>
 
-    <!-- ТОВАРЫ ДЛЯ БЫСТРОГО ВЫБОРА C КНОПКАМИ +/- -->
-    <div class="glass-panel">
-        <label>Добавить товар текущему клиенту:</label>
-        <div class="products-grid" id="productsGrid"></div>
+    <!-- ПАНЕЛЬ БЫСТРЫХ ТОВАРОВ (STORIES) -->
+    <div style="margin-bottom: 10px;">
+        <label style="padding-left: 4px;">Быстрый выбор товара</label>
+        <div class="stories-bar" id="storiesBar"></div>
     </div>
 
     <!-- СПИСОК КЛИЕНТОВ -->
     <div id="clientsContainer"></div>
-    <button class="btn-add-client" onclick="addClient()">+ Добавить нового клиента</button>
+    <button class="btn-add-client" onclick="addClient()">+ Добавить клиента</button>
 
     <!-- РАСХОД И КЛУБНИКА -->
-    <div class="glass-panel">
+    <div class="ig-card">
         <div class="row" style="margin-bottom: 10px;">
             <div>
                 <label>Расход</label>
                 <input type="text" id="expenses" placeholder="не было" oninput="saveData()">
             </div>
-            <div style="flex:0.3; display:flex; align-items:flex-end;">
-                <button class="btn-glass-sm" style="width:100%; padding:11px;" onclick="document.getElementById('expenses').value='не было'; saveData();">Не было</button>
+            <div style="flex:0.35; display:flex; align-items:flex-end;">
+                <button class="btn-reset" style="width:100%; padding:11px; border-radius:10px;" onclick="document.getElementById('expenses').value='не было'; saveData();">Не было</button>
             </div>
         </div>
         <label>По клубникам</label>
@@ -313,32 +354,34 @@
     </div>
 
     <!-- ПРЕДПРОСМОТР -->
-    <div class="glass-panel">
-        <label>Предпросмотр отчета:</label>
+    <div class="ig-card">
+        <label>Итоговый отчёт</label>
         <div class="preview" id="reportPreview"></div>
     </div>
 
-    <!-- ФИКСИРОВАННАЯ КНОПКА СНИЗУ -->
+    <!-- КНОПКА СНИЗУ -->
     <div class="bottom-bar">
-        <button class="btn-copy" onclick="copyReport()">📋 Скопировать отчет</button>
+        <button class="btn-copy" onclick="copyReport()">📋 Скопировать отчёт</button>
+    </div>
+
+    <!-- МОДАЛЬНОЕ ОКНО ДЛЯ ВЫБОРА КОЛИЧЕСТВА -->
+    <div class="modal" id="qtyModal">
+        <div class="modal-content">
+            <h3 id="modalTitle" style="font-size: 16px; margin-bottom: 4px;"></h3>
+            <div class="qty-picker">
+                <button class="qty-btn" onclick="changeQty(-1)">−</button>
+                <span id="modalQty" style="font-size: 24px; font-weight: 700;">1</span>
+                <button class="qty-btn" onclick="changeQty(1)">+</button>
+            </div>
+            <button class="btn-add-client" style="margin-bottom:0;" onclick="confirmAddProduct()">Добавить в заказ</button>
+        </div>
     </div>
 
     <script>
-        // Список частых товаров для витрины
-        const catalogItems = [
-            "Ст.клубника в шк",
-            "Ст.ананас",
-            "Ст.черешня",
-            "Ст.малина в шк",
-            "Роза красная",
-            "Куст.розы",
-            "Доставка"
-        ];
-
-        let itemCounters = {};
-        catalogItems.forEach(item => itemCounters[item] = 1);
-
+        let quickCatalog = ["Ст.клубника в шк", "Ст.ананас", "Ст.черешня", "Роза красная", "Доставка 350"];
         let clients = [];
+        let selectedProduct = '';
+        let currentQty = 1;
 
         function initDate() {
             const today = new Date();
@@ -348,41 +391,56 @@
             return `${fmt(today)}-${fmt(tomorrow)}`;
         }
 
-        function renderProductsGrid() {
-            const container = document.getElementById('productsGrid');
+        function renderStories() {
+            const container = document.getElementById('storiesBar');
             container.innerHTML = '';
 
-            catalogItems.forEach(item => {
-                const count = itemCounters[item] || 1;
+            // Кнопка добавить новый товар в каталог
+            const addBtn = document.createElement('div');
+            addBtn.className = 'story-chip add-btn';
+            addBtn.innerText = '+ Товар';
+            addBtn.onclick = addNewCatalogItem;
+            container.appendChild(addBtn);
+
+            quickCatalog.forEach(item => {
                 const chip = document.createElement('div');
-                chip.className = 'product-chip';
-                chip.innerHTML = `
-                    <div class="product-title">${item}</div>
-                    <div class="stepper">
-                        <button class="stepper-btn" onclick="changeCount('${item}', -1)">−</button>
-                        <span class="stepper-val">${count} шт</span>
-                        <button class="stepper-btn" onclick="changeCount('${item}', 1)">+</button>
-                    </div>
-                    <button class="btn-glass-sm" style="padding:4px; margin-top:4px;" onclick="addProductToCurrentClient('${item}')">Добавить</button>
-                `;
+                chip.className = 'story-chip';
+                chip.innerText = item;
+                chip.onclick = () => openQtyModal(item);
                 container.appendChild(chip);
             });
         }
 
-        function changeCount(item, delta) {
-            let curr = itemCounters[item] || 1;
-            curr += delta;
-            if (curr < 1) curr = 1;
-            itemCounters[item] = curr;
-            renderProductsGrid();
+        function addNewCatalogItem() {
+            const name = prompt('Введите название товара (например: Ежемалина):');
+            if (name && name.trim()) {
+                quickCatalog.push(name.trim());
+                saveData();
+                renderStories();
+            }
         }
 
-        function addProductToCurrentClient(itemName) {
+        function openQtyModal(itemName) {
+            selectedProduct = itemName;
+            currentQty = 1;
+            document.getElementById('modalTitle').innerText = itemName;
+            document.getElementById('modalQty').innerText = currentQty;
+            document.getElementById('qtyModal').style.display = 'flex';
+        }
+
+        function changeQty(delta) {
+            currentQty += delta;
+            if (currentQty < 1) currentQty = 1;
+            document.getElementById('modalQty').innerText = currentQty;
+        }
+
+        function confirmAddProduct() {
+            document.getElementById('qtyModal').style.display = 'none';
             if (clients.length === 0) addClient(false);
-            const count = itemCounters[itemName] || 1;
-            const textToAdd = `${itemName} - ${count}`;
             
             const lastIdx = clients.length - 1;
+            const textToAdd = `${selectedProduct} - ${currentQty}`;
+            
             if (clients[lastIdx].items) {
                 clients[lastIdx].items += '\n' + textToAdd;
             } else {
@@ -393,7 +451,7 @@
         }
 
         function loadData() {
-            const saved = localStorage.getItem('strawberry_shift_data_v2');
+            const saved = localStorage.getItem('ig_strawberry_data');
             if (saved) {
                 const data = JSON.parse(saved);
                 document.getElementById('shiftDate').value = data.shiftDate || initDate();
@@ -401,6 +459,7 @@
                 document.getElementById('expenses').value = data.expenses || '';
                 document.getElementById('strawberries').value = data.strawberries || 'продаж не было';
                 clients = data.clients || [];
+                if (data.quickCatalog) quickCatalog = data.quickCatalog;
             } else {
                 document.getElementById('shiftDate').value = initDate();
                 document.getElementById('strawberries').value = 'продаж не было';
@@ -409,7 +468,7 @@
             if (clients.length === 0) addClient(false);
             else renderClients();
 
-            renderProductsGrid();
+            renderStories();
             updateReport();
         }
 
@@ -419,9 +478,10 @@
                 cashRegister: document.getElementById('cashRegister').value,
                 expenses: document.getElementById('expenses').value,
                 strawberries: document.getElementById('strawberries').value,
-                clients: clients
+                clients: clients,
+                quickCatalog: quickCatalog
             };
-            localStorage.setItem('strawberry_shift_data_v2', JSON.stringify(data));
+            localStorage.setItem('ig_strawberry_data', JSON.stringify(data));
             updateReport();
         }
 
@@ -459,19 +519,19 @@
                 const card = document.createElement('div');
                 card.className = 'client-card';
                 card.innerHTML = `
-                    <div class="client-header">
+                    <div class="client-head">
                         <strong>Клиент ${i + 1}</strong>
-                        ${clients.length > 1 ? `<button class="btn-glass-sm" style="color:var(--accent-red)" onclick="removeClient(${i})">Удалить</button>` : ''}
+                        ${clients.length > 1 ? `<span style="color:var(--danger); font-size:12px; font-weight:600; cursor:pointer;" onclick="removeClient(${i})">Удалить</span>` : ''}
                     </div>
                     <input type="text" placeholder="Примечание (напр., Муса Вип)" value="${c.name}" style="margin-bottom:8px;" oninput="clients[${i}].name = this.value; saveData();">
                     
                     <textarea placeholder="Состав заказа" rows="2" style="margin-bottom:8px;" oninput="clients[${i}].items = this.value; saveData();">${c.items}</textarea>
 
-                    <div class="ios-segmented">
-                        <div class="segmented-btn ${c.payType==='Нал'?'active':''}" onclick="setPayType(${i}, 'Нал')">Нал</div>
-                        <div class="segmented-btn ${c.payType==='Перевод'?'active':''}" onclick="setPayType(${i}, 'Перевод')">Перевод</div>
-                        <div class="segmented-btn ${c.payType==='Терминал'?'active':''}" onclick="setPayType(${i}, 'Терминал')">Терминал</div>
-                        <div class="segmented-btn ${c.payType==='Долг'?'active':''}" onclick="setPayType(${i}, 'Долг')">Долг</div>
+                    <div class="ig-segmented">
+                        <div class="ig-seg-btn ${c.payType==='Нал'?'active':''}" onclick="setPayType(${i}, 'Нал')">Нал</div>
+                        <div class="ig-seg-btn ${c.payType==='Перевод'?'active':''}" onclick="setPayType(${i}, 'Перевод')">Перевод</div>
+                        <div class="ig-seg-btn ${c.payType==='Терминал'?'active':''}" onclick="setPayType(${i}, 'Терминал')">Терминал</div>
+                        <div class="ig-seg-btn ${c.payType==='Долг'?'active':''}" onclick="setPayType(${i}, 'Долг')">Долг</div>
                     </div>
 
                     <div class="row">
@@ -531,7 +591,7 @@
         function copyReport() {
             const text = generateReportText();
             navigator.clipboard.writeText(text).then(() => {
-                alert('✅ Отчет скопирован!');
+                alert('✅ Отчёт скопирован!');
             }).catch(() => {
                 alert('Скопируйте текст из предпросмотра вручную.');
             });
@@ -539,7 +599,7 @@
 
         function resetShift() {
             if (confirm('Очистить смену и начать заново?')) {
-                localStorage.removeItem('strawberry_shift_data_v2');
+                localStorage.removeItem('ig_strawberry_data');
                 clients = [];
                 document.getElementById('expenses').value = '';
                 document.getElementById('strawberries').value = 'продаж не было';
