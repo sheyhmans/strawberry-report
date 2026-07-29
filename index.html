@@ -346,6 +346,10 @@
                 <input type="number" class="input-box" id="startCashInput" placeholder="0" oninput="updateStartCash()">
             </div>
             <div style="margin-bottom: 10px;">
+                <label style="font-size:13px; font-weight:700; color:var(--text-muted); display:block; margin-bottom:4px;">Дополнительные расходы (₽)</label>
+                <input type="number" class="input-box" id="expensesInput" placeholder="0" oninput="updateExpenses()">
+            </div>
+            <div style="margin-bottom: 10px;">
                 <label style="font-size:13px; font-weight:700; color:var(--text-muted); display:block; margin-bottom:4px;">Google Gemini API Ключ</label>
                 <input type="password" class="input-box" id="apiKeyInput" placeholder="AIzaSy..." oninput="updateApiKey()">
             </div>
@@ -405,6 +409,7 @@
         function openModal(id) { 
             if(id === 'modalSettings') {
                 document.getElementById('startCashInput').value = state.startCash || '';
+                document.getElementById('expensesInput').value = state.expenses || '';
                 document.getElementById('apiKeyInput').value = state.apiKey || '';
             }
             document.getElementById(id).style.display = 'flex'; 
@@ -414,6 +419,11 @@
 
         function updateStartCash() {
             state.startCash = parseInt(document.getElementById('startCashInput').value) || 0;
+            saveData();
+        }
+
+        function updateExpenses() {
+            state.expenses = parseInt(document.getElementById('expensesInput').value) || 0;
             saveData();
         }
 
@@ -445,7 +455,6 @@
         }
 
         function finishAndNextClient() {
-            // Создаем нового клиента автоматически и переключаемся на него
             let nextNum = state.clients.length + 1;
             state.clients.push({ id: Date.now(), name: `Клиент ${nextNum}`, items: [], pay: 'Нал', time: '', discount: 0 });
             state.activeClient = state.clients.length - 1;
@@ -718,7 +727,7 @@
             
             let totalCash = 0;
             let totalCard = 0;
-            let totalDelivery = 0;
+            let totalDeliveryExpenses = 0;
 
             state.clients.forEach((cli, idx) => {
                 if(!cli.items || cli.items.length === 0) return;
@@ -730,7 +739,7 @@
                     txt += `• ${it.name} (${it.qty}${it.unit}) — ${it.sum} руб\n`;
                     sub += it.sum;
                     if(it.type === 'delivery') {
-                        totalDelivery += it.sum;
+                        totalDeliveryExpenses += it.sum;
                     }
                 });
 
@@ -755,24 +764,29 @@
                 }
             });
 
-            let deliveryFromCash = Math.min(totalCash, totalDelivery);
-            let remainingDelivery = totalDelivery - deliveryFromCash;
-            
-            let finalNetCash = totalCash - deliveryFromCash;
-            let finalStartCash = state.startCash - remainingDelivery;
-            let totalRevenue = finalNetCash + totalCard;
+            let totalExpenses = state.expenses + totalDeliveryExpenses;
+            let netCash = totalCash - totalDeliveryExpenses;
+            let totalRevenue = totalCash + totalCard;
 
             txt += `\n-------------------\n`;
-            txt += `💸 Расходы: ${state.expenses} руб\n`;
-            txt += `💵 Наличные: ${finalNetCash} руб\n`;
-            if(totalDelivery > 0) {
-                txt += `(Доставка: -${totalDelivery} руб)\n`;
+            if (totalExpenses > 0) {
+                txt += `💸 Расходы: ${totalExpenses} руб`;
+                if (totalDeliveryExpenses > 0 && state.expenses > 0) {
+                    txt += ` (доставки: ${totalDeliveryExpenses} + прочее: ${state.expenses})`;
+                } else if (totalDeliveryExpenses > 0) {
+                    txt += ` (в т.ч. доставки: ${totalDeliveryExpenses} руб)`;
+                }
+                txt += `\n`;
+            } else {
+                txt += `💸 Расходы: 0 руб\n`;
             }
-            if(state.startCash > 0 || remainingDelivery > 0) {
-                txt += `🏦 Начальная касса: ${finalStartCash} руб${remainingDelivery > 0 ? ` (вычтен остаток доставки: -${remainingDelivery} руб)` : ''}\n`;
+
+            txt += `💵 Наличные: ${netCash} руб${totalDeliveryExpenses > 0 ? ` (за минусом доставок: -${totalDeliveryExpenses})` : ''}\n`;
+            if(state.startCash > 0) {
+                txt += `🏦 Начальная касса: ${state.startCash} руб\n`;
             }
             txt += `📱 Переводы/Терминал: ${totalCard} руб\n`;
-            txt += `💰 ИТОГО КАССА: ${totalRevenue - state.expenses} руб`;
+            txt += `💰 ИТОГО КАССА: ${totalRevenue - totalExpenses} руб`;
 
             return txt;
         }
