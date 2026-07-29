@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Strawberry POS 3.0</title>
+    <title>Strawberry POS 3.1</title>
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
@@ -91,7 +91,6 @@
         .item-info h4 { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
         .item-price { font-size: 15px; font-weight: 700; color: var(--text-sub); }
         
-        /* Кнопки количества +- */
         .qty-control {
             display: flex; align-items: center; gap: 12px;
             background: var(--btn-bg); padding: 6px; border-radius: 12px;
@@ -125,14 +124,12 @@
         .pad-section { display: none; flex: 1; flex-direction: column; }
         .pad-section.active { display: flex; }
 
-        /* Скроллируемая сетка товаров */
         .catalog-grid {
             display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
             overflow-y: auto; flex: 1; align-content: start; padding-bottom: 10px;
         }
         .catalog-grid::-webkit-scrollbar { display: none; }
 
-        /* Нижний ряд кнопок управления */
         .action-row {
             display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;
             margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border);
@@ -151,6 +148,8 @@
         .pad-btn.action .name { color: var(--accent-blue); font-weight: 700;}
         .pad-btn.pay { background: rgba(52, 199, 89, 0.1); }
         .pad-btn.pay .name { color: var(--accent-green); font-weight: 700;}
+        .pad-btn.special { background: rgba(255, 149, 0, 0.1); }
+        .pad-btn.special .name { color: #FF9500; font-weight: 700;}
 
         /* Цифровая клавиатура */
         .numpad-display {
@@ -218,7 +217,7 @@
                 <div class="client-name" id="clientName">Клиент 1</div>
                 <div class="icon-btn" onclick="nextClient()">→</div>
             </div>
-            <div class="icon-btn" onclick="addClient()" style="background: var(--accent-blue); color:white; border:none;">+</div>
+            <div class="icon-btn" onclick="addClient()" style="background: var(--accent-blue); color:white; border:none;" title="Новый клиент">+</div>
         </div>
 
         <div class="items-list" id="receiptItems"></div>
@@ -236,7 +235,7 @@
         <!-- Главное меню (Скроллируемое) -->
         <div class="pad-section active" id="padMain">
             <div class="catalog-grid" id="catalogGrid">
-                <!-- Товары рендерятся сюда -->
+                <!-- Товары и кнопки добавления/веса рендерятся сюда -->
             </div>
             <div class="action-row">
                 <button class="pad-btn action" onclick="showPad('padDiscount')"><div class="icon">🏷️</div><div class="name">Скидка</div></button>
@@ -245,7 +244,7 @@
             </div>
         </div>
 
-        <!-- Универсальный Numpad (Вес / Доставка) -->
+        <!-- Универсальный Numpad (Вес / Доставка / Свой товар) -->
         <div class="pad-section" id="padNumpad">
             <div class="numpad-display" id="numpadDisplay">0</div>
             <div class="num-grid">
@@ -290,6 +289,24 @@
         </div>
     </div>
 
+    <!-- МОДАЛКА: СОЗДАНИЕ СВОЕГО ТОВАРА -->
+    <div class="overlay" id="modalCustomItem">
+        <div class="modal-card">
+            <div class="modal-title">Новый товар <div class="icon-btn" onclick="closeModal('modalCustomItem')">✕</div></div>
+            <div class="modal-body">
+                <div class="input-group">
+                    <label>Название товара</label>
+                    <input type="text" id="customItemName" placeholder="Например: Букет 51">
+                </div>
+                <div class="input-group">
+                    <label>Цена за шт (₽)</label>
+                    <input type="number" id="customItemPrice" placeholder="5000">
+                </div>
+                <button class="big-btn green" onclick="saveCustomItem()">Добавить в каталог</button>
+            </div>
+        </div>
+    </div>
+
     <!-- НАСТРОЙКИ -->
     <div class="overlay" id="modalSettings">
         <div class="modal-card">
@@ -325,15 +342,13 @@
     </div>
 
     <script>
-        // БАЗА ТОВАРОВ (Можно легко добавлять новые)
-        const catalog = [
+        let catalog = [
             { id: 1, name: "Клубника ШК", icon: "🍓", price: 900, type: "piece" },
             { id: 2, name: "Ананас ШК", icon: "🍍", price: 1200, type: "piece" },
             { id: 3, name: "Роза", icon: "🌹", price: 250, type: "piece" },
             { id: 4, name: "Клубника (кг)", icon: "⚖️", price: 600, type: "weight" },
             { id: 5, name: "Голубика (кг)", icon: "🫐", price: 1500, type: "weight" },
-            { id: 6, name: "Банан ШК", icon: "🍌", price: 300, type: "piece" }, // Пример нового
-            { id: 99, name: "Доставка", icon: "🚗", price: 0, type: "delivery" }
+            { id: 6, name: "Доставка", icon: "🚗", price: 0, type: "delivery" }
         ];
 
         let app = {
@@ -349,13 +364,18 @@
         let activeProductForNumpad = null;
 
         function init() {
-            const saved = localStorage.getItem('pos_v3');
+            const saved = localStorage.getItem('pos_v3_1');
             if (saved) {
                 app = JSON.parse(saved);
                 if(!app.shift.clients || app.shift.clients.length === 0) resetShiftData();
             } else {
                 app.shift.date = getAutoDate();
             }
+            
+            // Загрузка кастомных товаров если были добавлены
+            const savedCatalog = localStorage.getItem('pos_catalog');
+            if(savedCatalog) catalog = JSON.parse(savedCatalog);
+
             applyTheme();
             syncInputsToApp();
             renderCatalog();
@@ -368,7 +388,6 @@
             return `${f(d)}-${f(t)}`;
         }
 
-        // ТЕМА
         function applyTheme() {
             document.body.setAttribute('data-theme', app.theme);
             document.getElementById('themeBtn').innerText = app.theme === 'dark' ? '☀️' : '🌙';
@@ -381,7 +400,7 @@
         function saveCore() {
             app.shift.date = document.getElementById('inpDate').value || app.shift.date;
             app.shift.cash = document.getElementById('inpCash').value || app.shift.cash;
-            localStorage.setItem('pos_v3', JSON.stringify(app));
+            localStorage.setItem('pos_v3_1', JSON.stringify(app));
         }
         function syncInputsToApp() {
             document.getElementById('inpDate').value = app.shift.date;
@@ -402,10 +421,12 @@
             saveCore(); renderReceipt();
         }
 
-        // РЕНДЕР КАТАЛОГА ТОВАРОВ
+        // РЕНДЕР КАТАЛОГА С КНОПКАМИ ДОБАВЛЕНИЯ И ВЕСА СРЕДИ ПЛИТОК
         function renderCatalog() {
             const grid = document.getElementById('catalogGrid');
             grid.innerHTML = '';
+            
+            // Рендерим стандартные и добавленные товары
             catalog.forEach(item => {
                 let priceLabel = item.type === 'delivery' ? 'Ввод ₽' : (item.type === 'weight' ? `${item.price}₽/кг` : `${item.price}₽`);
                 grid.innerHTML += `
@@ -414,25 +435,48 @@
                         <div class="name">${item.name}<br><span style="opacity:0.6">${priceLabel}</span></div>
                     </button>`;
             });
+
+            // Кнопка быстрого добавления весового товара (весовка) прямо в плитках
+            grid.innerHTML += `
+                <button class="pad-btn special" onclick="openWeightQuickSelector()">
+                    <div class="icon">⚖️</div>
+                    <div class="name">Выбрать вес<br><span style="opacity:0.6">любой</span></div>
+                </button>
+            `;
+
+            // Плитка добавления нового товара
+            grid.innerHTML += `
+                <button class="pad-btn action" onclick="openModal('modalCustomItem')">
+                    <div class="icon">➕</div>
+                    <div class="name">+ Товар<br><span style="opacity:0.6">новый</span></div>
+                </button>
+            `;
         }
 
-        // ОБРАБОТКА НАЖАТИЯ НА ТОВАР
+        // Выбор весового товара по клику на специальную плитку
+        function openWeightQuickSelector() {
+            // Находим первый весовой товар в каталоге или создаем виртуальный
+            const weightItem = catalog.find(x => x.type === 'weight') || { id: 999, name: "Весовой товар", icon: "⚖️", price: 600, type: "weight" };
+            activeProductForNumpad = weightItem;
+            currentInputStr = "";
+            updateNumpadDisplay();
+            showPad('padNumpad');
+        }
+
         function handleProductClick(id) {
             const item = catalog.find(x => x.id === id);
             const c = getC();
 
-            if (item.type === 'piece') {
-                // Если товар уже есть, просто увеличиваем количество
+            if (item.type === 'piece' || item.type === 'custom') {
                 let existing = c.items.find(i => i.id === item.id);
                 if (existing) {
                     existing.qty += 1;
                     existing.sum = existing.qty * existing.price;
                 } else {
-                    c.items.push({ id: item.id, icon: item.icon, name: item.name, qty: 1, unit: 'шт', price: item.price, sum: item.price, type: 'piece' });
+                    c.items.push({ id: item.id, icon: item.icon, name: item.name, qty: 1, unit: 'шт', price: item.price, sum: item.price, type: item.type });
                 }
                 saveCore(); renderReceipt();
             } else {
-                // Открываем клавиатуру для Веса или Доставки
                 activeProductForNumpad = item;
                 currentInputStr = "";
                 updateNumpadDisplay();
@@ -440,11 +484,25 @@
             }
         }
 
-        // ИЗМЕНЕНИЕ КОЛИЧЕСТВА ИЗ ЧЕКА (+ / -)
+        function saveCustomItem() {
+            const name = document.getElementById('customItemName').value.trim();
+            const price = parseInt(document.getElementById('customItemPrice').value);
+            if(!name || isNaN(price)) { alert('Заполни название и цену'); return; }
+
+            const newItem = { id: Date.now(), name: name, icon: "📦", price: price, type: "custom" };
+            catalog.push(newItem);
+            localStorage.setItem('pos_catalog', JSON.stringify(catalog));
+            
+            document.getElementById('customItemName').value = '';
+            document.getElementById('customItemPrice').value = '';
+            closeModal('modalCustomItem');
+            renderCatalog();
+        }
+
         function changeQty(index, delta) {
             let item = getC().items[index];
             
-            if (item.type === 'piece') {
+            if (item.type === 'piece' || item.type === 'custom') {
                 item.qty += delta;
                 if (item.qty <= 0) {
                     getC().items.splice(index, 1);
@@ -452,13 +510,11 @@
                     item.sum = item.qty * item.price;
                 }
             } else {
-                // Для веса и доставки минус просто удаляет товар (плюс не показывается)
                 if (delta < 0) getC().items.splice(index, 1);
             }
             saveCore(); renderReceipt();
         }
 
-        // РЕНДЕР ЧЕКА
         function renderReceipt() {
             const c = getC();
             document.getElementById('clientName').innerText = c.note ? `Клиент ${activeIndex + 1} (${c.note})` : `Клиент ${activeIndex + 1}`;
@@ -479,16 +535,14 @@
                 c.items.forEach((it, idx) => {
                     rawSum += it.sum;
                     
-                    // Рисуем кнопки количества в зависимости от типа
                     let controlsHTML = '';
-                    if (it.type === 'piece') {
+                    if (it.type === 'piece' || it.type === 'custom') {
                         controlsHTML = `
                             <button class="qty-btn ${it.qty === 1 ? 'del' : ''}" onclick="changeQty(${idx}, -1)">${it.qty === 1 ? '✕' : '-'}</button>
                             <span class="qty-val">${it.qty} ${it.unit}</span>
                             <button class="qty-btn" onclick="changeQty(${idx}, 1)">+</button>
                         `;
                     } else {
-                        // Для веса и доставки только кнопка удаления
                         controlsHTML = `
                             <span class="qty-val" style="margin-right:10px;">${it.qty} ${it.unit}</span>
                             <button class="qty-btn del" onclick="changeQty(${idx}, -1)">✕</button>
@@ -513,14 +567,12 @@
             document.getElementById('totalSum').innerText = finalSum > 0 ? `${finalSum.toLocaleString('ru-RU')} ₽` : '0 ₽';
         }
 
-        // НАВИГАЦИЯ ПАНЕЛЕЙ
         function showPad(id) {
             document.querySelectorAll('.pad-section').forEach(el => el.classList.remove('active'));
             document.getElementById(id).classList.add('active');
         }
         function closePads() { showPad('padMain'); }
 
-        // УНИВЕРСАЛЬНЫЙ NUMPAD (Вес и Доставка)
         function typeNum(num) {
             if (currentInputStr.length < 6) currentInputStr += num;
             updateNumpadDisplay();
@@ -531,7 +583,7 @@
             
             if (activeProductForNumpad.type === 'weight') {
                 const sum = Math.round((val / 1000) * activeProductForNumpad.price);
-                display.innerText = `${val} г = ${sum} ₽`;
+                display.innerText = `${activeProductForNumpad.name}: ${val} г = ${sum} ₽`;
             } else if (activeProductForNumpad.type === 'delivery') {
                 display.innerText = `Доставка: ${val} ₽`;
             }
@@ -550,16 +602,13 @@
             closePads();
         }
 
-        // ОПЕРАЦИИ
         function setNowTime() { getC().time = new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}); saveCore(); renderReceipt(); }
         function applyDiscount(val) { getC().discount = val; saveCore(); renderReceipt(); closePads(); }
         function applyPay(val) { getC().pay = val; saveCore(); renderReceipt(); closePads(); }
 
-        // МОДАЛКИ
         function openModal(id) { document.getElementById(id).style.display = 'flex'; }
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
-        // ОТЧЕТ
         function generateReportText() {
             let txt = `${app.shift.date}\nКасса: ${app.shift.cash}\n\n`;
             let n = 0, p = 0;
@@ -599,7 +648,6 @@
             navigator.clipboard.writeText(generateReportText()).then(()=>alert('✅ Скопировано!')).catch(()=>alert('Ошибка'));
         }
 
-        // СБРОС
         function resetShiftData() {
             app.shift.date = getAutoDate();
             app.shift.cash = '10.000';
