@@ -1,4 +1,4 @@
-<!DOCTYPE html><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -38,101 +38,102 @@
 
         header {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 16px 20px; background: var(--glass-card); border-bottom: 1px solid var(--border);
+            padding: 12px 16px; background: var(--glass-card); border-bottom: 1px solid var(--border);
+            flex-shrink: 0;
         }
-        .brand { font-size: 22px; font-weight: 800; color: var(--primary); letter-spacing: 0.5px; }
-        .header-tools { display: flex; gap: 12px; }
+        .brand { font-size: 20px; font-weight: 800; color: var(--primary); letter-spacing: 0.5px; }
+        .header-tools { display: flex; gap: 8px; }
         .btn-icon {
-            width: 44px; height: 44px; border-radius: 12px; background: var(--bg-gradient);
+            width: 38px; height: 38px; border-radius: 10px; background: var(--bg-gradient);
             border: 1px solid var(--border); display: flex; align-items: center; justify-content: center;
-            font-size: 20px; cursor: pointer; color: var(--text-main);
+            font-size: 18px; cursor: pointer; color: var(--text-main);
         }
 
         .workspace {
-            flex: 1; display: flex; flex-direction: column; padding: 16px; gap: 14px; overflow: hidden; max-width: 600px; width: 100%; margin: 0 auto;
+            flex: 1; display: flex; flex-direction: column; padding: 12px; gap: 10px; overflow: hidden; max-width: 600px; width: 100%; margin: 0 auto;
         }
 
         /* ТАБЫ */
         .clients-bar {
-            display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; flex-shrink: 0;
+            display: flex; gap: 8px; overflow-x: auto; padding-bottom: 2px; flex-shrink: 0;
         }
         .client-tab {
             background: var(--glass-card); border: 1px solid var(--border);
-            padding: 10px 18px; border-radius: 12px; font-size: 15px; font-weight: 700;
-            white-space: nowrap; cursor: pointer; color: var(--text-muted); display: flex; align-items: center; gap: 8px;
+            padding: 8px 14px; border-radius: 10px; font-size: 14px; font-weight: 700;
+            white-space: nowrap; cursor: pointer; color: var(--text-muted); display: flex; align-items: center; gap: 6px;
         }
         .client-tab.active { background: var(--primary); color: #fff; border-color: var(--primary); }
         .client-tab-add { background: var(--primary); color: #fff; border: none; }
 
         /* КАРТОЧКА ЧЕКА */
         .receipt-card {
-            flex: 1; background: var(--glass-card); border: 1px solid var(--border);
-            border-radius: 20px; display: flex; flex-direction: column; padding: 16px; overflow: hidden; box-shadow: var(--shadow);
+            flex: 1; min-height: 0; background: var(--glass-card); border: 1px solid var(--border);
+            border-radius: 16px; display: flex; flex-direction: column; padding: 12px; overflow: hidden; box-shadow: var(--shadow);
         }
 
         .receipt-header-row {
-            display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;
-            padding-bottom: 10px; border-bottom: 1px solid var(--border);
+            display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;
+            padding-bottom: 8px; border-bottom: 1px solid var(--border); flex-shrink: 0;
         }
         .client-input {
-            background: transparent; border: none; font-size: 18px; font-weight: 700; color: var(--text-main); outline: none; width: 50%;
+            background: transparent; border: none; font-size: 16px; font-weight: 700; color: var(--text-main); outline: none; width: 50%;
         }
         .header-badges { display: flex; gap: 6px; align-items: center; }
         .pay-badge, .time-badge {
-            background: rgba(79, 70, 229, 0.1); color: var(--primary); padding: 8px 12px;
-            border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer;
+            background: rgba(79, 70, 229, 0.1); color: var(--primary); padding: 6px 10px;
+            border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer;
         }
         .time-badge { background: rgba(107, 114, 128, 0.1); color: var(--text-muted); }
 
         .cart-list {
-            flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 10px;
+            flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; padding-right: 2px;
         }
 
         .cart-item {
             display: flex; justify-content: space-between; align-items: center;
-            background: var(--bg-gradient); padding: 12px 14px; border-radius: 14px; border: 1px solid var(--border);
-            cursor: pointer; transition: background 0.1s;
+            background: var(--bg-gradient); padding: 10px 12px; border-radius: 12px; border: 1px solid var(--border);
+            cursor: pointer; transition: background 0.1s; flex-shrink: 0;
         }
         .cart-item:active { opacity: 0.8; }
-        .cart-item-info h5 { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
-        .cart-item-info span { font-size: 14px; color: var(--text-muted); font-weight: 600; }
+        .cart-item-info h5 { font-size: 15px; font-weight: 700; margin-bottom: 2px; }
+        .cart-item-info span { font-size: 13px; color: var(--text-muted); font-weight: 600; }
         
-        .cart-item-controls { display: flex; align-items: center; gap: 8px; }
+        .cart-item-controls { display: flex; align-items: center; gap: 6px; }
         .mini-btn {
-            width: 32px; height: 32px; border-radius: 8px; border: 1px solid var(--border); background: var(--glass-card);
-            color: var(--text-main); font-weight: 700; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 16px;
+            width: 28px; height: 28px; border-radius: 6px; border: 1px solid var(--border); background: var(--glass-card);
+            color: var(--text-main); font-weight: 700; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 14px;
         }
         .mini-btn.del { color: var(--accent-red); }
 
         .receipt-footer {
-            margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border);
-            display: flex; justify-content: space-between; align-items: flex-end;
+            margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border);
+            display: flex; justify-content: space-between; align-items: flex-end; flex-shrink: 0;
         }
-        .total-label { font-size: 13px; text-transform: uppercase; color: var(--text-muted); font-weight: 700; }
-        .total-sum { font-size: 30px; font-weight: 900; }
+        .total-label { font-size: 12px; text-transform: uppercase; color: var(--text-muted); font-weight: 700; }
+        .total-sum { font-size: 24px; font-weight: 900; }
 
         /* КАТАЛОГ СЕТКА */
         .catalog-container {
-            height: 230px; background: var(--glass-card); border: 1px solid var(--border);
-            border-radius: 20px; padding: 12px; display: grid; grid-template-columns: repeat(3, 1fr);
-            gap: 10px; overflow-y: auto; flex-shrink: 0; box-shadow: var(--shadow);
+            height: 190px; background: var(--glass-card); border: 1px solid var(--border);
+            border-radius: 16px; padding: 10px; display: grid; grid-template-columns: repeat(3, 1fr);
+            gap: 8px; overflow-y: auto; flex-shrink: 0; box-shadow: var(--shadow);
         }
 
         .product-tile {
-            background: var(--bg-gradient); border: 1px solid var(--border); border-radius: 16px;
-            padding: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center;
-            cursor: pointer; text-align: center; position: relative;
+            background: var(--bg-gradient); border: 1px solid var(--border); border-radius: 12px;
+            padding: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center;
+            cursor: pointer; text-align: center; position: relative; height: 100%;
         }
-        .product-tile .icon { font-size: 28px; margin-bottom: 4px; }
-        .product-tile .name { font-size: 14px; font-weight: 700; color: var(--text-main); line-height: 1.1; margin-bottom: 4px;}
-        .product-tile .price { font-size: 12px; font-weight: 600; color: var(--text-muted); }
+        .product-tile .icon { font-size: 24px; margin-bottom: 2px; }
+        .product-tile .name { font-size: 13px; font-weight: 700; color: var(--text-main); line-height: 1.1; margin-bottom: 2px;}
+        .product-tile .price { font-size: 11px; font-weight: 600; color: var(--text-muted); }
         .product-tile.add-tile { border: 2px dashed var(--primary); background: rgba(79, 70, 229, 0.05); }
         .product-tile.add-tile .name { color: var(--primary); }
 
         .edit-prod-btn {
-            position: absolute; top: 6px; right: 6px; width: 24px; height: 24px;
-            background: var(--glass-card); border: 1px solid var(--border); border-radius: 6px;
-            display: flex; align-items: center; justify-content: center; font-size: 12px;
+            position: absolute; top: 4px; right: 4px; width: 20px; height: 20px;
+            background: var(--glass-card); border: 1px solid var(--border); border-radius: 4px;
+            display: flex; align-items: center; justify-content: center; font-size: 10px;
             color: var(--text-muted); cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
@@ -142,26 +143,26 @@
             z-index: 100; justify-content: center; align-items: center; padding: 16px;
         }
         .modal {
-            background: var(--glass-card); width: 100%; max-width: 360px; border-radius: 24px;
-            padding: 24px; border: 1px solid var(--border); box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            background: var(--glass-card); width: 100%; max-width: 360px; border-radius: 20px;
+            padding: 20px; border: 1px solid var(--border); box-shadow: 0 20px 40px rgba(0,0,0,0.2);
         }
-        .modal-title { font-size: 20px; font-weight: 800; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; }
+        .modal-title { font-size: 18px; font-weight: 800; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; }
         .input-box, .select-box {
             width: 100%; background: var(--bg-gradient); border: 1px solid var(--border);
-            padding: 16px; border-radius: 14px; font-size: 16px; font-weight: 600; color: var(--text-main); outline: none; margin-bottom: 12px;
+            padding: 12px; border-radius: 12px; font-size: 15px; font-weight: 600; color: var(--text-main); outline: none; margin-bottom: 10px;
         }
         .btn-action {
-            width: 100%; padding: 16px; border-radius: 14px; border: none; font-size: 16px; font-weight: 700; cursor: pointer;
+            width: 100%; padding: 14px; border-radius: 12px; border: none; font-size: 15px; font-weight: 700; cursor: pointer;
         }
-        .btn-action.primary { background: var(--primary); color: #fff; margin-top: 6px; }
-        .btn-action.secondary { background: var(--bg-gradient); color: var(--text-main); border: 1px solid var(--border); margin-bottom: 8px; text-align: left; }
+        .btn-action.primary { background: var(--primary); color: #fff; margin-top: 4px; }
+        .btn-action.secondary { background: var(--bg-gradient); color: var(--text-main); border: 1px solid var(--border); margin-bottom: 6px; text-align: left; }
         
-        .preset-weights { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 12px; }
-        .preset-btn { background: var(--bg-gradient); border: 1px solid var(--border); padding: 12px; border-radius: 10px; font-weight: 700; cursor: pointer; font-size: 14px; text-align: center; color: var(--text-main); }
+        .preset-weights { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 10px; }
+        .preset-btn { background: var(--bg-gradient); border: 1px solid var(--border); padding: 10px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 13px; text-align: center; color: var(--text-main); }
         
         .report-box {
-            background: var(--bg-gradient); padding: 14px; border-radius: 14px; font-family: monospace;
-            font-size: 13px; max-height: 45vh; overflow-y: auto; border: 1px solid var(--border); margin-bottom: 16px; white-space: pre-wrap;
+            background: var(--bg-gradient); padding: 12px; border-radius: 12px; font-family: monospace;
+            font-size: 12px; max-height: 45vh; overflow-y: auto; border: 1px solid var(--border); margin-bottom: 14px; white-space: pre-wrap;
         }
     </style>
 </head>
@@ -197,7 +198,7 @@
             <div class="receipt-footer">
                 <div>
                     <div class="total-label">Скидка: <span id="discountLabel" style="color:var(--accent-red)">0%</span></div>
-                    <button class="mini-btn" style="width:auto; padding:0 10px; font-size:12px; margin-top:4px;" onclick="openModal('modalDiscount')">🏷️ Изменить</button>
+                    <button class="mini-btn" style="width:auto; padding:0 8px; font-size:11px; margin-top:2px;" onclick="openModal('modalDiscount')">🏷️ Изменить</button>
                 </div>
                 <div style="text-align: right;">
                     <div class="total-label">ИТОГО</div>
@@ -213,7 +214,7 @@
     <!-- МОДАЛКА ВЕСА / ДОСТАВКИ -->
     <div class="overlay" id="modalWeight">
         <div class="modal">
-            <div class="modal-title"><span id="weightModalTitle">Значение</span> <div class="btn-icon" style="width:34px; height:34px; font-size:14px;" onclick="closeModal('modalWeight')">✕</div></div>
+            <div class="modal-title"><span id="weightModalTitle">Значение</span> <div class="btn-icon" style="width:30px; height:30px; font-size:12px;" onclick="closeModal('modalWeight')">✕</div></div>
             <div class="preset-weights" id="weightPresetsContainer">
                 <div class="preset-btn" onclick="selectWeightPreset(250)">250 г</div>
                 <div class="preset-btn" onclick="selectWeightPreset(500)">500 г</div>
@@ -227,27 +228,27 @@
     <!-- МОДАЛКА ВРЕМЕНИ -->
     <div class="overlay" id="modalTime">
         <div class="modal">
-            <div class="modal-title">Время перевода/терминала <div class="btn-icon" style="width:34px; height:34px; font-size:14px;" onclick="closeModal('modalTime')">✕</div></div>
+            <div class="modal-title">Время перевода/терминала <div class="btn-icon" style="width:30px; height:30px; font-size:12px;" onclick="closeModal('modalTime')">✕</div></div>
             <input type="text" class="input-box" id="timeInput" placeholder="например: 14:35">
             <button class="btn-action primary" onclick="saveTime()">Сохранить время</button>
-            <button class="btn-action secondary" style="margin-top:8px; text-align:center;" onclick="clearTime()">Сбросить время</button>
+            <button class="btn-action secondary" style="margin-top:6px; text-align:center;" onclick="clearTime()">Сбросить время</button>
         </div>
     </div>
 
     <!-- МОДАЛКА РЕДАКТИРОВАНИЯ ТОВАРА В ЧЕКЕ -->
     <div class="overlay" id="modalEditItem">
         <div class="modal">
-            <div class="modal-title"><span id="editItemTitle">Изменить товар</span> <div class="btn-icon" style="width:34px; height:34px; font-size:14px;" onclick="closeModal('modalEditItem')">✕</div></div>
+            <div class="modal-title"><span id="editItemTitle">Изменить товар</span> <div class="btn-icon" style="width:30px; height:30px; font-size:12px;" onclick="closeModal('modalEditItem')">✕</div></div>
             <input type="number" class="input-box" id="editItemInput" placeholder="Новое значение...">
             <button class="btn-action primary" onclick="saveEditedItem()">Сохранить</button>
-            <button class="btn-action secondary" style="color:var(--accent-red); margin-top:12px; text-align:center;" onclick="deleteEditedItem()">🗑️ Удалить</button>
+            <button class="btn-action secondary" style="color:var(--accent-red); margin-top:10px; text-align:center;" onclick="deleteEditedItem()">🗑️ Удалить</button>
         </div>
     </div>
 
     <!-- МОДАЛКА ДОБАВЛЕНИЯ ТОВАРА В КАТАЛОГ -->
     <div class="overlay" id="modalAddProduct">
         <div class="modal">
-            <div class="modal-title">Новый товар <div class="btn-icon" style="width:34px; height:34px; font-size:14px;" onclick="closeModal('modalAddProduct')">✕</div></div>
+            <div class="modal-title">Новый товар <div class="btn-icon" style="width:30px; height:30px; font-size:12px;" onclick="closeModal('modalAddProduct')">✕</div></div>
             <input type="text" class="input-box" id="newProdName" placeholder="Название...">
             <input type="number" class="input-box" id="newProdPrice" placeholder="Цена (₽)...">
             <select class="select-box" id="newProdType">
@@ -262,7 +263,7 @@
     <!-- МОДАЛКА ИЗМЕНЕНИЯ ТОВАРА КАТАЛОГА -->
     <div class="overlay" id="modalEditCatalog">
         <div class="modal">
-            <div class="modal-title">Настройки товара <div class="btn-icon" style="width:34px; height:34px; font-size:14px;" onclick="closeModal('modalEditCatalog')">✕</div></div>
+            <div class="modal-title">Настройки товара <div class="btn-icon" style="width:30px; height:30px; font-size:12px;" onclick="closeModal('modalEditCatalog')">✕</div></div>
             <input type="text" class="input-box" id="editCatName" placeholder="Название">
             <input type="number" class="input-box" id="editCatPrice" placeholder="Цена">
             <select class="select-box" id="editCatType">
@@ -271,14 +272,14 @@
                 <option value="delivery">Произвольная доставка</option>
             </select>
             <button class="btn-action primary" onclick="saveCatalogEdits()">💾 Сохранить</button>
-            <button class="btn-action secondary" style="color:var(--accent-red); margin-top:12px; text-align:center;" onclick="deleteFromCatalog()">🗑️ Удалить</button>
+            <button class="btn-action secondary" style="color:var(--accent-red); margin-top:10px; text-align:center;" onclick="deleteFromCatalog()">🗑️ Удалить</button>
         </div>
     </div>
 
     <!-- МОДАЛКА ОПЛАТЫ -->
     <div class="overlay" id="modalPay">
         <div class="modal">
-            <div class="modal-title">Оплата <div class="btn-icon" style="width:34px; height:34px; font-size:14px;" onclick="closeModal('modalPay')">✕</div></div>
+            <div class="modal-title">Оплата <div class="btn-icon" style="width:30px; height:30px; font-size:12px;" onclick="closeModal('modalPay')">✕</div></div>
             <button class="btn-action secondary" style="color:var(--accent-green)" onclick="setPay('Нал')">💵 Наличные</button>
             <button class="btn-action secondary" style="color:var(--primary)" onclick="setPay('Перевод')">📱 Перевод</button>
             <button class="btn-action secondary" style="color:#f59e0b" onclick="setPay('Терминал')">💳 Терминал</button>
@@ -289,7 +290,7 @@
     <!-- МОДАЛКА СКИДКИ -->
     <div class="overlay" id="modalDiscount">
         <div class="modal">
-            <div class="modal-title">Скидка <div class="btn-icon" style="width:34px; height:34px; font-size:14px;" onclick="closeModal('modalDiscount')">✕</div></div>
+            <div class="modal-title">Скидка <div class="btn-icon" style="width:30px; height:30px; font-size:12px;" onclick="closeModal('modalDiscount')">✕</div></div>
             <div class="preset-weights" style="grid-template-columns: repeat(3, 1fr);">
                 <div class="preset-btn" onclick="setDiscount(0)">0%</div>
                 <div class="preset-btn" onclick="setDiscount(5)">5%</div>
@@ -304,7 +305,7 @@
     <!-- МОДАЛКА ОТЧЕТА -->
     <div class="overlay" id="modalReport">
         <div class="modal">
-            <div class="modal-title">Отчет смены <div class="btn-icon" style="width:34px; height:34px; font-size:14px;" onclick="closeModal('modalReport')">✕</div></div>
+            <div class="modal-title">Отчет смены <div class="btn-icon" style="width:30px; height:30px; font-size:12px;" onclick="closeModal('modalReport')">✕</div></div>
             <div class="report-box" id="reportContent"></div>
             <button class="btn-action primary" onclick="copyReport()">📋 Скопировать</button>
         </div>
@@ -313,14 +314,10 @@
     <!-- МОДАЛКА НАСТРОЕК -->
     <div class="overlay" id="modalSettings">
         <div class="modal">
-            <div class="modal-title">Настройки <div class="btn-icon" style="width:34px; height:34px; font-size:14px;" onclick="closeModal('modalSettings')">✕</div></div>
-            <div style="margin-bottom: 12px;">
-                <label style="font-size:14px; font-weight:700; color:var(--text-muted); display:block; margin-bottom:6px;">Начальная касса (₽)</label>
+            <div class="modal-title">Настройки <div class="btn-icon" style="width:30px; height:30px; font-size:12px;" onclick="closeModal('modalSettings')">✕</div></div>
+            <div style="margin-bottom: 10px;">
+                <label style="font-size:13px; font-weight:700; color:var(--text-muted); display:block; margin-bottom:4px;">Начальная касса (₽)</label>
                 <input type="number" class="input-box" id="startCashInput" placeholder="0" oninput="updateStartCash()">
-            </div>
-            <div style="margin-bottom: 12px;">
-                <label style="font-size:14px; font-weight:700; color:var(--text-muted); display:block; margin-bottom:6px;">Расходы (₽)</label>
-                <input type="number" class="input-box" id="expensesInput" placeholder="0" oninput="updateExpenses()">
             </div>
             <button class="btn-action secondary" style="color:var(--accent-red); text-align:center;" onclick="resetAllData()">🚨 Сбросить смену и данные</button>
         </div>
@@ -377,760 +374,6 @@
         function openModal(id) { 
             if(id === 'modalSettings') {
                 document.getElementById('startCashInput').value = state.startCash || '';
-                document.getElementById('expensesInput').value = state.expenses || '';
-            }
-            document.getElementById(id).style.display = 'flex'; 
-        }
-        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-        function openSettings() { openModal('modalSettings'); }
-
-        function updateStartCash() {
-            state.startCash = parseInt(document.getElementById('startCashInput').value) || 0;
-            saveData();
-        }
-
-        function updateExpenses() {
-            state.expenses = parseInt(document.getElementById('expensesInput').value) || 0;
-            saveData();
-        }
-
-        // КЛИЕНТЫ
-        function renderClientsBar() {
-            const bar = document.getElementById('clientsBar');
-            bar.innerHTML = '';
-            state.clients.forEach((cli, idx) => {
-                bar.innerHTML += `
-                    <div class="client-tab ${idx === state.activeClient ? 'active' : ''}" onclick="switchClient(${idx})">
-                        ${cli.name || ('Клиент ' + (idx+1))} 
-                        ${state.clients.length > 1 ? `<span onclick="event.stopPropagation(); removeClient(${idx})" style="opacity:0.6; margin-left:6px; font-size:16px;">✕</span>` : ''}
-                    </div>
-                `;
-            });
-            bar.innerHTML += `<button class="client-tab client-tab-add" onclick="addNewClient()">+ Клиент</button>`;
-        }
-
-        function addNewClient() {
-            state.clients.push({ id: Date.now(), name: `Клиент ${state.clients.length + 1}`, items: [], pay: 'Нал', time: '', discount: 0 });
-            state.activeClient = state.clients.length - 1;
-            saveData(); renderClientsBar(); renderActiveClient();
-        }
-
-        function switchClient(idx) { state.activeClient = idx; renderClientsBar(); renderActiveClient(); }
-
-        function removeClient(idx) {
-            if(state.clients.length <= 1) return;
-            state.clients.splice(idx, 1);
-            if(state.activeClient >= state.clients.length) state.activeClient = state.clients.length - 1;
-            saveData(); renderClientsBar(); renderActiveClient();
-        }
-
-        function getCurClient() { return state.clients[state.activeClient]; }
-
-        function updateClientName() {
-            getCurClient().name = document.getElementById('clientNameInput').value;
-            saveData(); renderClientsBar();
-        }
-
-        function saveTime() {
-            let val = document.getElementById('timeInput').value.trim();
-            getCurClient().time = val;
-            saveData(); renderActiveClient(); closeModal('modalTime');
-        }
-
-        function clearTime() {
-            getCurClient().time = '';
-            saveData(); renderActiveClient(); closeModal('modalTime');
-        }
-
-        // КАТАЛОГ
-        function renderCatalog() {
-            const grid = document.getElementById('catalogGrid');
-            grid.innerHTML = '';
-            catalog.forEach(item => {
-                let priceSub = item.type === 'delivery' ? 'Ввод ₽' : (item.type === 'weight' ? `${item.price}₽/кг` : `${item.price}₽`);
-                grid.innerHTML += `
-                    <div class="product-tile" onclick="handleCatalogClick(${item.id})">
-                        <div class="edit-prod-btn" onclick="openEditCatalogModal(${item.id}, event)">✏️</div>
-                        <div class="icon">${item.icon || '📦'}</div>
-                        <div class="name">${item.name}</div>
-                        <div class="price">${priceSub}</div>
-                    </div>
-                `;
-            });
-            grid.innerHTML += `
-                <div class="product-tile add-tile" onclick="openModal('modalAddProduct')">
-                    <div class="icon">➕</div>
-                    <div class="name">Новый<br>Товар</div>
-                </div>
-            `;
-        }
-
-        function openEditCatalogModal(id, event) {
-            event.stopPropagation();
-            const item = catalog.find(x => x.id === id);
-            if(!item) return;
-            editingCatalogId = id;
-            document.getElementById('editCatName').value = item.name;
-            document.getElementById('editCatPrice').value = item.price;
-            document.getElementById('editCatType').value = item.type;
-            openModal('modalEditCatalog');
-        }
-
-        function saveCatalogEdits() {
-            let item = catalog.find(x => x.id === editingCatalogId);
-            if(item) {
-                item.name = document.getElementById('editCatName').value || item.name;
-                item.price = parseInt(document.getElementById('editCatPrice').value) || 0;
-                let newType = document.getElementById('editCatType').value;
-                item.type = newType;
-                item.icon = newType === 'weight' ? '⚖️' : (newType === 'delivery' ? '🚗' : '📦');
-                saveCatalog(); renderCatalog(); closeModal('modalEditCatalog');
-            }
-        }
-
-        function deleteFromCatalog() {
-            if(confirm('Удалить товар из каталога?')) {
-                catalog = catalog.filter(x => x.id !== editingCatalogId);
-                saveCatalog(); renderCatalog(); closeModal('modalEditCatalog');
-            }
-        }
-
-        function saveNewProduct() {
-            let name = document.getElementById('newProdName').value.trim();
-            let price = parseInt(document.getElementById('newProdPrice').value) || 0;
-            let type = document.getElementById('newProdType').value;
-            if(!name) return alert('Введите название');
-
-            catalog.push({
-                id: Date.now(),
-                name: name,
-                icon: type === 'weight' ? '⚖️' : (type === 'delivery' ? '🚗' : '📦'),
-                price: price,
-                type: type
-            });
-            saveCatalog(); renderCatalog(); closeModal('modalAddProduct');
-            document.getElementById('newProdName').value = '';
-            document.getElementById('newProdPrice').value = '';
-        }
-
-        function handleCatalogClick(id) {
-            const item = catalog.find(x => x.id === id);
-            if(!item) return;
-            const cli = getCurClient();
-
-            if (item.type === 'piece') {
-                let existing = cli.items.find(i => i.catalogId === item.id && i.type === 'piece');
-                if (existing) {
-                    existing.qty += 1;
-                    existing.sum = existing.qty * existing.price;
-                } else {
-                    cli.items.push({ uid: Date.now() + Math.random(), catalogId: item.id, icon: item.icon, name: item.name, qty: 1, unit: 'шт', price: item.price, sum: item.price, type: 'piece' });
-                }
-                saveData(); renderActiveClient();
-            } else {
-                activeProductForModal = item;
-                document.getElementById('weightModalTitle').innerText = item.type === 'weight' ? `Вес: ${item.name}` : `Сумма доставки`;
-                document.getElementById('weightInput').value = '';
-                document.getElementById('weightPresetsContainer').style.display = item.type === 'weight' ? 'grid' : 'none';
-                openModal('modalWeight');
-                setTimeout(() => document.getElementById('weightInput').focus(), 100);
-            }
-        }
-
-        function selectWeightPreset(grams) { document.getElementById('weightInput').value = grams; }
-
-        function confirmWeightItem() {
-            const val = parseInt(document.getElementById('weightInput').value) || 0;
-            if(val <= 0 || !activeProductForModal) return;
-            const cli = getCurClient();
-
-            if (activeProductForModal.type === 'weight') {
-                let sum = Math.round((val / 1000) * activeProductForModal.price);
-                cli.items.push({ uid: Date.now() + Math.random(), catalogId: activeProductForModal.id, icon: activeProductForModal.icon, name: activeProductForModal.name, qty: val, unit: 'г', price: activeProductForModal.price, sum: sum, type: 'weight' });
-            } else if (activeProductForModal.type === 'delivery') {
-                cli.items.push({ uid: Date.now() + Math.random(), catalogId: activeProductForModal.id, icon: activeProductForModal.icon, name: activeProductForModal.name, qty: 1, unit: '', price: val, sum: val, type: 'delivery' });
-            }
-
-            saveData(); renderActiveClient(); closeModal('modalWeight');
-        }
-
-        // РАБОТА С ЧЕКОМ
-        function changeQty(uid, delta, event) {
-            if(event) event.stopPropagation();
-            const cli = getCurClient();
-            let idx = cli.items.findIndex(i => i.uid === uid);
-            if(idx === -1) return;
-            let item = cli.items[idx];
-
-            if(item.type === 'piece') {
-                item.qty += delta;
-                if(item.qty <= 0) cli.items.splice(idx, 1);
-                else item.sum = item.qty * item.price;
-            } else {
-                cli.items.splice(idx, 1);
-            }
-            saveData(); renderActiveClient();
-        }
-
-        function openEditItemModal(uid) {
-            const cli = getCurClient();
-            let item = cli.items.find(i => i.uid === uid);
-            if(!item) return;
-            editingItemUid = uid;
-            document.getElementById('editItemTitle').innerText = `Изменить: ${item.name}`;
-            document.getElementById('editItemInput').value = item.qty;
-            openModal('modalEditItem');
-            setTimeout(() => document.getElementById('editItemInput').focus(), 100);
-        }
-
-        function saveEditedItem() {
-            const val = parseInt(document.getElementById('editItemInput').value) || 0;
-            if(val <= 0) { deleteEditedItem(); return; }
-            const cli = getCurClient();
-            let item = cli.items.find(i => i.uid === editingItemUid);
-            if(item) {
-                item.qty = val;
-                if(item.type === 'weight') {
-                    item.sum = Math.round((val / 1000) * item.price);
-                } else if(item.type === 'piece') {
-                    item.sum = val * item.price;
-                } else if(item.type === 'delivery') {
-                    item.sum = val;
-                    item.price = val;
-                }
-            }
-            saveData(); renderActiveClient(); closeModal('modalEditItem');
-        }
-
-        function deleteEditedItem() {
-            const cli = getCurClient();
-            cli.items = cli.items.filter(i => i.uid !== editingItemUid);
-            saveData(); renderActiveClient(); closeModal('modalEditItem');
-        }
-
-        function renderActiveClient() {
-            const cli = getCurClient();
-            document.getElementById('clientNameInput').value = cli.name || '';
-            document.getElementById('payBadge',).innerText = `💵 ${cli.pay}`;
-            
-            const timeBadge = document.getElementById('timeBadge');
-            if(cli.time) {
-                timeBadge.innerText = `🕒 ${cli.time}`;
-                timeBadge.style.color = 'var(--primary)';
-            } else {
-                timeBadge.innerText = `🕒 --:--`;
-                timeBadge.style.color = 'var(--text-muted)';
-            }
-            
-            document.getElementById('discountLabel').innerText = `${cli.discount}%`;
-
-            const list = document.getElementById('cartList');
-            list.innerHTML = '';
-            let rawSum = 0;
-
-            if(!cli.items || cli.items.length === 0) {
-                list.innerHTML = `<div style="text-align:center; padding:40px 0; color:var(--text-muted); font-size:15px; font-weight:600;">Выберите товары из каталога 👇</div>`;
-            } else {
-                cli.items.forEach(it => {
-                    rawSum += it.sum;
-                    let controls = it.type === 'piece' ? `
-                        <button class="mini-btn ${it.qty === 1 ? 'del' : ''}" onclick="changeQty(${it.uid}, -1, event)">${it.qty === 1 ? '✕' : '-'}</button>
-                        <span style="font-size:15px; font-weight:800; min-width:24px; text-align:center;">${it.qty}</span>
-                        <button class="mini-btn" onclick="changeQty(${it.uid}, 1, event)">+</button>
-                    ` : `
-                        <span style="font-size:14px; font-weight:700; margin-right:6px;">${it.qty}${it.unit}</span>
-                        <button class="mini-btn del" onclick="changeQty(${it.uid}, -1, event)">✕</button>
-                    `;
-
-                    list.innerHTML += `
-                        <div class="cart-item" onclick="openEditItemModal(${it.uid})">
-                            <div class="cart-item-info">
-                                <h5>${it.icon} ${it.name}</h5>
-                                <span>${it.sum.toLocaleString('ru-RU')} ₽</span>
-                            </div>
-                            <div class="cart-item-controls" onclick="event.stopPropagation()">${controls}</div>
-                        </div>
-                    `;
-                });
-            }
-
-            let finalSum = Math.round(rawSum * (1 - cli.discount / 100));
-            document.getElementById('totalSum').innerText = `${finalSum.toLocaleString('ru-RU')} ₽`;
-        }
-
-        function setPay(method) { 
-            getCurClient().pay = method; 
-            saveData(); renderActiveClient(); closeModal('modalPay'); 
-            if(method === 'Перевод' || method === 'Терминал') {
-                document.getElementById('timeInput').value = getCurClient().time || '';
-                openModal('modalTime');
-            }
-        }
-        
-        function setDiscount(val) { getCurClient().discount = val; saveData(); renderActiveClient(); closeModal('modalDiscount'); }
-
-        function resetAllData() {
-            if(confirm('Сбросить смену и данные?')) {
-                localStorage.clear();
-                location.reload();
-            }
-        }
-
-        // ТОЧНЫЙ СТАНДАРТНЫЙ ФОРМАТ ПОЛЬЗОВАТЕЛЯ
-        function generateReport() {
-            let txt = `🍓ОТЧЕТ ПО СМЕНЕ🍓\n`;
-            
-            let totalCash = 0;
-            let totalCard = 0;
-            let totalDeliverySum = 0;
-
-            state.clients.forEach((cli, idx) => {
-                if(!cli.items || cli.items.length === 0) return;
-                
-                txt += `\n👤 Клиент: ${idx + 1}${cli.name ? ' ' + cli.name : ''}\n`;
-                let sub = 0;
-
-                cli.items.forEach(it => {
-                    txt += `• ${it.name} — ${it.qty}${it.unit || ''}\n`;
-                    sub += it.sum;
-                    if(it.type === 'delivery') {
-                        totalDeliverySum += it.sum;
-                    }
-                });
-
-                let final = Math.round(sub * (1 - cli.discount / 100));
-
-                if(cli.discount > 0) {
-                    txt += `Скидка: ${cli.discount}%\n`;
-                }
-
-                if(cli.pay === 'Нал') {
-                    totalCash += final;
-                    txt += `(Нал ${final.toLocaleString('ru-RU')})\n`;
-                } else if(cli.pay === 'Перевод') {
-                    totalCard += final;
-                    txt += `(Перевод ${final.toLocaleString('ru-RU')}${cli.time ? ' ' + cli.time : ''})\n`;
-                } else if(cli.pay === 'Терминал') {
-                    totalCard += final;
-                    txt += `(Терминал ${final.toLocaleString('ru-RU')}${cli.time ? ' ' + cli.time : ''})\n`;
-                } else {
-                    txt += `(${cli.pay})\n`;
-                }
-            });
-
-            // Логика вычета доставки: сначала из наличных от продаж, остаток из начальной кассы
-            let deliveryFromCash = Math.min(totalCash, totalDeliverySum);
-            let remainingDelivery = totalDeliverySum - deliveryFromCash;
-            
-            let finalNetCash = totalCash - deliveryFromCash;
-            let finalStartCash = (state.startCash || 0) - remainingDelivery;
-            let totalRevenue = finalNetCash + totalCard + (state.startCash || 0) - state.expenses;
-
-            txt += `\nРасход:\n`;
-            if(totalDeliverySum > 0) {
-                txt += `Доставка — ${totalDeliverySum}\n`;
-            }
-            if(state.expenses > 0) {
-                txt += `Прочие расходы — ${state.expenses}\n`;
-            }
-            if(totalDeliverySum === 0 && state.expenses === 0) {
-                txt += `0\n`;
-            }
-
-            txt += `\nНал: ${finalNetCash.toLocaleString('ru-RU')}\n`;
-            txt += `Перевод: ${totalCard.toLocaleString('ru-RU')}`;
-
-            return txt;
-        }
-
-        function openReport() {
-            document.getElementById('reportContent').innerText = generateReport();
-            openModal('modalReport');
-        }
-
-        function copyReport() {
-            navigator.clipboard.writeText(generateReport()).then(() => alert('Отчет скопирован!'));
-        }
-
-        window.onload = init;
-    </script>
-</body>
-</html>
-
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Моя Касса</title>
-    <style>
-        :root {
-            --bg-gradient: #f3f4f6;
-            --glass-card: #ffffff;
-            --text-main: #111827;
-            --text-muted: #6b7280;
-            --primary: #4f46e5;
-            --accent-green: #10b981;
-            --accent-red: #ef4444;
-            --border: #e5e7eb;
-            --shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
-        }
-
-        [data-theme="dark"] {
-            --bg-gradient: #0f172a;
-            --glass-card: #1e293b;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --primary: #6366f1;
-            --accent-green: #34d399;
-            --accent-red: #f87171;
-            --border: #334155;
-            --shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-        }
-
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; -webkit-tap-highlight-color: transparent; }
-
-        body {
-            background: var(--bg-gradient); color: var(--text-main);
-            height: 100vh; height: 100dvh; display: flex; flex-direction: column; overflow: hidden;
-        }
-
-        header {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 16px 20px; background: var(--glass-card); border-bottom: 1px solid var(--border);
-        }
-        .brand { font-size: 22px; font-weight: 800; color: var(--primary); letter-spacing: 0.5px; }
-        .header-tools { display: flex; gap: 12px; }
-        .btn-icon {
-            width: 44px; height: 44px; border-radius: 12px; background: var(--bg-gradient);
-            border: 1px solid var(--border); display: flex; align-items: center; justify-content: center;
-            font-size: 20px; cursor: pointer; color: var(--text-main);
-        }
-
-        .workspace {
-            flex: 1; display: flex; flex-direction: column; padding: 16px; gap: 14px; overflow: hidden; max-width: 600px; width: 100%; margin: 0 auto;
-        }
-
-        /* ТАБЫ */
-        .clients-bar {
-            display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; flex-shrink: 0;
-        }
-        .client-tab {
-            background: var(--glass-card); border: 1px solid var(--border);
-            padding: 10px 18px; border-radius: 12px; font-size: 15px; font-weight: 700;
-            white-space: nowrap; cursor: pointer; color: var(--text-muted); display: flex; align-items: center; gap: 8px;
-        }
-        .client-tab.active { background: var(--primary); color: #fff; border-color: var(--primary); }
-        .client-tab-add { background: var(--primary); color: #fff; border: none; }
-
-        /* КАРТОЧКА ЧЕКА */
-        .receipt-card {
-            flex: 1; background: var(--glass-card); border: 1px solid var(--border);
-            border-radius: 20px; display: flex; flex-direction: column; padding: 16px; overflow: hidden; box-shadow: var(--shadow);
-        }
-
-        .receipt-header-row {
-            display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;
-            padding-bottom: 10px; border-bottom: 1px solid var(--border);
-        }
-        .client-input {
-            background: transparent; border: none; font-size: 18px; font-weight: 700; color: var(--text-main); outline: none; width: 50%;
-        }
-        .header-badges { display: flex; gap: 6px; align-items: center; }
-        .pay-badge, .time-badge {
-            background: rgba(79, 70, 229, 0.1); color: var(--primary); padding: 8px 12px;
-            border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer;
-        }
-        .time-badge { background: rgba(107, 114, 128, 0.1); color: var(--text-muted); }
-
-        .cart-list {
-            flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 10px;
-        }
-
-        .cart-item {
-            display: flex; justify-content: space-between; align-items: center;
-            background: var(--bg-gradient); padding: 12px 14px; border-radius: 14px; border: 1px solid var(--border);
-            cursor: pointer; transition: background 0.1s;
-        }
-        .cart-item:active { opacity: 0.8; }
-        .cart-item-info h5 { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
-        .cart-item-info span { font-size: 14px; color: var(--text-muted); font-weight: 600; }
-        
-        .cart-item-controls { display: flex; align-items: center; gap: 8px; }
-        .mini-btn {
-            width: 32px; height: 32px; border-radius: 8px; border: 1px solid var(--border); background: var(--glass-card);
-            color: var(--text-main); font-weight: 700; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 16px;
-        }
-        .mini-btn.del { color: var(--accent-red); }
-
-        .receipt-footer {
-            margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border);
-            display: flex; justify-content: space-between; align-items: flex-end;
-        }
-        .total-label { font-size: 13px; text-transform: uppercase; color: var(--text-muted); font-weight: 700; }
-        .total-sum { font-size: 30px; font-weight: 900; }
-
-        /* КАТАЛОГ СЕТКА */
-        .catalog-container {
-            height: 230px; background: var(--glass-card); border: 1px solid var(--border);
-            border-radius: 20px; padding: 12px; display: grid; grid-template-columns: repeat(3, 1fr);
-            gap: 10px; overflow-y: auto; flex-shrink: 0; box-shadow: var(--shadow);
-        }
-
-        .product-tile {
-            background: var(--bg-gradient); border: 1px solid var(--border); border-radius: 16px;
-            padding: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center;
-            cursor: pointer; text-align: center; position: relative;
-        }
-        .product-tile .icon { font-size: 28px; margin-bottom: 4px; }
-        .product-tile .name { font-size: 14px; font-weight: 700; color: var(--text-main); line-height: 1.1; margin-bottom: 4px;}
-        .product-tile .price { font-size: 12px; font-weight: 600; color: var(--text-muted); }
-        .product-tile.add-tile { border: 2px dashed var(--primary); background: rgba(79, 70, 229, 0.05); }
-        .product-tile.add-tile .name { color: var(--primary); }
-
-        .edit-prod-btn {
-            position: absolute; top: 6px; right: 6px; width: 24px; height: 24px;
-            background: var(--glass-card); border: 1px solid var(--border); border-radius: 6px;
-            display: flex; align-items: center; justify-content: center; font-size: 12px;
-            color: var(--text-muted); cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        /* МОДАЛКИ */
-        .overlay {
-            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px);
-            z-index: 100; justify-content: center; align-items: center; padding: 16px;
-        }
-        .modal {
-            background: var(--glass-card); width: 100%; max-width: 360px; border-radius: 24px;
-            padding: 24px; border: 1px solid var(--border); box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-        }
-        .modal-title { font-size: 20px; font-weight: 800; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; }
-        .input-box, .select-box {
-            width: 100%; background: var(--bg-gradient); border: 1px solid var(--border);
-            padding: 16px; border-radius: 14px; font-size: 16px; font-weight: 600; color: var(--text-main); outline: none; margin-bottom: 12px;
-        }
-        .btn-action {
-            width: 100%; padding: 16px; border-radius: 14px; border: none; font-size: 16px; font-weight: 700; cursor: pointer;
-        }
-        .btn-action.primary { background: var(--primary); color: #fff; margin-top: 6px; }
-        .btn-action.secondary { background: var(--bg-gradient); color: var(--text-main); border: 1px solid var(--border); margin-bottom: 8px; text-align: left; }
-        
-        .preset-weights { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 12px; }
-        .preset-btn { background: var(--bg-gradient); border: 1px solid var(--border); padding: 12px; border-radius: 10px; font-weight: 700; cursor: pointer; font-size: 14px; text-align: center; color: var(--text-main); }
-        
-        .report-box {
-            background: var(--bg-gradient); padding: 14px; border-radius: 14px; font-family: monospace;
-            font-size: 13px; max-height: 45vh; overflow-y: auto; border: 1px solid var(--border); margin-bottom: 16px; white-space: pre-wrap;
-        }
-    </style>
-</head>
-<body data-theme="light">
-
-    <header>
-        <div class="brand">✨ КАССА</div>
-        <div class="header-tools">
-            <div class="btn-icon" onclick="toggleTheme()" id="themeBtn">🌙</div>
-            <div class="btn-icon" onclick="openReport()">📊</div>
-            <div class="btn-icon" onclick="openSettings()">⚙️</div>
-        </div>
-    </header>
-
-    <div class="workspace">
-        <!-- ТАБЫ КЛИЕНТОВ -->
-        <div class="clients-bar" id="clientsBar">
-            <button class="client-tab client-tab-add" onclick="addNewClient()">+ Клиент</button>
-        </div>
-
-        <!-- ЧЕК КЛИЕНТА -->
-        <div class="receipt-card">
-            <div class="receipt-header-row">
-                <input type="text" class="client-input" id="clientNameInput" placeholder="Клиент..." oninput="updateClientName()">
-                <div class="header-badges">
-                    <div class="time-badge" id="timeBadge" onclick="openModal('modalTime')" title="Время перевода/терминала">🕒 --:--</div>
-                    <div class="pay-badge" id="payBadge" onclick="openModal('modalPay')">💵 Нал</div>
-                </div>
-            </div>
-
-            <div class="cart-list" id="cartList"></div>
-
-            <div class="receipt-footer">
-                <div>
-                    <div class="total-label">Скидка: <span id="discountLabel" style="color:var(--accent-red)">0%</span></div>
-                    <button class="mini-btn" style="width:auto; padding:0 10px; font-size:12px; margin-top:4px;" onclick="openModal('modalDiscount')">🏷️ Изменить</button>
-                </div>
-                <div style="text-align: right;">
-                    <div class="total-label">ИТОГО</div>
-                    <div class="total-sum" id="totalSum">0 ₽</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- КАТАЛОГ -->
-        <div class="catalog-container" id="catalogGrid"></div>
-    </div>
-
-    <!-- МОДАЛКА ВЕСА / ДОСТАВКИ -->
-    <div class="overlay" id="modalWeight">
-        <div class="modal">
-            <div class="modal-title"><span id="weightModalTitle">Значение</span> <div class="btn-icon" style="width:34px; height:34px; font-size:14px;" onclick="closeModal('modalWeight')">✕</div></div>
-            <div class="preset-weights" id="weightPresetsContainer">
-                <div class="preset-btn" onclick="selectWeightPreset(250)">250 г</div>
-                <div class="preset-btn" onclick="selectWeightPreset(500)">500 г</div>
-                <div class="preset-btn" onclick="selectWeightPreset(1000)">1 кг</div>
-            </div>
-            <input type="number" class="input-box" id="weightInput" placeholder="Число...">
-            <button class="btn-action primary" onclick="confirmWeightItem()">Добавить в чек</button>
-        </div>
-    </div>
-
-    <!-- МОДАЛКА ВРЕМЕНИ -->
-    <div class="overlay" id="modalTime">
-        <div class="modal">
-            <div class="modal-title">Время перевода/терминала <div class="btn-icon" style="width:34px; height:34px; font-size:14px;" onclick="closeModal('modalTime')">✕</div></div>
-            <input type="text" class="input-box" id="timeInput" placeholder="например: 14:35">
-            <button class="btn-action primary" onclick="saveTime()">Сохранить время</button>
-            <button class="btn-action secondary" style="margin-top:8px; text-align:center;" onclick="clearTime()">Сбросить время</button>
-        </div>
-    </div>
-
-    <!-- МОДАЛКА РЕДАКТИРОВАНИЯ ТОВАРА В ЧЕКЕ -->
-    <div class="overlay" id="modalEditItem">
-        <div class="modal">
-            <div class="modal-title"><span id="editItemTitle">Изменить товар</span> <div class="btn-icon" style="width:34px; height:34px; font-size:14px;" onclick="closeModal('modalEditItem')">✕</div></div>
-            <input type="number" class="input-box" id="editItemInput" placeholder="Новое значение...">
-            <button class="btn-action primary" onclick="saveEditedItem()">Сохранить</button>
-            <button class="btn-action secondary" style="color:var(--accent-red); margin-top:12px; text-align:center;" onclick="deleteEditedItem()">🗑️ Удалить</button>
-        </div>
-    </div>
-
-    <!-- МОДАЛКА ДОБАВЛЕНИЯ ТОВАРА В КАТАЛОГ -->
-    <div class="overlay" id="modalAddProduct">
-        <div class="modal">
-            <div class="modal-title">Новый товар <div class="btn-icon" style="width:34px; height:34px; font-size:14px;" onclick="closeModal('modalAddProduct')">✕</div></div>
-            <input type="text" class="input-box" id="newProdName" placeholder="Название...">
-            <input type="number" class="input-box" id="newProdPrice" placeholder="Цена (₽)...">
-            <select class="select-box" id="newProdType">
-                <option value="piece">Штучный</option>
-                <option value="weight">Весовой (в граммах)</option>
-                <option value="delivery">Произвольная доставка</option>
-            </select>
-            <button class="btn-action primary" onclick="saveNewProduct()">Добавить в каталог</button>
-        </div>
-    </div>
-
-    <!-- МОДАЛКА ИЗМЕНЕНИЯ ТОВАРА КАТАЛОГА -->
-    <div class="overlay" id="modalEditCatalog">
-        <div class="modal">
-            <div class="modal-title">Настройки товара <div class="btn-icon" style="width:34px; height:34px; font-size:14px;" onclick="closeModal('modalEditCatalog')">✕</div></div>
-            <input type="text" class="input-box" id="editCatName" placeholder="Название">
-            <input type="number" class="input-box" id="editCatPrice" placeholder="Цена">
-            <select class="select-box" id="editCatType">
-                <option value="piece">Штучный</option>
-                <option value="weight">Весовой (в граммах)</option>
-                <option value="delivery">Произвольная доставка</option>
-            </select>
-            <button class="btn-action primary" onclick="saveCatalogEdits()">💾 Сохранить</button>
-            <button class="btn-action secondary" style="color:var(--accent-red); margin-top:12px; text-align:center;" onclick="deleteFromCatalog()">🗑️ Удалить</button>
-        </div>
-    </div>
-
-    <!-- МОДАЛКА ОПЛАТЫ -->
-    <div class="overlay" id="modalPay">
-        <div class="modal">
-            <div class="modal-title">Оплата <div class="btn-icon" style="width:34px; height:34px; font-size:14px;" onclick="closeModal('modalPay')">✕</div></div>
-            <button class="btn-action secondary" style="color:var(--accent-green)" onclick="setPay('Нал')">💵 Наличные</button>
-            <button class="btn-action secondary" style="color:var(--primary)" onclick="setPay('Перевод')">📱 Перевод</button>
-            <button class="btn-action secondary" style="color:#f59e0b" onclick="setPay('Терминал')">💳 Терминал</button>
-            <button class="btn-action secondary" style="color:var(--accent-red)" onclick="setPay('Долг')">📝 В долг</button>
-        </div>
-    </div>
-
-    <!-- МОДАЛКА СКИДКИ -->
-    <div class="overlay" id="modalDiscount">
-        <div class="modal">
-            <div class="modal-title">Скидка <div class="btn-icon" style="width:34px; height:34px; font-size:14px;" onclick="closeModal('modalDiscount')">✕</div></div>
-            <div class="preset-weights" style="grid-template-columns: repeat(3, 1fr);">
-                <div class="preset-btn" onclick="setDiscount(0)">0%</div>
-                <div class="preset-btn" onclick="setDiscount(5)">5%</div>
-                <div class="preset-btn" onclick="setDiscount(10)">10%</div>
-                <div class="preset-btn" onclick="setDiscount(15)">15%</div>
-                <div class="preset-btn" onclick="setDiscount(20)">20%</div>
-                <div class="preset-btn" onclick="setDiscount(25)">25%</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- МОДАЛКА ОТЧЕТА -->
-    <div class="overlay" id="modalReport">
-        <div class="modal">
-            <div class="modal-title">Отчет смены <div class="btn-icon" style="width:34px; height:34px; font-size:14px;" onclick="closeModal('modalReport')">✕</div></div>
-            <div class="report-box" id="reportContent"></div>
-            <button class="btn-action primary" onclick="copyReport()">📋 Скопировать</button>
-        </div>
-    </div>
-
-    <!-- МОДАЛКА НАСТРОЕК -->
-    <div class="overlay" id="modalSettings">
-        <div class="modal">
-            <div class="modal-title">Настройки <div class="btn-icon" style="width:34px; height:34px; font-size:14px;" onclick="closeModal('modalSettings')">✕</div></div>
-            <div style="margin-bottom: 12px;">
-                <label style="font-size:14px; font-weight:700; color:var(--text-muted); display:block; margin-bottom:6px;">Начальная касса (₽)</label>
-                <input type="number" class="input-box" id="startCashInput" placeholder="0" oninput="updateStartCash()">
-            </div>
-            <button class="btn-action secondary" style="color:var(--accent-red); text-align:center;" onclick="resetAllData()">🚨 Сбросить смену и данные</button>
-        </div>
-    </div>
-
-    <script>
-        let catalog = [
-            { id: 1, name: "Клубника ШК", icon: "🍓", price: 900, type: "piece" },
-            { id: 2, name: "Ананас ШК", icon: "🍍", price: 1200, type: "piece" },
-            { id: 3, name: "Роза", icon: "🌹", price: 250, type: "piece" },
-            { id: 4, name: "Клубника (кг)", icon: "⚖️", price: 600, type: "weight" },
-            { id: 5, name: "Доставка", icon: "🚗", price: 0, type: "delivery" }
-        ];
-
-        let state = {
-            theme: 'light',
-            startCash: 0,
-            expenses: 0, // Учет расходов
-            activeClient: 0,
-            clients: [{ id: 1, name: 'Клиент 1', items: [], pay: 'Нал', time: '', discount: 0 }]
-        };
-
-        let activeProductForModal = null;
-        let editingItemUid = null;
-        let editingCatalogId = null;
-
-        function init() {
-            try {
-                const saved = localStorage.getItem('pos_state_v8');
-                if (saved) state = JSON.parse(saved);
-                const savedCat = localStorage.getItem('pos_cat_v8');
-                if (savedCat) catalog = JSON.parse(savedCat);
-            } catch(e) {}
-
-            applyTheme();
-            renderClientsBar();
-            renderCatalog();
-            renderActiveClient();
-        }
-
-        function saveData() { try { localStorage.setItem('pos_state_v8', JSON.stringify(state)); } catch(e) {} }
-        function saveCatalog() { try { localStorage.setItem('pos_cat_v8', JSON.stringify(catalog)); } catch(e) {} }
-
-        function applyTheme() {
-            document.body.setAttribute('data-theme', state.theme);
-            document.getElementById('themeBtn').innerText = state.theme === 'dark' ? '☀️' : '🌙';
-        }
-
-        function toggleTheme() {
-            state.theme = state.theme === 'dark' ? 'light' : 'dark';
-            applyTheme(); saveData();
-        }
-
-        function openModal(id) { 
-            if(id === 'modalSettings') {
-                document.getElementById('startCashInput').value = state.startCash || '';
             }
             document.getElementById(id).style.display = 'flex'; 
         }
@@ -1150,7 +393,7 @@
                 bar.innerHTML += `
                     <div class="client-tab ${idx === state.activeClient ? 'active' : ''}" onclick="switchClient(${idx})">
                         ${cli.name || ('Клиент ' + (idx+1))} 
-                        ${state.clients.length > 1 ? `<span onclick="event.stopPropagation(); removeClient(${idx})" style="opacity:0.6; margin-left:6px; font-size:16px;">✕</span>` : ''}
+                        ${state.clients.length > 1 ? `<span onclick="event.stopPropagation(); removeClient(${idx})" style="opacity:0.6; margin-left:4px; font-size:14px;">✕</span>` : ''}
                     </div>
                 `;
             });
@@ -1377,16 +620,16 @@
             let rawSum = 0;
 
             if(!cli.items || cli.items.length === 0) {
-                list.innerHTML = `<div style="text-align:center; padding:40px 0; color:var(--text-muted); font-size:15px; font-weight:600;">Выберите товары из каталога 👇</div>`;
+                list.innerHTML = `<div style="text-align:center; padding:30px 0; color:var(--text-muted); font-size:14px; font-weight:600;">Выберите товары из каталога 👇</div>`;
             } else {
                 cli.items.forEach(it => {
                     rawSum += it.sum;
                     let controls = it.type === 'piece' ? `
                         <button class="mini-btn ${it.qty === 1 ? 'del' : ''}" onclick="changeQty(${it.uid}, -1, event)">${it.qty === 1 ? '✕' : '-'}</button>
-                        <span style="font-size:15px; font-weight:800; min-width:24px; text-align:center;">${it.qty}</span>
+                        <span style="font-size:14px; font-weight:800; min-width:20px; text-align:center;">${it.qty}</span>
                         <button class="mini-btn" onclick="changeQty(${it.uid}, 1, event)">+</button>
                     ` : `
-                        <span style="font-size:14px; font-weight:700; margin-right:6px;">${it.qty}${it.unit}</span>
+                        <span style="font-size:13px; font-weight:700; margin-right:4px;">${it.qty}${it.unit}</span>
                         <button class="mini-btn del" onclick="changeQty(${it.uid}, -1, event)">✕</button>
                     `;
 
@@ -1424,7 +667,6 @@
             }
         }
 
-        // ОТЧЕТ: доставка всегда вычитается из налички, если там не хватает — остаток из начальной кассы
         function generateReport() {
             let txt = `🍓ОТЧЕТ ПО СМЕНЕ🍓\n`;
             
@@ -1467,7 +709,6 @@
                 }
             });
 
-            // Распределение вычета доставки: сначала из наличных от продаж, остаток из начальной кассы
             let deliveryFromCash = Math.min(totalCash, totalDelivery);
             let remainingDelivery = totalDelivery - deliveryFromCash;
             
