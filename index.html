@@ -89,7 +89,9 @@
         .cart-item {
             display: flex; justify-content: space-between; align-items: center;
             background: var(--bg-gradient); padding: 8px 10px; border-radius: 10px; border: 1px solid var(--border);
+            cursor: pointer; transition: background 0.1s;
         }
+        .cart-item:active { opacity: 0.8; }
         .cart-item-info h5 { font-size: 13px; font-weight: 700; margin-bottom: 2px; }
         .cart-item-info span { font-size: 11px; color: var(--text-muted); font-weight: 600; }
         
@@ -207,7 +209,17 @@
         </div>
     </div>
 
-    <!-- МОДАЛКА ДОБАВЛЕНИЯ ТОВАРА -->
+    <!-- МОДАЛКА РЕДАКТИРОВАНИЯ ТОВАРА В ЧЕКЕ -->
+    <div class="overlay" id="modalEditItem">
+        <div class="modal">
+            <div class="modal-title"><span id="editItemTitle">Изменить товар</span> <div class="btn-icon" style="width:28px; height:28px; font-size:12px;" onclick="closeModal('modalEditItem')">✕</div></div>
+            <input type="number" class="input-box" id="editItemInput" placeholder="Новое значение...">
+            <button class="btn-action primary" onclick="saveEditedItem()">Сохранить</button>
+            <button class="btn-action secondary" style="color:var(--accent-red); margin-top:8px; text-align:center;" onclick="deleteEditedItem()">🗑️ Удалить из чека</button>
+        </div>
+    </div>
+
+    <!-- МОДАЛКА ДОБАВЛЕНИЯ ТОВАРА В КАТАЛОГ -->
     <div class="overlay" id="modalAddProduct">
         <div class="modal">
             <div class="modal-title">Новый товар <div class="btn-icon" style="width:28px; height:28px; font-size:12px;" onclick="closeModal('modalAddProduct')">✕</div></div>
@@ -281,12 +293,13 @@
         };
 
         let activeProductForModal = null;
+        let editingItemUid = null;
 
         function init() {
             try {
-                const saved = localStorage.getItem('aura_pos_v3');
+                const saved = localStorage.getItem('aura_pos_v4');
                 if (saved) state = JSON.parse(saved);
-                const savedCat = localStorage.getItem('aura_cat_v3');
+                const savedCat = localStorage.getItem('aura_cat_v4');
                 if (savedCat) catalog = JSON.parse(savedCat);
             } catch(e) {}
 
@@ -297,15 +310,11 @@
         }
 
         function saveData() {
-            try {
-                localStorage.setItem('aura_pos_v3', JSON.stringify(state));
-            } catch(e) {}
+            try { localStorage.setItem('aura_pos_v4', JSON.stringify(state)); } catch(e) {}
         }
 
         function saveCatalog() {
-            try {
-                localStorage.setItem('aura_cat_v3', JSON.stringify(catalog));
-            } catch(e) {}
+            try { localStorage.setItem('aura_cat_v4', JSON.stringify(catalog)); } catch(e) {}
         }
 
         function applyTheme() {
@@ -444,7 +453,8 @@
             saveData(); renderActiveClient(); closeModal('modalWeight');
         }
 
-        function changeQty(uid, delta) {
+        function changeQty(uid, delta, event) {
+            if(event) event.stopPropagation();
             const cli = getCurClient();
             let idx = cli.items.findIndex(i => i.uid === uid);
             if(idx === -1) return;
@@ -458,6 +468,42 @@
                 cli.items.splice(idx, 1);
             }
             saveData(); renderActiveClient();
+        }
+
+        function openEditItemModal(uid) {
+            const cli = getCurClient();
+            let item = cli.items.find(i => i.uid === uid);
+            if(!item) return;
+            editingItemUid = uid;
+            document.getElementById('editItemTitle').innerText = `Изменить: ${item.name}`;
+            document.getElementById('editItemInput').value = item.qty;
+            openModal('modalEditItem');
+            setTimeout(() => document.getElementById('editItemInput').focus(), 100);
+        }
+
+        function saveEditedItem() {
+            const val = parseInt(document.getElementById('editItemInput').value) || 0;
+            if(val <= 0) { deleteEditedItem(); return; }
+            const cli = getCurClient();
+            let item = cli.items.find(i => i.uid === editingItemUid);
+            if(item) {
+                item.qty = val;
+                if(item.type === 'weight') {
+                    item.sum = Math.round((val / 1000) * item.price);
+                } else if(item.type === 'piece') {
+                    item.sum = val * item.price;
+                } else if(item.type === 'delivery') {
+                    item.sum = val;
+                    item.price = val;
+                }
+            }
+            saveData(); renderActiveClient(); closeModal('modalEditItem');
+        }
+
+        function deleteEditedItem() {
+            const cli = getCurClient();
+            cli.items = cli.items.filter(i => i.uid !== editingItemUid);
+            saveData(); renderActiveClient(); closeModal('modalEditItem');
         }
 
         function renderActiveClient() {
@@ -476,21 +522,21 @@
                 cli.items.forEach(it => {
                     rawSum += it.sum;
                     let controls = it.type === 'piece' ? `
-                        <button class="mini-btn ${it.qty === 1 ? 'del' : ''}" onclick="changeQty(${it.uid}, -1)">${it.qty === 1 ? '✕' : '-'}</button>
+                        <button class="mini-btn ${it.qty === 1 ? 'del' : ''}" onclick="changeQty(${it.uid}, -1, event)">${it.qty === 1 ? '✕' : '-'}</button>
                         <span style="font-size:12px; font-weight:800; min-width:20px; text-align:center;">${it.qty}</span>
-                        <button class="mini-btn" onclick="changeQty(${it.uid}, 1)">+</button>
+                        <button class="mini-btn" onclick="changeQty(${it.uid}, 1, event)">+</button>
                     ` : `
                         <span style="font-size:11px; font-weight:700; margin-right:4px;">${it.qty}${it.unit}</span>
-                        <button class="mini-btn del" onclick="changeQty(${it.uid}, -1)">✕</button>
+                        <button class="mini-btn del" onclick="changeQty(${it.uid}, -1, event)">✕</button>
                     `;
 
                     list.innerHTML += `
-                        <div class="cart-item">
+                        <div class="cart-item" onclick="openEditItemModal(${it.uid})">
                             <div class="cart-item-info">
                                 <h5>${it.icon} ${it.name}</h5>
                                 <span>${it.sum.toLocaleString('ru-RU')} ₽</span>
                             </div>
-                            <div class="cart-item-controls">${controls}</div>
+                            <div class="cart-item-controls" onclick="event.stopPropagation()">${controls}</div>
                         </div>
                     `;
                 });
@@ -510,23 +556,43 @@
             }
         }
 
-        // ОТЧЕТ
+        // ОТЧЕТ (с вычетом доставки из наличных)
         function generateReport() {
             let txt = `🍓 ОТЧЕТ ПО СМЕНЕ\n────────────────────\n`;
-            let total = 0;
+            let totalCash = 0, totalCard = 0, totalDelivery = 0;
+
             state.clients.forEach((cli, idx) => {
                 if(!cli.items || cli.items.length === 0) return;
                 txt += `👤 ${cli.name || ('Клиент ' + (idx+1))}\n`;
                 let sub = 0;
+                let clientDelivery = 0;
+
                 cli.items.forEach(it => {
                     txt += `  • ${it.name} (${it.qty}${it.unit}) = ${it.sum} ₽\n`;
                     sub += it.sum;
+                    if(it.type === 'delivery') clientDelivery += it.sum;
                 });
+
                 let final = Math.round(sub * (1 - cli.discount / 100));
-                total += final;
+                
+                if(cli.pay === 'Нал') {
+                    totalCash += final;
+                    totalDelivery += clientDelivery;
+                } else {
+                    totalCard += final;
+                }
+
                 txt += `  💳 Оплата: ${cli.pay} — ${final} ₽\n\n`;
             });
-            txt += `────────────────────\n💰 ИТОГО: ${total} ₽`;
+
+            let finalNetCash = totalCash - totalDelivery;
+            let totalRevenue = totalCash + totalCard;
+
+            txt += `────────────────────\n`;
+            txt += `💵 Наличные (чистые): ${finalNetCash} ₽\n`;
+            if(totalDelivery > 0) txt += `  (Вычтена доставка: -${totalDelivery} ₽)\n`;
+            txt += `📱 Безнал / Перевод: ${totalCard} ₽\n`;
+            txt += `💰 ИТОГО ВЫРУЧКА: ${totalRevenue} ₽`;
             return txt;
         }
 
