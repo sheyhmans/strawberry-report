@@ -3,39 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Strawberry POS 2.0</title>
+    <title>Strawberry POS 3.0</title>
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
     <style>
         :root {
-            --bg-grad-1: #0f0c29;
-            --bg-grad-2: #302b63;
-            --bg-grad-3: #24243e;
-            --glass-bg: rgba(255, 255, 255, 0.05);
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --text-main: #ffffff;
-            --text-sub: rgba(255, 255, 255, 0.6);
-            --accent: #ff2d55;
-            --green: #32d74b;
-            --pad-bg: rgba(20, 20, 25, 0.85);
-            --btn-bg: rgba(255, 255, 255, 0.1);
-            --btn-active: rgba(255, 255, 255, 0.2);
+            --bg-main: #F2F2F7;
+            --bg-card: #FFFFFF;
+            --text-main: #000000;
+            --text-sub: #8E8E93;
+            --border: rgba(0, 0, 0, 0.1);
+            --accent-blue: #007AFF;
+            --accent-red: #FF3B30;
+            --accent-green: #34C759;
+            --pad-bg: #FFFFFF;
+            --btn-bg: #F2F2F7;
+            --btn-active: #E5E5EA;
         }
 
-        [data-theme="light"] {
-            --bg-grad-1: #fdfbfb;
-            --bg-grad-2: #ebedee;
-            --bg-grad-3: #f5f7fa;
-            --glass-bg: rgba(255, 255, 255, 0.7);
-            --glass-border: rgba(0, 0, 0, 0.05);
-            --text-main: #1c1c1e;
-            --text-sub: rgba(0, 0, 0, 0.5);
-            --accent: #ff2d55;
-            --green: #34c759;
-            --pad-bg: rgba(245, 245, 250, 0.9);
-            --btn-bg: #ffffff;
-            --btn-active: #e5e5ea;
+        [data-theme="dark"] {
+            --bg-main: #000000;
+            --bg-card: #1C1C1E;
+            --text-main: #FFFFFF;
+            --text-sub: #98989D;
+            --border: rgba(255, 255, 255, 0.15);
+            --accent-blue: #0A84FF;
+            --accent-red: #FF453A;
+            --accent-green: #32D74B;
+            --pad-bg: #1C1C1E;
+            --btn-bg: #2C2C2E;
+            --btn-active: #3A3A3C;
         }
 
         * {
@@ -45,18 +43,9 @@
         }
 
         body {
-            background: linear-gradient(135deg, var(--bg-grad-1), var(--bg-grad-2), var(--bg-grad-3));
-            background-size: 200% 200%;
-            animation: gradientMove 15s ease infinite;
-            color: var(--text-main);
-            height: 100dvh; 
-            display: flex; flex-direction: column; overflow: hidden;
-        }
-
-        @keyframes gradientMove {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+            background: var(--bg-main); color: var(--text-main);
+            height: 100dvh; display: flex; flex-direction: column; overflow: hidden;
+            transition: background 0.3s;
         }
 
         /* ТОП ПАНЕЛЬ */
@@ -64,144 +53,159 @@
             display: flex; justify-content: space-between; align-items: center;
             padding: max(16px, env(safe-area-inset-top)) 20px 10px 20px;
         }
-        .top-group { display: flex; gap: 12px; }
+        .top-group { display: flex; gap: 10px; }
         .icon-btn {
-            background: var(--glass-bg); border: 1px solid var(--glass-border);
-            color: var(--text-main); width: 42px; height: 42px; border-radius: 50%;
+            background: var(--bg-card); border: 1px solid var(--border);
+            color: var(--text-main); width: 40px; height: 40px; border-radius: 12px;
             display: flex; justify-content: center; align-items: center; font-size: 18px;
-            backdrop-filter: blur(10px); cursor: pointer; transition: 0.15s;
+            cursor: pointer; transition: 0.15s; box-shadow: 0 2px 8px rgba(0,0,0,0.04);
         }
         .icon-btn:active { transform: scale(0.9); background: var(--btn-active); }
 
         /* ЧЕК (ВЕРХ) */
         .receipt-zone {
-            flex: 1; padding: 0 20px 20px 20px; display: flex; flex-direction: column;
-            overflow: hidden; justify-content: flex-end;
+            flex: 1; padding: 0 20px 16px 20px; display: flex; flex-direction: column;
+            overflow: hidden;
         }
 
         .client-header {
-            display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 16px;
+            display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;
         }
-        .client-nav { display: flex; gap: 10px; align-items: center; }
-        .client-name { font-size: 22px; font-weight: 800; letter-spacing: 0.5px; }
+        .client-nav { display: flex; gap: 8px; align-items: center; }
+        .client-name { font-size: 20px; font-weight: 700; }
         
         .items-list {
-            flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 10px;
-            padding-bottom: 20px; scroll-behavior: smooth;
+            flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 8px;
+            padding-bottom: 10px; scroll-behavior: smooth;
         }
         .items-list::-webkit-scrollbar { display: none; }
         
         .item-row {
             display: flex; justify-content: space-between; align-items: center;
-            background: var(--glass-bg); border: 1px solid var(--glass-border);
-            padding: 14px 16px; border-radius: 20px; backdrop-filter: blur(10px);
-            animation: popIn 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+            background: var(--bg-card); border: 1px solid var(--border);
+            padding: 12px 16px; border-radius: 16px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.02);
         }
-        @keyframes popIn { from { opacity: 0; transform: scale(0.95) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
         
-        .item-info h4 { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
-        .item-info p { font-size: 12px; color: var(--text-sub); font-weight: 600; }
-        .item-price { font-size: 18px; font-weight: 800; }
+        .item-info { flex: 1; }
+        .item-info h4 { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
+        .item-price { font-size: 15px; font-weight: 700; color: var(--text-sub); }
         
-        .total-block { text-align: right; margin-top: 10px; }
-        .total-block .label { font-size: 14px; color: var(--text-sub); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
-        .total-block .sum { font-size: 44px; font-weight: 800; color: var(--green); line-height: 1; margin-top: 4px; }
+        /* Кнопки количества +- */
+        .qty-control {
+            display: flex; align-items: center; gap: 12px;
+            background: var(--btn-bg); padding: 6px; border-radius: 12px;
+        }
+        .qty-btn {
+            background: var(--bg-card); border: none; width: 32px; height: 32px;
+            border-radius: 8px; font-size: 18px; font-weight: 600; color: var(--text-main);
+            display: flex; justify-content: center; align-items: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1); cursor: pointer;
+        }
+        .qty-btn:active { transform: scale(0.9); }
+        .qty-btn.del { color: var(--accent-red); }
+        .qty-val { font-size: 15px; font-weight: 700; min-width: 35px; text-align: center; }
+
+        .total-block { text-align: right; margin-top: auto; padding-top: 10px; }
+        .total-block .label { font-size: 13px; color: var(--text-sub); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+        .total-block .sum { font-size: 38px; font-weight: 800; color: var(--text-main); line-height: 1; margin-top: 4px; }
         .discount-badge {
-            display: inline-block; background: var(--accent); color: #fff;
-            padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 800; margin-bottom: 6px;
+            display: inline-block; background: var(--accent-red); color: #fff;
+            padding: 4px 8px; border-radius: 8px; font-size: 12px; font-weight: 700; margin-bottom: 4px;
         }
 
-        /* SMART PAD (НИЗ) */
+        /* ПАНЕЛЬ УПРАВЛЕНИЯ (НИЗ) */
         .smart-pad {
-            background: var(--pad-bg); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
-            border-radius: 32px 32px 0 0; padding: 24px 20px max(24px, env(safe-area-inset-bottom));
-            box-shadow: 0 -10px 40px rgba(0,0,0,0.3); transition: 0.3s ease;
+            background: var(--pad-bg); border-top: 1px solid var(--border);
+            height: 48vh; min-height: 350px; display: flex; flex-direction: column;
+            padding: 16px 16px max(16px, env(safe-area-inset-bottom));
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.05); z-index: 10;
         }
 
-        /* МАГИЯ ПАНЕЛЕЙ (ЖЕСТКАЯ ФИКСАЦИЯ СЕТКИ) */
-        .pad-section { display: none; }
-        .pad-section.active.grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
-        .pad-section.active.block { display: block; }
+        .pad-section { display: none; flex: 1; flex-direction: column; }
+        .pad-section.active { display: flex; }
+
+        /* Скроллируемая сетка товаров */
+        .catalog-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+            overflow-y: auto; flex: 1; align-content: start; padding-bottom: 10px;
+        }
+        .catalog-grid::-webkit-scrollbar { display: none; }
+
+        /* Нижний ряд кнопок управления */
+        .action-row {
+            display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;
+            margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border);
+        }
 
         .pad-btn {
-            background: var(--btn-bg); border: none; border-radius: 20px; height: 85px;
+            background: var(--btn-bg); border: none; border-radius: 16px; height: 80px;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             color: var(--text-main); cursor: pointer; transition: transform 0.1s;
         }
-        .pad-btn:active { background: var(--btn-active); transform: scale(0.92); }
-        .pad-btn .icon { font-size: 24px; margin-bottom: 6px; }
-        .pad-btn .name { font-size: 12px; font-weight: 700; text-align: center; line-height: 1.1; padding: 0 4px; }
+        .pad-btn:active { background: var(--btn-active); transform: scale(0.95); }
+        .pad-btn .icon { font-size: 26px; margin-bottom: 6px; }
+        .pad-btn .name { font-size: 12px; font-weight: 600; text-align: center; line-height: 1.1; padding: 0 4px; color: var(--text-sub); }
         
-        /* Цвета функциональных кнопок */
-        .pad-btn.action { background: rgba(255, 45, 85, 0.1); color: var(--accent); }
-        .pad-btn.pay { background: rgba(50, 215, 75, 0.1); color: var(--green); }
-        .pad-btn.action:active { background: rgba(255, 45, 85, 0.2); }
-        .pad-btn.pay:active { background: rgba(50, 215, 75, 0.2); }
+        .pad-btn.action { background: rgba(0, 122, 255, 0.1); }
+        .pad-btn.action .name { color: var(--accent-blue); font-weight: 700;}
+        .pad-btn.pay { background: rgba(52, 199, 89, 0.1); }
+        .pad-btn.pay .name { color: var(--accent-green); font-weight: 700;}
 
         /* Цифровая клавиатура */
         .numpad-display {
-            background: var(--glass-bg); border-radius: 20px; padding: 20px; text-align: center;
-            margin-bottom: 16px; font-size: 28px; font-weight: 800; color: var(--green); border: 1px solid var(--glass-border);
+            background: var(--btn-bg); border-radius: 16px; padding: 16px; text-align: center;
+            margin-bottom: 12px; font-size: 24px; font-weight: 700; color: var(--text-main);
         }
-        .num-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+        .num-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; flex: 1; }
         .num-btn {
-            background: var(--btn-bg); border: none; border-radius: 20px; height: 65px;
-            font-size: 24px; font-weight: 600; color: var(--text-main);
+            background: var(--btn-bg); border: none; border-radius: 16px;
+            font-size: 24px; font-weight: 500; color: var(--text-main);
         }
-        .num-btn:active { background: var(--btn-active); transform: scale(0.95); }
-        .num-btn.done { background: var(--green); color: #fff; font-weight: 800; }
-        .num-btn.cancel { background: var(--accent); color: #fff; font-size: 18px; font-weight: 700; }
+        .num-btn:active { background: var(--btn-active); }
+        .num-btn.done { background: var(--accent-green); color: #fff; font-weight: 700; }
+        .num-btn.cancel { background: var(--accent-red); color: #fff; font-size: 16px; font-weight: 600; }
 
         /* МОДАЛЬНЫЕ ОКНА */
         .overlay {
-            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6);
-            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); z-index: 100;
+            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); z-index: 100;
             justify-content: center; align-items: center; padding: 20px;
         }
         .modal-card {
-            background: var(--pad-bg); width: 100%; max-width: 420px; border-radius: 32px;
-            padding: 24px; border: 1px solid var(--glass-border); animation: popIn 0.3s;
+            background: var(--bg-card); width: 100%; max-width: 420px; border-radius: 24px;
+            padding: 24px; border: 1px solid var(--border); box-shadow: 0 10px 40px rgba(0,0,0,0.2);
             max-height: 85vh; display: flex; flex-direction: column;
         }
-        .modal-title { font-size: 22px; font-weight: 800; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+        .modal-title { font-size: 20px; font-weight: 700; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
         
         .modal-body { overflow-y: auto; flex: 1; padding-bottom: 10px; }
         .modal-body::-webkit-scrollbar { display: none; }
 
         .input-group { margin-bottom: 16px; }
-        .input-group label { display: block; font-size: 12px; font-weight: 700; color: var(--text-sub); margin-bottom: 8px; text-transform: uppercase; }
+        .input-group label { display: block; font-size: 12px; font-weight: 600; color: var(--text-sub); margin-bottom: 6px; text-transform: uppercase; }
         .input-group input {
-            width: 100%; background: var(--btn-bg); border: 1px solid var(--glass-border); color: var(--text-main);
-            padding: 16px; border-radius: 16px; font-size: 16px; font-weight: 600; outline: none;
+            width: 100%; background: var(--btn-bg); border: 1px solid var(--border); color: var(--text-main);
+            padding: 14px; border-radius: 12px; font-size: 16px; outline: none;
         }
         
         .big-btn {
-            width: 100%; background: var(--btn-bg); color: var(--text-main); border: none; padding: 18px;
-            border-radius: 20px; font-size: 16px; font-weight: 800; margin-top: 10px; cursor: pointer; transition: 0.1s;
+            width: 100%; border: none; padding: 16px; border-radius: 16px;
+            font-size: 16px; font-weight: 600; margin-top: 10px; cursor: pointer; transition: 0.1s;
         }
-        .big-btn:active { opacity: 0.7; transform: scale(0.97); }
-        .big-btn.green { background: var(--green); color: #fff; }
-        .big-btn.red { background: rgba(255,45,85,0.1); color: var(--accent); margin-top: 24px; }
+        .big-btn:active { opacity: 0.8; transform: scale(0.98); }
+        .big-btn.green { background: var(--accent-green); color: #fff; }
+        .big-btn.red { background: rgba(255,59,48,0.1); color: var(--accent-red); margin-top: 24px; }
+        .big-btn.outline { background: var(--btn-bg); color: var(--text-main); }
 
-        .report-view { background: rgba(0,0,0,0.3); padding: 16px; border-radius: 16px; font-family: monospace; font-size: 13px; color: #32d74b; white-space: pre-wrap; margin-bottom: 16px; }
-        
-        /* История */
-        .history-item {
-            background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 16px;
-            border-radius: 16px; margin-bottom: 10px; cursor: pointer;
-        }
-        .history-item h3 { font-size: 16px; margin-bottom: 4px; }
-        .history-item p { font-size: 13px; color: var(--text-sub); }
-        .history-details { display: none; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--glass-border); color: var(--green); font-family: monospace; font-size: 12px; white-space: pre-wrap; }
+        .report-view { background: var(--btn-bg); padding: 16px; border-radius: 12px; font-family: monospace; font-size: 13px; color: var(--text-main); white-space: pre-wrap; margin-bottom: 16px; border: 1px solid var(--border); }
     </style>
 </head>
-<body data-theme="dark">
+<body data-theme="light">
 
     <div class="top-nav">
-        <div class="icon-btn" onclick="toggleTheme()" id="themeBtn">☀️</div>
+        <div class="icon-btn" onclick="toggleTheme()" id="themeBtn">🌙</div>
         <div class="top-group">
-            <div class="icon-btn" onclick="openModal('modalHistory')">🕰️</div>
             <div class="icon-btn" onclick="openModal('modalSettings')">⚙️</div>
             <div class="icon-btn" onclick="openReport()">📄</div>
         </div>
@@ -214,7 +218,7 @@
                 <div class="client-name" id="clientName">Клиент 1</div>
                 <div class="icon-btn" onclick="nextClient()">→</div>
             </div>
-            <div class="icon-btn" onclick="addClient()" style="background: var(--accent); color:white; border:none;">+</div>
+            <div class="icon-btn" onclick="addClient()" style="background: var(--accent-blue); color:white; border:none;">+</div>
         </div>
 
         <div class="items-list" id="receiptItems"></div>
@@ -226,34 +230,43 @@
         </div>
     </div>
 
-    <!-- SMART PAD -->
+    <!-- ПАНЕЛЬ УПРАВЛЕНИЯ -->
     <div class="smart-pad">
         
-        <!-- Главное меню товаров (СЕТКА) -->
-        <div class="pad-section active grid" id="padMain"></div>
-
-        <!-- Ввод веса (БЛОК) -->
-        <div class="pad-section block" id="padWeight">
-            <div class="numpad-display" id="weightDisplay">0 г = 0 ₽</div>
-            <div class="num-grid">
-                <button class="num-btn" onclick="typeWeight('1')">1</button>
-                <button class="num-btn" onclick="typeWeight('2')">2</button>
-                <button class="num-btn" onclick="typeWeight('3')">3</button>
-                <button class="num-btn" onclick="typeWeight('4')">4</button>
-                <button class="num-btn" onclick="typeWeight('5')">5</button>
-                <button class="num-btn" onclick="typeWeight('6')">6</button>
-                <button class="num-btn" onclick="typeWeight('7')">7</button>
-                <button class="num-btn" onclick="typeWeight('8')">8</button>
-                <button class="num-btn" onclick="typeWeight('9')">9</button>
-                <button class="num-btn cancel" onclick="cancelWeight()">Отмена</button>
-                <button class="num-btn" onclick="typeWeight('0')">0</button>
-                <button class="num-btn done" onclick="confirmWeight()">✓</button>
+        <!-- Главное меню (Скроллируемое) -->
+        <div class="pad-section active" id="padMain">
+            <div class="catalog-grid" id="catalogGrid">
+                <!-- Товары рендерятся сюда -->
+            </div>
+            <div class="action-row">
+                <button class="pad-btn action" onclick="showPad('padDiscount')"><div class="icon">🏷️</div><div class="name">Скидка</div></button>
+                <button class="pad-btn action" onclick="setNowTime()"><div class="icon">🕒</div><div class="name">Время</div></button>
+                <button class="pad-btn pay" onclick="showPad('padPay')"><div class="icon">💳</div><div class="name">Оплата</div></button>
             </div>
         </div>
 
-        <!-- Скидка (БЛОК) -->
-        <div class="pad-section block" id="padDiscount">
-            <div class="numpad-display" style="color:var(--accent);">Скидка</div>
+        <!-- Универсальный Numpad (Вес / Доставка) -->
+        <div class="pad-section" id="padNumpad">
+            <div class="numpad-display" id="numpadDisplay">0</div>
+            <div class="num-grid">
+                <button class="num-btn" onclick="typeNum('1')">1</button>
+                <button class="num-btn" onclick="typeNum('2')">2</button>
+                <button class="num-btn" onclick="typeNum('3')">3</button>
+                <button class="num-btn" onclick="typeNum('4')">4</button>
+                <button class="num-btn" onclick="typeNum('5')">5</button>
+                <button class="num-btn" onclick="typeNum('6')">6</button>
+                <button class="num-btn" onclick="typeNum('7')">7</button>
+                <button class="num-btn" onclick="typeNum('8')">8</button>
+                <button class="num-btn" onclick="typeNum('9')">9</button>
+                <button class="num-btn cancel" onclick="closePads()">Отмена</button>
+                <button class="num-btn" onclick="typeNum('0')">0</button>
+                <button class="num-btn done" onclick="confirmNumpad()">Ввод</button>
+            </div>
+        </div>
+
+        <!-- Скидка -->
+        <div class="pad-section" id="padDiscount">
+            <div class="numpad-display" style="color:var(--accent-red);">Скидка</div>
             <div class="num-grid" style="grid-template-columns: repeat(2, 1fr);">
                 <button class="num-btn" onclick="applyDiscount(0)">0%</button>
                 <button class="num-btn" onclick="applyDiscount(5)">5%</button>
@@ -264,113 +277,88 @@
             </div>
         </div>
 
-        <!-- Оплата (БЛОК) -->
-        <div class="pad-section block" id="padPay">
-            <div class="numpad-display" style="color:var(--text-main);">Оплата</div>
+        <!-- Оплата -->
+        <div class="pad-section" id="padPay">
+            <div class="numpad-display">Способ оплаты</div>
             <div class="num-grid" style="grid-template-columns: repeat(2, 1fr);">
-                <button class="num-btn" style="color:var(--green);" onclick="applyPay('Нал')">💵 Нал</button>
-                <button class="num-btn" style="color:#0a84ff;" onclick="applyPay('Перевод')">📱 Перевод</button>
-                <button class="num-btn" style="color:#ff9f0a;" onclick="applyPay('Терминал')">💳 Терминал</button>
-                <button class="num-btn" style="color:var(--accent);" onclick="applyPay('Долг')">📝 В долг</button>
-                <button class="num-btn cancel" style="grid-column: span 2;" onclick="closePads()">Отмена</button>
+                <button class="num-btn" style="color:var(--accent-green);" onclick="applyPay('Нал')">💵 Нал</button>
+                <button class="num-btn" style="color:var(--accent-blue);" onclick="applyPay('Перевод')">📱 Перевод</button>
+                <button class="num-btn" style="color:#FF9500;" onclick="applyPay('Терминал')">💳 Терминал</button>
+                <button class="num-btn" style="color:var(--accent-red);" onclick="applyPay('Долг')">📝 В долг</button>
+                <button class="num-btn cancel" style="grid-column: span 2;" onclick="closePads()">Назад</button>
             </div>
         </div>
-
     </div>
 
-    <!-- ОКНО: НАСТРОЙКИ (И СБРОС) -->
-    <div class="overlay" id="modalSettings" style="display:none;">
+    <!-- НАСТРОЙКИ -->
+    <div class="overlay" id="modalSettings">
         <div class="modal-card">
-            <div class="modal-title">Смена <div class="icon-btn" onclick="closeModal('modalSettings')">✕</div></div>
+            <div class="modal-title">Настройки <div class="icon-btn" onclick="closeModal('modalSettings')">✕</div></div>
             <div class="modal-body">
                 <div class="input-group">
-                    <label>Период смены</label>
+                    <label>Дата смены</label>
                     <input type="text" id="inpDate" oninput="saveCore()">
                 </div>
                 <div class="input-group">
-                    <label>Старт кассы (₽)</label>
+                    <label>Касса на старте</label>
                     <input type="text" id="inpCash" oninput="saveCore()">
                 </div>
                 <div class="input-group">
-                    <label>Расходы смены</label>
-                    <input type="text" id="inpExp" placeholder="не было" oninput="saveCore()">
+                    <label>Имя/Авто клиента</label>
+                    <input type="text" id="inpClientNote" placeholder="Например: Toyota 777" oninput="updateClientMeta()">
                 </div>
-                <div class="input-group">
-                    <label>Инфо по клубникам</label>
-                    <input type="text" id="inpStraw" placeholder="продаж не было" oninput="saveCore()">
-                </div>
-                <div class="input-group">
-                    <label>Имя/Авто текущего клиента</label>
-                    <input type="text" id="inpClientNote" placeholder="..." oninput="updateClientMeta()">
-                </div>
-                
-                <button class="big-btn red" onclick="clearCurrentShift()">🚨 Сбросить смену (очистить данные)</button>
+                <button class="big-btn red" onclick="clearCurrentShift()">🚨 Сбросить смену (Удалить всё)</button>
             </div>
         </div>
     </div>
 
-    <!-- ОКНО: ОТЧЕТ И ЗАКРЫТИЕ СМЕНЫ -->
-    <div class="overlay" id="modalReport" style="display:none;">
+    <!-- ОТЧЕТ -->
+    <div class="overlay" id="modalReport">
         <div class="modal-card">
             <div class="modal-title">Отчёт <div class="icon-btn" onclick="closeModal('modalReport')">✕</div></div>
             <div class="modal-body">
                 <div class="report-view" id="reportOutput"></div>
-                <button class="big-btn green" onclick="copyReport()">📋 Скопировать текст</button>
-                <button class="big-btn" style="margin-top:10px; background:rgba(50,215,75,0.2); color:var(--green);" onclick="endShiftAndSave()">📦 Завершить смену и в архив</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- ОКНО: ИСТОРИЯ СМЕН -->
-    <div class="overlay" id="modalHistory" style="display:none;">
-        <div class="modal-card">
-            <div class="modal-title">Архив смен <div class="icon-btn" onclick="closeModal('modalHistory')">✕</div></div>
-            <div class="modal-body" id="historyList">
-                <!-- Сюда падают старые смены -->
+                <button class="big-btn green" onclick="copyReport()">📋 Скопировать</button>
+                <button class="big-btn outline" style="margin-top:10px;" onclick="closeModal('modalReport')">Закрыть</button>
             </div>
         </div>
     </div>
 
     <script>
-        // База данных
+        // БАЗА ТОВАРОВ (Можно легко добавлять новые)
         const catalog = [
             { id: 1, name: "Клубника ШК", icon: "🍓", price: 900, type: "piece" },
             { id: 2, name: "Ананас ШК", icon: "🍍", price: 1200, type: "piece" },
             { id: 3, name: "Роза", icon: "🌹", price: 250, type: "piece" },
             { id: 4, name: "Клубника (кг)", icon: "⚖️", price: 600, type: "weight" },
             { id: 5, name: "Голубика (кг)", icon: "🫐", price: 1500, type: "weight" },
-            { id: 6, name: "Доставка", icon: "🚗", price: 350, type: "piece" }
+            { id: 6, name: "Банан ШК", icon: "🍌", price: 300, type: "piece" }, // Пример нового
+            { id: 99, name: "Доставка", icon: "🚗", price: 0, type: "delivery" }
         ];
 
-        // Состояние приложения
         let app = {
-            theme: 'dark',
+            theme: 'light',
             shift: {
-                date: '', cash: '10.000', exp: '', straw: '',
+                date: '', cash: '10.000',
                 clients: [{ id: 1, note: '', items: [], pay: 'Нал', discount: 0, time: '' }]
-            },
-            history: [] // { date: '...', total: 0, report: '...' }
+            }
         };
         let activeIndex = 0;
-        let currentWeightStr = "";
-        let activeWeightProduct = null;
+        
+        let currentInputStr = "";
+        let activeProductForNumpad = null;
 
-        // Инициализация
         function init() {
-            const saved = localStorage.getItem('pos_v2');
+            const saved = localStorage.getItem('pos_v3');
             if (saved) {
                 app = JSON.parse(saved);
-                // Защита, если клиенты пустые
                 if(!app.shift.clients || app.shift.clients.length === 0) resetShiftData();
             } else {
                 app.shift.date = getAutoDate();
             }
-            
-            document.body.setAttribute('data-theme', app.theme);
-            document.getElementById('themeBtn').innerText = app.theme === 'dark' ? '☀️' : '🌙';
-            
+            applyTheme();
             syncInputsToApp();
-            renderPad();
+            renderCatalog();
             renderReceipt();
         }
 
@@ -380,32 +368,28 @@
             return `${f(d)}-${f(t)}`;
         }
 
-        function toggleTheme() {
-            app.theme = app.theme === 'dark' ? 'light' : 'dark';
+        // ТЕМА
+        function applyTheme() {
             document.body.setAttribute('data-theme', app.theme);
             document.getElementById('themeBtn').innerText = app.theme === 'dark' ? '☀️' : '🌙';
-            saveCore();
+        }
+        function toggleTheme() {
+            app.theme = app.theme === 'dark' ? 'light' : 'dark';
+            applyTheme(); saveCore();
         }
 
         function saveCore() {
-            // Забираем данные из инпутов
             app.shift.date = document.getElementById('inpDate').value || app.shift.date;
             app.shift.cash = document.getElementById('inpCash').value || app.shift.cash;
-            app.shift.exp = document.getElementById('inpExp').value;
-            app.shift.straw = document.getElementById('inpStraw').value;
-            localStorage.setItem('pos_v2', JSON.stringify(app));
+            localStorage.setItem('pos_v3', JSON.stringify(app));
         }
-
         function syncInputsToApp() {
             document.getElementById('inpDate').value = app.shift.date;
             document.getElementById('inpCash').value = app.shift.cash;
-            document.getElementById('inpExp').value = app.shift.exp;
-            document.getElementById('inpStraw').value = app.shift.straw;
         }
 
-        // --- КЛИЕНТЫ ---
+        // КЛИЕНТЫ
         function getC() { return app.shift.clients[activeIndex]; }
-        
         function nextClient() { if(activeIndex < app.shift.clients.length - 1) { activeIndex++; renderReceipt(); } }
         function prevClient() { if(activeIndex > 0) { activeIndex--; renderReceipt(); } }
         function addClient() {
@@ -418,13 +402,69 @@
             saveCore(); renderReceipt();
         }
 
-        // --- ЧЕК ---
+        // РЕНДЕР КАТАЛОГА ТОВАРОВ
+        function renderCatalog() {
+            const grid = document.getElementById('catalogGrid');
+            grid.innerHTML = '';
+            catalog.forEach(item => {
+                let priceLabel = item.type === 'delivery' ? 'Ввод ₽' : (item.type === 'weight' ? `${item.price}₽/кг` : `${item.price}₽`);
+                grid.innerHTML += `
+                    <button class="pad-btn" onclick="handleProductClick(${item.id})">
+                        <div class="icon">${item.icon}</div>
+                        <div class="name">${item.name}<br><span style="opacity:0.6">${priceLabel}</span></div>
+                    </button>`;
+            });
+        }
+
+        // ОБРАБОТКА НАЖАТИЯ НА ТОВАР
+        function handleProductClick(id) {
+            const item = catalog.find(x => x.id === id);
+            const c = getC();
+
+            if (item.type === 'piece') {
+                // Если товар уже есть, просто увеличиваем количество
+                let existing = c.items.find(i => i.id === item.id);
+                if (existing) {
+                    existing.qty += 1;
+                    existing.sum = existing.qty * existing.price;
+                } else {
+                    c.items.push({ id: item.id, icon: item.icon, name: item.name, qty: 1, unit: 'шт', price: item.price, sum: item.price, type: 'piece' });
+                }
+                saveCore(); renderReceipt();
+            } else {
+                // Открываем клавиатуру для Веса или Доставки
+                activeProductForNumpad = item;
+                currentInputStr = "";
+                updateNumpadDisplay();
+                showPad('padNumpad');
+            }
+        }
+
+        // ИЗМЕНЕНИЕ КОЛИЧЕСТВА ИЗ ЧЕКА (+ / -)
+        function changeQty(index, delta) {
+            let item = getC().items[index];
+            
+            if (item.type === 'piece') {
+                item.qty += delta;
+                if (item.qty <= 0) {
+                    getC().items.splice(index, 1);
+                } else {
+                    item.sum = item.qty * item.price;
+                }
+            } else {
+                // Для веса и доставки минус просто удаляет товар (плюс не показывается)
+                if (delta < 0) getC().items.splice(index, 1);
+            }
+            saveCore(); renderReceipt();
+        }
+
+        // РЕНДЕР ЧЕКА
         function renderReceipt() {
             const c = getC();
             document.getElementById('clientName').innerText = c.note ? `Клиент ${activeIndex + 1} (${c.note})` : `Клиент ${activeIndex + 1}`;
             document.getElementById('inpClientNote').value = c.note || '';
-
             document.getElementById('payMethodLabel').innerText = `К ОПЛАТЕ (${c.pay})`;
+            
             const badge = document.getElementById('discountBadge');
             if(c.discount > 0) { badge.style.display = 'inline-block'; badge.innerText = `СКИДКА ${c.discount}%`; }
             else { badge.style.display = 'none'; }
@@ -434,14 +474,36 @@
             let rawSum = 0;
 
             if (c.items.length === 0) {
-                list.innerHTML = `<div style="text-align:center; padding:40px 20px; color:var(--text-sub); font-size:14px; font-weight:600;">Чек пуст. Нажмите на товар ниже.</div>`;
+                list.innerHTML = `<div style="text-align:center; padding:40px 20px; color:var(--text-sub); font-size:14px;">Выберите товар внизу</div>`;
             } else {
                 c.items.forEach((it, idx) => {
                     rawSum += it.sum;
+                    
+                    // Рисуем кнопки количества в зависимости от типа
+                    let controlsHTML = '';
+                    if (it.type === 'piece') {
+                        controlsHTML = `
+                            <button class="qty-btn ${it.qty === 1 ? 'del' : ''}" onclick="changeQty(${idx}, -1)">${it.qty === 1 ? '✕' : '-'}</button>
+                            <span class="qty-val">${it.qty} ${it.unit}</span>
+                            <button class="qty-btn" onclick="changeQty(${idx}, 1)">+</button>
+                        `;
+                    } else {
+                        // Для веса и доставки только кнопка удаления
+                        controlsHTML = `
+                            <span class="qty-val" style="margin-right:10px;">${it.qty} ${it.unit}</span>
+                            <button class="qty-btn del" onclick="changeQty(${idx}, -1)">✕</button>
+                        `;
+                    }
+
                     list.innerHTML += `
-                        <div class="item-row" onclick="removeItem(${idx})">
-                            <div class="item-info"><h4>${it.icon} ${it.name}</h4><p>${it.val} <span style="font-size:10px; opacity:0.6;">(удали ✕)</span></p></div>
-                            <div class="item-price">${it.sum} ₽</div>
+                        <div class="item-row">
+                            <div class="item-info">
+                                <h4>${it.icon} ${it.name}</h4>
+                                <div class="item-price">${it.sum} ₽</div>
+                            </div>
+                            <div class="qty-control">
+                                ${controlsHTML}
+                            </div>
                         </div>`;
                 });
                 setTimeout(() => list.scrollTop = list.scrollHeight, 50);
@@ -451,97 +513,68 @@
             document.getElementById('totalSum').innerText = finalSum > 0 ? `${finalSum.toLocaleString('ru-RU')} ₽` : '0 ₽';
         }
 
-        function removeItem(idx) { getC().items.splice(idx, 1); saveCore(); renderReceipt(); }
-
-        // --- КЛАВИАТУРА И ЭКРАНЫ ---
-        function renderPad() {
-            const pad = document.getElementById('padMain');
-            pad.innerHTML = '';
-            
-            catalog.forEach(item => {
-                pad.innerHTML += `
-                    <button class="pad-btn" onclick="handleProductClick(${item.id})">
-                        <div class="icon">${item.icon}</div>
-                        <div class="name">${item.name}<br><span style="font-size:10px; opacity:0.6">${item.price}₽</span></div>
-                    </button>`;
-            });
-
-            pad.innerHTML += `
-                <button class="pad-btn action" onclick="showPad('padDiscount')"><div class="icon">🏷️</div><div class="name">Скидка</div></button>
-                <button class="pad-btn action" onclick="setNowTime()"><div class="icon">🕒</div><div class="name">Время</div></button>
-                <button class="pad-btn pay" onclick="showPad('padPay')"><div class="icon">💳</div><div class="name">Оплата</div></button>
-            `;
-        }
-
-        function setNowTime() {
-            getC().time = new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
-            saveCore(); renderReceipt();
-        }
-
-        // БЕЗОПАСНОЕ ПЕРЕКЛЮЧЕНИЕ ПАНЕЛЕЙ (Фикс бага сетки)
+        // НАВИГАЦИЯ ПАНЕЛЕЙ
         function showPad(id) {
-            // Убираем класс active у всех
             document.querySelectorAll('.pad-section').forEach(el => el.classList.remove('active'));
-            // Добавляем классу active нужному id
             document.getElementById(id).classList.add('active');
         }
         function closePads() { showPad('padMain'); }
 
-        function handleProductClick(id) {
-            const item = catalog.find(x => x.id === id);
-            if (item.type === 'piece') {
-                getC().items.push({ icon: item.icon, name: item.name, val: '1 шт', sum: item.price });
-                saveCore(); renderReceipt();
-            } else {
-                activeWeightProduct = item; currentWeightStr = ""; updateWeightDisplay();
-                showPad('padWeight');
+        // УНИВЕРСАЛЬНЫЙ NUMPAD (Вес и Доставка)
+        function typeNum(num) {
+            if (currentInputStr.length < 6) currentInputStr += num;
+            updateNumpadDisplay();
+        }
+        function updateNumpadDisplay() {
+            const val = parseInt(currentInputStr) || 0;
+            const display = document.getElementById('numpadDisplay');
+            
+            if (activeProductForNumpad.type === 'weight') {
+                const sum = Math.round((val / 1000) * activeProductForNumpad.price);
+                display.innerText = `${val} г = ${sum} ₽`;
+            } else if (activeProductForNumpad.type === 'delivery') {
+                display.innerText = `Доставка: ${val} ₽`;
             }
         }
-
-        function typeWeight(num) {
-            if (currentWeightStr.length < 5) currentWeightStr += num;
-            updateWeightDisplay();
-        }
-        function cancelWeight() { currentWeightStr = ""; closePads(); }
-        
-        function updateWeightDisplay() {
-            const grams = parseInt(currentWeightStr) || 0;
-            const sum = Math.round((grams / 1000) * activeWeightProduct.price);
-            document.getElementById('weightDisplay').innerText = `${grams} г = ${sum} ₽`;
-        }
-        function confirmWeight() {
-            const grams = parseInt(currentWeightStr) || 0;
-            if (grams > 0) {
-                const sum = Math.round((grams / 1000) * activeWeightProduct.price);
-                getC().items.push({ icon: activeWeightProduct.icon, name: activeWeightProduct.name, val: `${grams} г`, sum: sum });
+        function confirmNumpad() {
+            const val = parseInt(currentInputStr) || 0;
+            if (val > 0) {
+                if (activeProductForNumpad.type === 'weight') {
+                    const sum = Math.round((val / 1000) * activeProductForNumpad.price);
+                    getC().items.push({ id: Date.now(), icon: activeProductForNumpad.icon, name: activeProductForNumpad.name, qty: val, unit: 'г', price: activeProductForNumpad.price, sum: sum, type: 'weight' });
+                } else if (activeProductForNumpad.type === 'delivery') {
+                    getC().items.push({ id: Date.now(), icon: activeProductForNumpad.icon, name: activeProductForNumpad.name, qty: 1, unit: '', price: val, sum: val, type: 'delivery' });
+                }
                 saveCore(); renderReceipt();
             }
             closePads();
         }
 
+        // ОПЕРАЦИИ
+        function setNowTime() { getC().time = new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}); saveCore(); renderReceipt(); }
         function applyDiscount(val) { getC().discount = val; saveCore(); renderReceipt(); closePads(); }
         function applyPay(val) { getC().pay = val; saveCore(); renderReceipt(); closePads(); }
 
-        // --- ОКНА, ОТЧЕТ И СБРОС ---
-        function openModal(id) { 
-            if(id === 'modalHistory') renderHistory();
-            document.getElementById(id).style.display = 'flex'; 
-        }
+        // МОДАЛКИ
+        function openModal(id) { document.getElementById(id).style.display = 'flex'; }
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
+        // ОТЧЕТ
         function generateReportText() {
             let txt = `${app.shift.date}\nКасса: ${app.shift.cash}\n\n`;
-            let n = 0, p = 0, totalShift = 0;
+            let n = 0, p = 0;
 
             app.shift.clients.forEach((c, idx) => {
                 if(c.items.length === 0) return;
                 
                 let rawSum = 0;
                 let cTxt = c.note ? `Клиент: ${c.note}\n` : `Клиент: ${idx+1}\n`;
-                c.items.forEach(it => { cTxt += `${it.name} - ${it.val}\n`; rawSum += it.sum; });
+                c.items.forEach(it => { 
+                    cTxt += `${it.name} - ${it.qty}${it.unit}\n`; 
+                    rawSum += it.sum; 
+                });
                 
                 let finalSum = Math.round(rawSum * (1 - c.discount / 100));
-                totalShift += finalSum;
 
                 if (c.discount > 0) cTxt += `(Скидка ${c.discount}%)\n`;
                 cTxt += `(${c.pay} ${finalSum}`;
@@ -553,78 +586,33 @@
                 if(c.pay === 'Перевод' || c.pay === 'Терминал') p += finalSum;
             });
 
-            const e = app.shift.exp || 'не было';
-            const s = app.shift.straw || 'продаж не было';
-            txt += `Расход: ${e}\n\nНал: ${n > 0 ? n.toLocaleString('ru-RU') : '0'}\nПеревод: ${p > 0 ? p.toLocaleString('ru-RU') : '0'}\n\nПо клубникам: ${s}`;
-            return { text: txt, total: totalShift };
+            txt += `\nНал: ${n > 0 ? n.toLocaleString('ru-RU') : '0'}\nБезнал: ${p > 0 ? p.toLocaleString('ru-RU') : '0'}`;
+            return txt;
         }
 
         function openReport() {
-            document.getElementById('reportOutput').innerText = generateReportText().text;
+            document.getElementById('reportOutput').innerText = generateReportText();
             openModal('modalReport');
         }
 
         function copyReport() {
-            navigator.clipboard.writeText(generateReportText().text).then(()=>alert('✅ Отчёт скопирован!')).catch(()=>alert('Ошибка'));
+            navigator.clipboard.writeText(generateReportText()).then(()=>alert('✅ Скопировано!')).catch(()=>alert('Ошибка'));
         }
 
-        // --- УПРАВЛЕНИЕ ДАННЫМИ (ОЧИСТКА И АРХИВ) ---
+        // СБРОС
         function resetShiftData() {
             app.shift.date = getAutoDate();
-            app.shift.cash = '10.000'; app.shift.exp = ''; app.shift.straw = '';
+            app.shift.cash = '10.000';
             app.shift.clients = [{ id: Date.now(), note: '', items: [], pay: 'Нал', discount: 0, time: '' }];
             activeIndex = 0;
             syncInputsToApp(); saveCore(); renderReceipt();
         }
 
         function clearCurrentShift() {
-            if(confirm('🚨 Вы уверены, что хотите полностью очистить текущую смену? Данные не сохранятся в архив.')) {
+            if(confirm('🚨 Точно удалить все данные?')) {
                 resetShiftData();
                 closeModal('modalSettings');
             }
-        }
-
-        function endShiftAndSave() {
-            if(confirm('📦 Завершить смену? Отчёт будет сохранен в архив, а текущий экран очистится.')) {
-                const rep = generateReportText();
-                if(rep.total > 0 || app.shift.exp !== '') {
-                    app.history.unshift({
-                        id: Date.now(),
-                        date: app.shift.date,
-                        total: rep.total,
-                        report: rep.text
-                    });
-                }
-                resetShiftData();
-                closeModal('modalReport');
-            }
-        }
-
-        // --- ИСТОРИЯ СМЕН ---
-        function renderHistory() {
-            const list = document.getElementById('historyList');
-            list.innerHTML = '';
-            if(app.history.length === 0) {
-                list.innerHTML = '<div style="text-align:center; color:var(--text-sub); margin-top:20px;">Архив пуст. Завершите смену, чтобы сохранить отчёт сюда.</div>';
-                return;
-            }
-
-            app.history.forEach((h, i) => {
-                list.innerHTML += `
-                    <div class="history-item" onclick="toggleHist(${i})">
-                        <div style="display:flex; justify-content:space-between; align-items:center;">
-                            <h3>Смена: ${h.date}</h3>
-                            <div style="font-weight:800; color:var(--green);">${h.total.toLocaleString('ru-RU')} ₽</div>
-                        </div>
-                        <p>Нажми, чтобы посмотреть детали</p>
-                        <div class="history-details" id="hist_det_${i}">${h.report}</div>
-                    </div>`;
-            });
-        }
-
-        function toggleHist(i) {
-            const el = document.getElementById(`hist_det_${i}`);
-            el.style.display = el.style.display === 'block' ? 'none' : 'block';
         }
 
         window.onload = init;
