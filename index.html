@@ -112,6 +112,12 @@
         .total-label { font-size: 12px; text-transform: uppercase; color: var(--text-muted); font-weight: 700; }
         .total-sum { font-size: 24px; font-weight: 900; }
 
+        .checkout-btn {
+            margin-top: 8px; width: 100%; background: var(--accent-green); color: #fff; border: none;
+            padding: 12px; border-radius: 12px; font-size: 15px; font-weight: 800; cursor: pointer; flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2); display: flex; align-items: center; justify-content: center; gap: 6px;
+        }
+
         /* КАТАЛОГ СЕТКА */
         .catalog-container {
             height: 190px; background: var(--glass-card); border: 1px solid var(--border);
@@ -211,6 +217,10 @@
                     <div class="total-sum" id="totalSum">0 ₽</div>
                 </div>
             </div>
+
+            <button class="checkout-btn" onclick="finishAndNextClient()">
+                ✅ Оформить и следующий клиент ➡️
+            </button>
         </div>
 
         <!-- КАТАЛОГ -->
@@ -367,9 +377,9 @@
 
         function init() {
             try {
-                const saved = localStorage.getItem('pos_state_v9');
+                const saved = localStorage.getItem('pos_state_v10');
                 if (saved) state = JSON.parse(saved);
-                const savedCat = localStorage.getItem('pos_cat_v9');
+                const savedCat = localStorage.getItem('pos_cat_v10');
                 if (savedCat) catalog = JSON.parse(savedCat);
             } catch(e) {}
 
@@ -379,8 +389,8 @@
             renderActiveClient();
         }
 
-        function saveData() { try { localStorage.setItem('pos_state_v9', JSON.stringify(state)); } catch(e) {} }
-        function saveCatalog() { try { localStorage.setItem('pos_cat_v9', JSON.stringify(catalog)); } catch(e) {} }
+        function saveData() { try { localStorage.setItem('pos_state_v10', JSON.stringify(state)); } catch(e) {} }
+        function saveCatalog() { try { localStorage.setItem('pos_cat_v10', JSON.stringify(catalog)); } catch(e) {} }
 
         function applyTheme() {
             document.body.setAttribute('data-theme', state.theme);
@@ -428,7 +438,16 @@
         }
 
         function addNewClient() {
-            state.clients.push({ id: Date.now(), name: `Клиент ${state.clients.length + 1}`, items: [], pay: 'Нал', time: '', discount: 0 });
+            let nextNum = state.clients.length + 1;
+            state.clients.push({ id: Date.now(), name: `Клиент ${nextNum}`, items: [], pay: 'Нал', time: '', discount: 0 });
+            state.activeClient = state.clients.length - 1;
+            saveData(); renderClientsBar(); renderActiveClient();
+        }
+
+        function finishAndNextClient() {
+            // Создаем нового клиента автоматически и переключаемся на него
+            let nextNum = state.clients.length + 1;
+            state.clients.push({ id: Date.now(), name: `Клиент ${nextNum}`, items: [], pay: 'Нал', time: '', discount: 0 });
             state.activeClient = state.clients.length - 1;
             saveData(); renderClientsBar(); renderActiveClient();
         }
@@ -767,7 +786,6 @@
             navigator.clipboard.writeText(generateReport()).then(() => alert('Отчет скопирован!'));
         }
 
-        // Автоматический анализ с помощью Gemini API с обходом лимитов
         async function runGeminiAnalysis() {
             const apiKey = state.apiKey;
             if (!apiKey) {
@@ -783,7 +801,6 @@
             const reportText = generateReport();
             const prompt = `Проанализируй этот отчет по кассе смены, выдели, что больше предпочитают по оплате, какие товары больше всего покупают, и дай краткие полезные рекомендации для бизнеса:\n\n` + reportText;
 
-            // Список моделей для последовательной попытки (если на первой квота исчерпана)
             const models = ['gemini-2.0-flash', 'gemini-1.5-flash', 'gemini-1.5-pro'];
             let success = false;
             let lastErrorMsg = "";
@@ -810,7 +827,6 @@
                         break;
                     } else if (data.error) {
                         lastErrorMsg = data.error.message || JSON.stringify(data.error);
-                        // Если ошибка квоты, переходим к следующей модели в цикле
                         if (lastErrorMsg.includes("quota") || lastErrorMsg.includes("limit") || response.status === 429) {
                             continue;
                         } else {
