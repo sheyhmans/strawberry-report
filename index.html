@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Strawberry POS</title>
+    <title>Strawberry POS 2.0</title>
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
@@ -59,20 +59,21 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* ТОП ПАНЕЛЬ (МАЛЕНЬКАЯ) */
+        /* ТОП ПАНЕЛЬ */
         .top-nav {
             display: flex; justify-content: space-between; align-items: center;
             padding: max(16px, env(safe-area-inset-top)) 20px 10px 20px;
         }
+        .top-group { display: flex; gap: 12px; }
         .icon-btn {
             background: var(--glass-bg); border: 1px solid var(--glass-border);
-            color: var(--text-main); width: 40px; height: 40px; border-radius: 50%;
+            color: var(--text-main); width: 42px; height: 42px; border-radius: 50%;
             display: flex; justify-content: center; align-items: center; font-size: 18px;
-            backdrop-filter: blur(10px); cursor: pointer; transition: 0.2s;
+            backdrop-filter: blur(10px); cursor: pointer; transition: 0.15s;
         }
-        .icon-btn:active { transform: scale(0.9); }
+        .icon-btn:active { transform: scale(0.9); background: var(--btn-active); }
 
-        /* ЗОНА ЧЕКА (ВЕРХНЯЯ ПОЛОВИНА) */
+        /* ЧЕК (ВЕРХ) */
         .receipt-zone {
             flex: 1; padding: 0 20px 20px 20px; display: flex; flex-direction: column;
             overflow: hidden; justify-content: flex-end;
@@ -85,9 +86,8 @@
         .client-nav { display: flex; gap: 10px; align-items: center; }
         .client-name { font-size: 22px; font-weight: 800; letter-spacing: 0.5px; }
         
-        /* Список покупок */
         .items-list {
-            flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 12px;
+            flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 10px;
             padding-bottom: 20px; scroll-behavior: smooth;
         }
         .items-list::-webkit-scrollbar { display: none; }
@@ -95,52 +95,51 @@
         .item-row {
             display: flex; justify-content: space-between; align-items: center;
             background: var(--glass-bg); border: 1px solid var(--glass-border);
-            padding: 16px; border-radius: 20px; backdrop-filter: blur(10px);
-            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            padding: 14px 16px; border-radius: 20px; backdrop-filter: blur(10px);
+            animation: popIn 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
-        @keyframes popIn { from { opacity: 0; transform: scale(0.9) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+        @keyframes popIn { from { opacity: 0; transform: scale(0.95) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
         
         .item-info h4 { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
-        .item-info p { font-size: 13px; color: var(--text-sub); font-weight: 600; }
+        .item-info p { font-size: 12px; color: var(--text-sub); font-weight: 600; }
         .item-price { font-size: 18px; font-weight: 800; }
         
-        /* Итоговая сумма на экране чека */
-        .total-block {
-            text-align: right; margin-top: 10px;
-        }
+        .total-block { text-align: right; margin-top: 10px; }
         .total-block .label { font-size: 14px; color: var(--text-sub); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
-        .total-block .sum { font-size: 42px; font-weight: 800; color: var(--green); line-height: 1; margin-top: 4px; }
-        .total-block .discount-badge {
+        .total-block .sum { font-size: 44px; font-weight: 800; color: var(--green); line-height: 1; margin-top: 4px; }
+        .discount-badge {
             display: inline-block; background: var(--accent); color: #fff;
-            padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 800; margin-bottom: 8px;
+            padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 800; margin-bottom: 6px;
         }
 
-        /* ЗОНА УПРАВЛЕНИЯ (НИЖНЯЯ ПОЛОВИНА - SMART PAD) */
+        /* SMART PAD (НИЗ) */
         .smart-pad {
             background: var(--pad-bg); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
             border-radius: 32px 32px 0 0; padding: 24px 20px max(24px, env(safe-area-inset-bottom));
-            box-shadow: 0 -10px 40px rgba(0,0,0,0.2); transition: 0.3s ease;
+            box-shadow: 0 -10px 40px rgba(0,0,0,0.3); transition: 0.3s ease;
         }
 
-        /* Сетка кнопок (товары, скидки, оплата) */
-        .grid-layout {
-            display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
-        }
+        /* МАГИЯ ПАНЕЛЕЙ (ЖЕСТКАЯ ФИКСАЦИЯ СЕТКИ) */
+        .pad-section { display: none; }
+        .pad-section.active.grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+        .pad-section.active.block { display: block; }
+
         .pad-btn {
-            background: var(--btn-bg); border: none; border-radius: 20px;
-            padding: 16px 10px; display: flex; flex-direction: column; align-items: center; justify-content: center;
-            color: var(--text-main); cursor: pointer; transition: all 0.15s;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.03); height: 85px;
+            background: var(--btn-bg); border: none; border-radius: 20px; height: 85px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            color: var(--text-main); cursor: pointer; transition: transform 0.1s;
         }
-        .pad-btn:active { background: var(--btn-active); transform: scale(0.94); }
+        .pad-btn:active { background: var(--btn-active); transform: scale(0.92); }
         .pad-btn .icon { font-size: 24px; margin-bottom: 6px; }
-        .pad-btn .name { font-size: 12px; font-weight: 700; text-align: center; line-height: 1.1; }
+        .pad-btn .name { font-size: 12px; font-weight: 700; text-align: center; line-height: 1.1; padding: 0 4px; }
         
+        /* Цвета функциональных кнопок */
         .pad-btn.action { background: rgba(255, 45, 85, 0.1); color: var(--accent); }
         .pad-btn.pay { background: rgba(50, 215, 75, 0.1); color: var(--green); }
+        .pad-btn.action:active { background: rgba(255, 45, 85, 0.2); }
+        .pad-btn.pay:active { background: rgba(50, 215, 75, 0.2); }
 
-        /* Цифровая клавиатура (Numpad) */
-        .numpad { display: none; }
+        /* Цифровая клавиатура */
         .numpad-display {
             background: var(--glass-bg); border-radius: 20px; padding: 20px; text-align: center;
             margin-bottom: 16px; font-size: 28px; font-weight: 800; color: var(--green); border: 1px solid var(--glass-border);
@@ -148,52 +147,66 @@
         .num-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
         .num-btn {
             background: var(--btn-bg); border: none; border-radius: 20px; height: 65px;
-            font-size: 24px; font-weight: 600; color: var(--text-main); display: flex; justify-content: center; align-items: center;
+            font-size: 24px; font-weight: 600; color: var(--text-main);
         }
-        .num-btn:active { background: var(--btn-active); }
+        .num-btn:active { background: var(--btn-active); transform: scale(0.95); }
         .num-btn.done { background: var(--green); color: #fff; font-weight: 800; }
-        .num-btn.cancel { background: var(--accent); color: #fff; }
+        .num-btn.cancel { background: var(--accent); color: #fff; font-size: 18px; font-weight: 700; }
 
-        /* Модальные окна поверх всего (Отчет, Настройки) */
+        /* МОДАЛЬНЫЕ ОКНА */
         .overlay {
             display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6);
             backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); z-index: 100;
             justify-content: center; align-items: center; padding: 20px;
         }
         .modal-card {
-            background: var(--pad-bg); width: 100%; max-width: 400px; border-radius: 32px;
-            padding: 24px; border: 1px solid var(--glass-border); animation: popIn 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+            background: var(--pad-bg); width: 100%; max-width: 420px; border-radius: 32px;
+            padding: 24px; border: 1px solid var(--glass-border); animation: popIn 0.3s;
+            max-height: 85vh; display: flex; flex-direction: column;
         }
         .modal-title { font-size: 22px; font-weight: 800; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
         
+        .modal-body { overflow-y: auto; flex: 1; padding-bottom: 10px; }
+        .modal-body::-webkit-scrollbar { display: none; }
+
         .input-group { margin-bottom: 16px; }
         .input-group label { display: block; font-size: 12px; font-weight: 700; color: var(--text-sub); margin-bottom: 8px; text-transform: uppercase; }
-        .input-group input, .input-group textarea {
+        .input-group input {
             width: 100%; background: var(--btn-bg); border: 1px solid var(--glass-border); color: var(--text-main);
             padding: 16px; border-radius: 16px; font-size: 16px; font-weight: 600; outline: none;
         }
         
         .big-btn {
-            width: 100%; background: var(--green); color: #fff; border: none; padding: 18px;
-            border-radius: 20px; font-size: 17px; font-weight: 800; margin-top: 10px; cursor: pointer;
+            width: 100%; background: var(--btn-bg); color: var(--text-main); border: none; padding: 18px;
+            border-radius: 20px; font-size: 16px; font-weight: 800; margin-top: 10px; cursor: pointer; transition: 0.1s;
         }
-        .big-btn:active { opacity: 0.8; }
+        .big-btn:active { opacity: 0.7; transform: scale(0.97); }
+        .big-btn.green { background: var(--green); color: #fff; }
+        .big-btn.red { background: rgba(255,45,85,0.1); color: var(--accent); margin-top: 24px; }
 
-        .report-view { background: rgba(0,0,0,0.3); padding: 16px; border-radius: 16px; font-family: monospace; font-size: 13px; color: #32d74b; white-space: pre-wrap; max-height: 40vh; overflow-y: auto; margin-bottom: 16px; }
+        .report-view { background: rgba(0,0,0,0.3); padding: 16px; border-radius: 16px; font-family: monospace; font-size: 13px; color: #32d74b; white-space: pre-wrap; margin-bottom: 16px; }
+        
+        /* История */
+        .history-item {
+            background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 16px;
+            border-radius: 16px; margin-bottom: 10px; cursor: pointer;
+        }
+        .history-item h3 { font-size: 16px; margin-bottom: 4px; }
+        .history-item p { font-size: 13px; color: var(--text-sub); }
+        .history-details { display: none; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--glass-border); color: var(--green); font-family: monospace; font-size: 12px; white-space: pre-wrap; }
     </style>
 </head>
 <body data-theme="dark">
 
-    <!-- ТОП ПАНЕЛЬ (Только иконки) -->
     <div class="top-nav">
         <div class="icon-btn" onclick="toggleTheme()" id="themeBtn">☀️</div>
-        <div style="display:flex; gap:12px;">
-            <div class="icon-btn" onclick="openSettings()">⚙️</div>
+        <div class="top-group">
+            <div class="icon-btn" onclick="openModal('modalHistory')">🕰️</div>
+            <div class="icon-btn" onclick="openModal('modalSettings')">⚙️</div>
             <div class="icon-btn" onclick="openReport()">📄</div>
         </div>
     </div>
 
-    <!-- ВИЗУАЛЬНЫЙ ЧЕК -->
     <div class="receipt-zone">
         <div class="client-header">
             <div class="client-nav">
@@ -204,25 +217,23 @@
             <div class="icon-btn" onclick="addClient()" style="background: var(--accent); color:white; border:none;">+</div>
         </div>
 
-        <div class="items-list" id="receiptItems">
-            <!-- Товары чека -->
-        </div>
+        <div class="items-list" id="receiptItems"></div>
 
         <div class="total-block">
-            <div id="discountBadge" class="discount-badge" style="display:none;">Скидка 10%</div>
+            <div id="discountBadge" class="discount-badge" style="display:none;"></div>
             <div class="label" id="payMethodLabel">К ОПЛАТЕ (НАЛ)</div>
             <div class="sum" id="totalSum">0 ₽</div>
         </div>
     </div>
 
-    <!-- SMART PAD (КЛАВИАТУРА) -->
+    <!-- SMART PAD -->
     <div class="smart-pad">
         
-        <!-- Режим 1: Главное меню товаров -->
-        <div class="grid-layout" id="padMain"></div>
+        <!-- Главное меню товаров (СЕТКА) -->
+        <div class="pad-section active grid" id="padMain"></div>
 
-        <!-- Режим 2: Ввод веса (Numpad) -->
-        <div class="numpad" id="padWeight">
+        <!-- Ввод веса (БЛОК) -->
+        <div class="pad-section block" id="padWeight">
             <div class="numpad-display" id="weightDisplay">0 г = 0 ₽</div>
             <div class="num-grid">
                 <button class="num-btn" onclick="typeWeight('1')">1</button>
@@ -234,17 +245,17 @@
                 <button class="num-btn" onclick="typeWeight('7')">7</button>
                 <button class="num-btn" onclick="typeWeight('8')">8</button>
                 <button class="num-btn" onclick="typeWeight('9')">9</button>
-                <button class="num-btn cancel" onclick="cancelWeight()">✕</button>
+                <button class="num-btn cancel" onclick="cancelWeight()">Отмена</button>
                 <button class="num-btn" onclick="typeWeight('0')">0</button>
                 <button class="num-btn done" onclick="confirmWeight()">✓</button>
             </div>
         </div>
 
-        <!-- Режим 3: Выбор скидки -->
-        <div class="numpad" id="padDiscount">
-            <div class="numpad-display" style="color:var(--accent);">Размер скидки</div>
+        <!-- Скидка (БЛОК) -->
+        <div class="pad-section block" id="padDiscount">
+            <div class="numpad-display" style="color:var(--accent);">Скидка</div>
             <div class="num-grid" style="grid-template-columns: repeat(2, 1fr);">
-                <button class="num-btn" onclick="applyDiscount(0)">Без скидки (0%)</button>
+                <button class="num-btn" onclick="applyDiscount(0)">0%</button>
                 <button class="num-btn" onclick="applyDiscount(5)">5%</button>
                 <button class="num-btn" onclick="applyDiscount(10)">10%</button>
                 <button class="num-btn" onclick="applyDiscount(15)">15%</button>
@@ -253,58 +264,76 @@
             </div>
         </div>
 
-        <!-- Режим 4: Оплата -->
-        <div class="numpad" id="padPay">
-            <div class="numpad-display" style="color:var(--text-main);">Способ оплаты</div>
+        <!-- Оплата (БЛОК) -->
+        <div class="pad-section block" id="padPay">
+            <div class="numpad-display" style="color:var(--text-main);">Оплата</div>
             <div class="num-grid" style="grid-template-columns: repeat(2, 1fr);">
-                <button class="num-btn" style="background:rgba(50, 215, 75, 0.2); color:var(--green);" onclick="applyPay('Нал')">💵 Наличные</button>
-                <button class="num-btn" style="background:rgba(10, 132, 255, 0.2); color:#0a84ff;" onclick="applyPay('Перевод')">📱 Перевод</button>
-                <button class="num-btn" style="background:rgba(255, 159, 10, 0.2); color:#ff9f0a;" onclick="applyPay('Терминал')">💳 Терминал</button>
-                <button class="num-btn" style="background:rgba(255, 69, 58, 0.2); color:var(--accent);" onclick="applyPay('Долг')">📝 В долг</button>
+                <button class="num-btn" style="color:var(--green);" onclick="applyPay('Нал')">💵 Нал</button>
+                <button class="num-btn" style="color:#0a84ff;" onclick="applyPay('Перевод')">📱 Перевод</button>
+                <button class="num-btn" style="color:#ff9f0a;" onclick="applyPay('Терминал')">💳 Терминал</button>
+                <button class="num-btn" style="color:var(--accent);" onclick="applyPay('Долг')">📝 В долг</button>
+                <button class="num-btn cancel" style="grid-column: span 2;" onclick="closePads()">Отмена</button>
             </div>
         </div>
 
     </div>
 
-    <!-- ОВЕРЛЕЙ: НАСТРОЙКИ (Даты, расходы, каталог) -->
-    <div class="overlay" id="modalSettings">
+    <!-- ОКНО: НАСТРОЙКИ (И СБРОС) -->
+    <div class="overlay" id="modalSettings" style="display:none;">
         <div class="modal-card">
-            <div class="modal-title">Настройки <div class="icon-btn" onclick="closeModal('modalSettings')">✕</div></div>
-            <div class="input-group">
-                <label>Период смены</label>
-                <input type="text" id="inpDate" oninput="saveCore()">
-            </div>
-            <div class="input-group">
-                <label>Старт кассы (₽)</label>
-                <input type="text" id="inpCash" value="10.000" oninput="saveCore()">
-            </div>
-            <div class="input-group">
-                <label>Расходы смены</label>
-                <input type="text" id="inpExp" placeholder="не было" oninput="saveCore()">
-            </div>
-            <div class="input-group">
-                <label>Инфо по клубникам</label>
-                <input type="text" id="inpStraw" placeholder="продаж не было" oninput="saveCore()">
-            </div>
-            <div class="input-group">
-                <label>Заметка к текущему клиенту</label>
-                <input type="text" id="inpClientNote" placeholder="Имя клиента, номер машины..." oninput="updateClientMeta()">
+            <div class="modal-title">Смена <div class="icon-btn" onclick="closeModal('modalSettings')">✕</div></div>
+            <div class="modal-body">
+                <div class="input-group">
+                    <label>Период смены</label>
+                    <input type="text" id="inpDate" oninput="saveCore()">
+                </div>
+                <div class="input-group">
+                    <label>Старт кассы (₽)</label>
+                    <input type="text" id="inpCash" oninput="saveCore()">
+                </div>
+                <div class="input-group">
+                    <label>Расходы смены</label>
+                    <input type="text" id="inpExp" placeholder="не было" oninput="saveCore()">
+                </div>
+                <div class="input-group">
+                    <label>Инфо по клубникам</label>
+                    <input type="text" id="inpStraw" placeholder="продаж не было" oninput="saveCore()">
+                </div>
+                <div class="input-group">
+                    <label>Имя/Авто текущего клиента</label>
+                    <input type="text" id="inpClientNote" placeholder="..." oninput="updateClientMeta()">
+                </div>
+                
+                <button class="big-btn red" onclick="clearCurrentShift()">🚨 Сбросить смену (очистить данные)</button>
             </div>
         </div>
     </div>
 
-    <!-- ОВЕРЛЕЙ: ОТЧЕТ -->
-    <div class="overlay" id="modalReport">
-        <div class="modal-card" style="max-width: 500px;">
-            <div class="modal-title">Итог смены <div class="icon-btn" onclick="closeModal('modalReport')">✕</div></div>
-            <div class="report-view" id="reportOutput"></div>
-            <button class="big-btn" onclick="copyReport()">📋 Скопировать отчёт</button>
+    <!-- ОКНО: ОТЧЕТ И ЗАКРЫТИЕ СМЕНЫ -->
+    <div class="overlay" id="modalReport" style="display:none;">
+        <div class="modal-card">
+            <div class="modal-title">Отчёт <div class="icon-btn" onclick="closeModal('modalReport')">✕</div></div>
+            <div class="modal-body">
+                <div class="report-view" id="reportOutput"></div>
+                <button class="big-btn green" onclick="copyReport()">📋 Скопировать текст</button>
+                <button class="big-btn" style="margin-top:10px; background:rgba(50,215,75,0.2); color:var(--green);" onclick="endShiftAndSave()">📦 Завершить смену и в архив</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ОКНО: ИСТОРИЯ СМЕН -->
+    <div class="overlay" id="modalHistory" style="display:none;">
+        <div class="modal-card">
+            <div class="modal-title">Архив смен <div class="icon-btn" onclick="closeModal('modalHistory')">✕</div></div>
+            <div class="modal-body" id="historyList">
+                <!-- Сюда падают старые смены -->
+            </div>
         </div>
     </div>
 
     <script>
-        // Иконки для красоты (можно менять в настройках каталога потом)
-        let catalog = [
+        // База данных
+        const catalog = [
             { id: 1, name: "Клубника ШК", icon: "🍓", price: 900, type: "piece" },
             { id: 2, name: "Ананас ШК", icon: "🍍", price: 1200, type: "piece" },
             { id: 3, name: "Роза", icon: "🌹", price: 250, type: "piece" },
@@ -313,30 +342,34 @@
             { id: 6, name: "Доставка", icon: "🚗", price: 350, type: "piece" }
         ];
 
-        let clients = [ { id: 1, note: '', items: [], pay: 'Нал', discount: 0, time: '' } ];
+        // Состояние приложения
+        let app = {
+            theme: 'dark',
+            shift: {
+                date: '', cash: '10.000', exp: '', straw: '',
+                clients: [{ id: 1, note: '', items: [], pay: 'Нал', discount: 0, time: '' }]
+            },
+            history: [] // { date: '...', total: 0, report: '...' }
+        };
         let activeIndex = 0;
-        
-        // Переменные для Numpad
         let currentWeightStr = "";
         let activeWeightProduct = null;
 
+        // Инициализация
         function init() {
-            const ls = localStorage.getItem('pos_x');
-            if (ls) {
-                const d = JSON.parse(ls);
-                clients = d.clients || clients;
-                document.getElementById('inpDate').value = d.date || getAutoDate();
-                document.getElementById('inpCash').value = d.cash || '10.000';
-                document.getElementById('inpExp').value = d.exp || '';
-                document.getElementById('inpStraw').value = d.straw || '';
+            const saved = localStorage.getItem('pos_v2');
+            if (saved) {
+                app = JSON.parse(saved);
+                // Защита, если клиенты пустые
+                if(!app.shift.clients || app.shift.clients.length === 0) resetShiftData();
             } else {
-                document.getElementById('inpDate').value = getAutoDate();
+                app.shift.date = getAutoDate();
             }
             
-            const theme = localStorage.getItem('pos_theme') || 'dark';
-            document.body.setAttribute('data-theme', theme);
-            document.getElementById('themeBtn').innerText = theme === 'dark' ? '☀️' : '🌙';
-
+            document.body.setAttribute('data-theme', app.theme);
+            document.getElementById('themeBtn').innerText = app.theme === 'dark' ? '☀️' : '🌙';
+            
+            syncInputsToApp();
             renderPad();
             renderReceipt();
         }
@@ -348,36 +381,36 @@
         }
 
         function toggleTheme() {
-            const t = document.body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-            document.body.setAttribute('data-theme', t);
-            document.getElementById('themeBtn').innerText = t === 'dark' ? '☀️' : '🌙';
-            localStorage.setItem('pos_theme', t);
+            app.theme = app.theme === 'dark' ? 'light' : 'dark';
+            document.body.setAttribute('data-theme', app.theme);
+            document.getElementById('themeBtn').innerText = app.theme === 'dark' ? '☀️' : '🌙';
+            saveCore();
         }
 
         function saveCore() {
-            localStorage.setItem('pos_x', JSON.stringify({
-                clients,
-                date: document.getElementById('inpDate').value,
-                cash: document.getElementById('inpCash').value,
-                exp: document.getElementById('inpExp').value,
-                straw: document.getElementById('inpStraw').value
-            }));
+            // Забираем данные из инпутов
+            app.shift.date = document.getElementById('inpDate').value || app.shift.date;
+            app.shift.cash = document.getElementById('inpCash').value || app.shift.cash;
+            app.shift.exp = document.getElementById('inpExp').value;
+            app.shift.straw = document.getElementById('inpStraw').value;
+            localStorage.setItem('pos_v2', JSON.stringify(app));
         }
 
-        // --- ЛОГИКА КЛИЕНТОВ ---
-        function getC() { return clients[activeIndex]; }
+        function syncInputsToApp() {
+            document.getElementById('inpDate').value = app.shift.date;
+            document.getElementById('inpCash').value = app.shift.cash;
+            document.getElementById('inpExp').value = app.shift.exp;
+            document.getElementById('inpStraw').value = app.shift.straw;
+        }
+
+        // --- КЛИЕНТЫ ---
+        function getC() { return app.shift.clients[activeIndex]; }
         
-        function nextClient() { 
-            if(activeIndex < clients.length - 1) activeIndex++; 
-            renderReceipt(); 
-        }
-        function prevClient() { 
-            if(activeIndex > 0) activeIndex--; 
-            renderReceipt(); 
-        }
+        function nextClient() { if(activeIndex < app.shift.clients.length - 1) { activeIndex++; renderReceipt(); } }
+        function prevClient() { if(activeIndex > 0) { activeIndex--; renderReceipt(); } }
         function addClient() {
-            clients.push({ id: Date.now(), note: '', items: [], pay: 'Нал', discount: 0, time: '' });
-            activeIndex = clients.length - 1;
+            app.shift.clients.push({ id: Date.now(), note: '', items: [], pay: 'Нал', discount: 0, time: '' });
+            activeIndex = app.shift.clients.length - 1;
             renderReceipt(); saveCore();
         }
         function updateClientMeta() {
@@ -385,47 +418,32 @@
             saveCore(); renderReceipt();
         }
 
-        // --- ОТРИСОВКА ЧЕКА ---
+        // --- ЧЕК ---
         function renderReceipt() {
             const c = getC();
-            
-            // Заголовок
-            let title = `Клиент ${activeIndex + 1}`;
-            if(c.note) title += ` (${c.note})`;
-            document.getElementById('clientName').innerText = title;
+            document.getElementById('clientName').innerText = c.note ? `Клиент ${activeIndex + 1} (${c.note})` : `Клиент ${activeIndex + 1}`;
             document.getElementById('inpClientNote').value = c.note || '';
 
-            // Статусы
             document.getElementById('payMethodLabel').innerText = `К ОПЛАТЕ (${c.pay})`;
             const badge = document.getElementById('discountBadge');
-            if(c.discount > 0) {
-                badge.style.display = 'inline-block';
-                badge.innerText = `СКИДКА ${c.discount}%`;
-            } else {
-                badge.style.display = 'none';
-            }
+            if(c.discount > 0) { badge.style.display = 'inline-block'; badge.innerText = `СКИДКА ${c.discount}%`; }
+            else { badge.style.display = 'none'; }
 
-            // Список товаров
             const list = document.getElementById('receiptItems');
             list.innerHTML = '';
             let rawSum = 0;
 
             if (c.items.length === 0) {
-                list.innerHTML = `<div style="text-align:center; padding:40px 20px; color:var(--text-sub); font-size:15px; font-weight:600;">Чек пуст. Нажмите на товар внизу.</div>`;
+                list.innerHTML = `<div style="text-align:center; padding:40px 20px; color:var(--text-sub); font-size:14px; font-weight:600;">Чек пуст. Нажмите на товар ниже.</div>`;
             } else {
                 c.items.forEach((it, idx) => {
                     rawSum += it.sum;
                     list.innerHTML += `
                         <div class="item-row" onclick="removeItem(${idx})">
-                            <div class="item-info">
-                                <h4>${it.icon} ${it.name}</h4>
-                                <p>${it.val} <span style="font-size:10px; opacity:0.6;">(нажми, чтобы удалить)</span></p>
-                            </div>
+                            <div class="item-info"><h4>${it.icon} ${it.name}</h4><p>${it.val} <span style="font-size:10px; opacity:0.6;">(удали ✕)</span></p></div>
                             <div class="item-price">${it.sum} ₽</div>
-                        </div>
-                    `;
+                        </div>`;
                 });
-                // Прокрутка вниз при добавлении
                 setTimeout(() => list.scrollTop = list.scrollHeight, 50);
             }
 
@@ -433,78 +451,59 @@
             document.getElementById('totalSum').innerText = finalSum > 0 ? `${finalSum.toLocaleString('ru-RU')} ₽` : '0 ₽';
         }
 
-        function removeItem(idx) {
-            getC().items.splice(idx, 1);
-            saveCore(); renderReceipt();
-        }
+        function removeItem(idx) { getC().items.splice(idx, 1); saveCore(); renderReceipt(); }
 
-        // --- SMART PAD (Клавиатура) ---
+        // --- КЛАВИАТУРА И ЭКРАНЫ ---
         function renderPad() {
             const pad = document.getElementById('padMain');
             pad.innerHTML = '';
             
-            // Рендер товаров
             catalog.forEach(item => {
                 pad.innerHTML += `
                     <button class="pad-btn" onclick="handleProductClick(${item.id})">
                         <div class="icon">${item.icon}</div>
                         <div class="name">${item.name}<br><span style="font-size:10px; opacity:0.6">${item.price}₽</span></div>
-                    </button>
-                `;
+                    </button>`;
             });
 
-            // Рендер кнопок управления чеком
             pad.innerHTML += `
-                <button class="pad-btn action" onclick="showPad('padDiscount')">
-                    <div class="icon">🏷️</div><div class="name">Скидка</div>
-                </button>
-                <button class="pad-btn action" onclick="getC().time = new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}); saveCore(); renderReceipt();">
-                    <div class="icon">🕒</div><div class="name">Время</div>
-                </button>
-                <button class="pad-btn pay" onclick="showPad('padPay')">
-                    <div class="icon">💳</div><div class="name">Оплата</div>
-                </button>
+                <button class="pad-btn action" onclick="showPad('padDiscount')"><div class="icon">🏷️</div><div class="name">Скидка</div></button>
+                <button class="pad-btn action" onclick="setNowTime()"><div class="icon">🕒</div><div class="name">Время</div></button>
+                <button class="pad-btn pay" onclick="showPad('padPay')"><div class="icon">💳</div><div class="name">Оплата</div></button>
             `;
         }
 
+        function setNowTime() {
+            getC().time = new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+            saveCore(); renderReceipt();
+        }
+
+        // БЕЗОПАСНОЕ ПЕРЕКЛЮЧЕНИЕ ПАНЕЛЕЙ (Фикс бага сетки)
         function showPad(id) {
-            document.getElementById('padMain').style.display = 'none';
-            document.getElementById('padWeight').style.display = 'none';
-            document.getElementById('padDiscount').style.display = 'none';
-            document.getElementById('padPay').style.display = 'none';
-            document.getElementById(id).style.display = 'block';
+            // Убираем класс active у всех
+            document.querySelectorAll('.pad-section').forEach(el => el.classList.remove('active'));
+            // Добавляем классу active нужному id
+            document.getElementById(id).classList.add('active');
         }
         function closePads() { showPad('padMain'); }
 
-        // Логика нажатия на товар
         function handleProductClick(id) {
             const item = catalog.find(x => x.id === id);
             if (item.type === 'piece') {
-                // Моментальное добавление 1 шт
                 getC().items.push({ icon: item.icon, name: item.name, val: '1 шт', sum: item.price });
                 saveCore(); renderReceipt();
             } else {
-                // Открытие весового Numpad
-                activeWeightProduct = item;
-                currentWeightStr = "";
-                updateWeightDisplay();
+                activeWeightProduct = item; currentWeightStr = ""; updateWeightDisplay();
                 showPad('padWeight');
             }
         }
 
-        // Логика Numpad
         function typeWeight(num) {
             if (currentWeightStr.length < 5) currentWeightStr += num;
             updateWeightDisplay();
         }
-        function cancelWeight() {
-            if(currentWeightStr.length > 0) {
-                currentWeightStr = currentWeightStr.slice(0, -1);
-                updateWeightDisplay();
-            } else {
-                closePads();
-            }
-        }
+        function cancelWeight() { currentWeightStr = ""; closePads(); }
+        
         function updateWeightDisplay() {
             const grams = parseInt(currentWeightStr) || 0;
             const sum = Math.round((grams / 1000) * activeWeightProduct.price);
@@ -520,29 +519,31 @@
             closePads();
         }
 
-        // Применение скидок и оплат
         function applyDiscount(val) { getC().discount = val; saveCore(); renderReceipt(); closePads(); }
         function applyPay(val) { getC().pay = val; saveCore(); renderReceipt(); closePads(); }
 
-        // --- МОДАЛКИ И ОТЧЕТ ---
-        function openSettings() { document.getElementById('modalSettings').style.display = 'flex'; }
+        // --- ОКНА, ОТЧЕТ И СБРОС ---
+        function openModal(id) { 
+            if(id === 'modalHistory') renderHistory();
+            document.getElementById(id).style.display = 'flex'; 
+        }
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
-        function generateReport() {
-            let txt = `${document.getElementById('inpDate').value}\nКасса: ${document.getElementById('inpCash').value}\n\n`;
-            let n = 0, p = 0;
+        function generateReportText() {
+            let txt = `${app.shift.date}\nКасса: ${app.shift.cash}\n\n`;
+            let n = 0, p = 0, totalShift = 0;
 
-            clients.forEach((c, idx) => {
+            app.shift.clients.forEach((c, idx) => {
                 if(c.items.length === 0) return;
                 
                 let rawSum = 0;
                 let cTxt = c.note ? `Клиент: ${c.note}\n` : `Клиент: ${idx+1}\n`;
-                
                 c.items.forEach(it => { cTxt += `${it.name} - ${it.val}\n`; rawSum += it.sum; });
                 
                 let finalSum = Math.round(rawSum * (1 - c.discount / 100));
+                totalShift += finalSum;
+
                 if (c.discount > 0) cTxt += `(Скидка ${c.discount}%)\n`;
-                
                 cTxt += `(${c.pay} ${finalSum}`;
                 if(c.time) cTxt += ` ${c.time}`;
                 cTxt += `)\n\n`;
@@ -552,20 +553,78 @@
                 if(c.pay === 'Перевод' || c.pay === 'Терминал') p += finalSum;
             });
 
-            const e = document.getElementById('inpExp').value || 'не было';
-            const s = document.getElementById('inpStraw').value || 'продаж не было';
-
+            const e = app.shift.exp || 'не было';
+            const s = app.shift.straw || 'продаж не было';
             txt += `Расход: ${e}\n\nНал: ${n > 0 ? n.toLocaleString('ru-RU') : '0'}\nПеревод: ${p > 0 ? p.toLocaleString('ru-RU') : '0'}\n\nПо клубникам: ${s}`;
-            return txt;
+            return { text: txt, total: totalShift };
         }
 
         function openReport() {
-            document.getElementById('reportOutput').innerText = generateReport();
-            document.getElementById('modalReport').style.display = 'flex';
+            document.getElementById('reportOutput').innerText = generateReportText().text;
+            openModal('modalReport');
         }
 
         function copyReport() {
-            navigator.clipboard.writeText(generateReport()).then(()=>alert('✅ Отчёт скопирован!')).catch(()=>alert('Ошибка копирования'));
+            navigator.clipboard.writeText(generateReportText().text).then(()=>alert('✅ Отчёт скопирован!')).catch(()=>alert('Ошибка'));
+        }
+
+        // --- УПРАВЛЕНИЕ ДАННЫМИ (ОЧИСТКА И АРХИВ) ---
+        function resetShiftData() {
+            app.shift.date = getAutoDate();
+            app.shift.cash = '10.000'; app.shift.exp = ''; app.shift.straw = '';
+            app.shift.clients = [{ id: Date.now(), note: '', items: [], pay: 'Нал', discount: 0, time: '' }];
+            activeIndex = 0;
+            syncInputsToApp(); saveCore(); renderReceipt();
+        }
+
+        function clearCurrentShift() {
+            if(confirm('🚨 Вы уверены, что хотите полностью очистить текущую смену? Данные не сохранятся в архив.')) {
+                resetShiftData();
+                closeModal('modalSettings');
+            }
+        }
+
+        function endShiftAndSave() {
+            if(confirm('📦 Завершить смену? Отчёт будет сохранен в архив, а текущий экран очистится.')) {
+                const rep = generateReportText();
+                if(rep.total > 0 || app.shift.exp !== '') {
+                    app.history.unshift({
+                        id: Date.now(),
+                        date: app.shift.date,
+                        total: rep.total,
+                        report: rep.text
+                    });
+                }
+                resetShiftData();
+                closeModal('modalReport');
+            }
+        }
+
+        // --- ИСТОРИЯ СМЕН ---
+        function renderHistory() {
+            const list = document.getElementById('historyList');
+            list.innerHTML = '';
+            if(app.history.length === 0) {
+                list.innerHTML = '<div style="text-align:center; color:var(--text-sub); margin-top:20px;">Архив пуст. Завершите смену, чтобы сохранить отчёт сюда.</div>';
+                return;
+            }
+
+            app.history.forEach((h, i) => {
+                list.innerHTML += `
+                    <div class="history-item" onclick="toggleHist(${i})">
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <h3>Смена: ${h.date}</h3>
+                            <div style="font-weight:800; color:var(--green);">${h.total.toLocaleString('ru-RU')} ₽</div>
+                        </div>
+                        <p>Нажми, чтобы посмотреть детали</p>
+                        <div class="history-details" id="hist_det_${i}">${h.report}</div>
+                    </div>`;
+            });
+        }
+
+        function toggleHist(i) {
+            const el = document.getElementById(`hist_det_${i}`);
+            el.style.display = el.style.display === 'block' ? 'none' : 'block';
         }
 
         window.onload = init;
