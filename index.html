@@ -4,122 +4,542 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Aura POS</title>
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-
     <style>
         :root {
-            --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            --glass-bg: rgba(255, 255, 255, 0.75);
-            --glass-card: rgba(255, 255, 255, 0.85);
+            --bg-gradient: #f0f2f5;
+            --glass-card: #ffffff;
             --text-main: #111827;
             --text-muted: #6b7280;
             --primary: #6366f1;
-            --primary-gradient: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
             --accent-green: #10b981;
             --accent-red: #ef4444;
-            --border: rgba(255, 255, 255, 0.6);
-            --shadow: 0 10px 30px 0 rgba(31, 38, 135, 0.07);
+            --border: #e5e7eb;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
         }
 
         [data-theme="dark"] {
-            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
-            --glass-bg: rgba(15, 23, 42, 0.75);
-            --glass-card: rgba(30, 41, 59, 0.75);
+            --bg-gradient: #0f172a;
+            --glass-card: #1e293b;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
             --primary: #818cf8;
-            --primary-gradient: linear-gradient(135deg, #818cf8 0%, #6366f1 100%);
             --accent-green: #34d399;
             --accent-red: #f87171;
-            --border: rgba(255, 255, 255, 0.08);
-            --shadow: 0 10px 30px 0 rgba(0, 0, 0, 0.3);
+            --border: #334155;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
         }
 
-        * {
-            box-sizing: border-box; margin: 0; padding: 0;
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            -webkit-tap-highlight-color: transparent; user-select: none;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; -webkit-tap-highlight-color: transparent; }
 
         body {
-            background: var(--bg-gradient); background-attachment: fixed;
-            color: var(--text-main); height: 100dvh; display: flex; flex-direction: column;
-            overflow: hidden; transition: background 0.4s ease;
+            background: var(--bg-gradient); color: var(--text-main);
+            height: 100vh; height: 100dvh; display: flex; flex-direction: column; overflow: hidden;
         }
 
         header {
             display: flex; justify-content: space-between; align-items: center;
-            padding: max(14px, env(safe-area-inset-top)) 20px 10px 20px;
-            z-index: 10;
+            padding: 12px 16px; background: var(--glass-card); border-bottom: 1px solid var(--border);
         }
-        .brand { font-size: 20px; font-weight: 800; letter-spacing: -0.5px; background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .header-tools { display: flex; gap: 10px; }
+        .brand { font-size: 18px; font-weight: 800; color: var(--primary); }
+        .header-tools { display: flex; gap: 8px; }
         .btn-icon {
-            width: 42px; height: 42px; border-radius: 14px; background: var(--glass-card);
+            width: 38px; height: 38px; border-radius: 10px; background: var(--bg-gradient);
             border: 1px solid var(--border); display: flex; align-items: center; justify-content: center;
-            font-size: 18px; cursor: pointer; box-shadow: var(--shadow); backdrop-filter: blur(10px);
-            transition: transform 0.2s; color: var(--text-main);
+            font-size: 16px; cursor: pointer; color: var(--text-main);
         }
-        .btn-icon:active { transform: scale(0.9); }
 
         .workspace {
-            flex: 1; display: flex; flex-direction: column; padding: 0 16px 12px 16px;
-            overflow: hidden; gap: 12px; max-width: 600px; width: 100%; margin: 0 auto;
+            flex: 1; display: flex; flex-direction: column; padding: 12px; gap: 10px; overflow: hidden; max-width: 600px; width: 100%; margin: 0 auto;
         }
 
         /* ТАБЫ КЛИЕНТОВ */
-        .orders-bar {
-            display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none;
+        .clients-bar {
+            display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px; flex-shrink: 0;
         }
-        .orders-bar::-webkit-scrollbar { display: none; }
-        
-        .order-tab {
+        .client-tab {
             background: var(--glass-card); border: 1px solid var(--border);
-            padding: 8px 16px; border-radius: 14px; font-size: 13px; font-weight: 700;
-            white-space: nowrap; cursor: pointer; box-shadow: var(--shadow); backdrop-filter: blur(10px);
-            transition: all 0.2s; color: var(--text-muted); display: flex; align-items: center; gap: 6px;
+            padding: 8px 14px; border-radius: 10px; font-size: 13px; font-weight: 700;
+            white-space: nowrap; cursor: pointer; color: var(--text-muted); display: flex; align-items: center; gap: 6px;
         }
-        .order-tab.active { background: var(--primary-gradient); color: #fff; border-color: transparent; }
-        .order-tab-add { background: var(--primary); color: #fff; border: none; }
+        .client-tab.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+        .client-tab-add { background: var(--primary); color: #fff; border: none; }
 
+        /* КАРТОЧКА */
         .receipt-card {
             flex: 1; background: var(--glass-card); border: 1px solid var(--border);
-            border-radius: 24px; display: flex; flex-direction: column; padding: 16px;
-            box-shadow: var(--shadow); backdrop-filter: blur(20px); overflow: hidden;
+            border-radius: 16px; display: flex; flex-direction: column; padding: 12px; overflow: hidden; box-shadow: var(--shadow);
         }
 
         .receipt-header-row {
-            display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;
-            padding-bottom: 8px; border-bottom: 1px solid var(--border);
+            display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;
+            padding-bottom: 6px; border-bottom: 1px solid var(--border);
         }
         .client-input {
-            background: transparent; border: none; font-size: 16px; font-weight: 700; color: var(--text-main);
-            outline: none; width: 60%;
+            background: transparent; border: none; font-size: 15px; font-weight: 700; color: var(--text-main); outline: none; width: 60%;
         }
         .pay-badge {
-            background: rgba(99, 102, 241, 0.1); color: var(--primary); padding: 6px 12px;
-            border-radius: 10px; font-size: 12px; font-weight: 700; cursor: pointer;
+            background: rgba(99, 102, 241, 0.1); color: var(--primary); padding: 4px 10px;
+            border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer;
         }
 
         .cart-list {
-            flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; padding-right: 2px;
+            flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 6px;
         }
-        .cart-list::-webkit-scrollbar { width: 4px; }
-        .cart-list::-webkit-scrollbar-thumb { background: var(--text-muted); border-radius: 4px; opacity: 0.3; }
 
         .cart-item {
             display: flex; justify-content: space-between; align-items: center;
-            background: var(--bg-gradient); padding: 10px 12px; border-radius: 14px;
-            border: 1px solid var(--border);
+            background: var(--bg-gradient); padding: 8px 10px; border-radius: 10px; border: 1px solid var(--border);
         }
-        .cart-item-info h5 { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
-        .cart-item-info span { font-size: 12px; color: var(--text-muted); font-weight: 600; }
+        .cart-item-info h5 { font-size: 13px; font-weight: 700; margin-bottom: 2px; }
+        .cart-item-info span { font-size: 11px; color: var(--text-muted); font-weight: 600; }
         
-        .cart-item-controls { display: flex; align-items: center; gap: 8px; }
+        .cart-item-controls { display: flex; align-items: center; gap: 6px; }
         .mini-btn {
-            width: 28px; height: 28px; border-radius: 8px; border: none; background: var(--glass-card);
-            color: var(--text-main); font-weight: 700; display: flex; align-items: center; justify-content: center;
-            cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            width: 26px; height: 26px; border-radius: 6px; border: 1px solid var(--border); background: var(--glass-card);
+            color: var(--text-main); font-weight: 700; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 12px;
         }
-        .mini-btn.del {
+        .mini-btn.del { color: var(--accent-red); }
+
+        .receipt-footer {
+            margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border);
+            display: flex; justify-content: space-between; align-items: flex-end;
+        }
+        .total-label { font-size: 10px; text-transform: uppercase; color: var(--text-muted); font-weight: 700; }
+        .total-sum { font-size: 24px; font-weight: 900; }
+
+        /* КАТАЛОГ */
+        .catalog-container {
+            height: 190px; background: var(--glass-card); border: 1px solid var(--border);
+            border-radius: 16px; padding: 8px; display: grid; grid-template-columns: repeat(3, 1fr);
+            gap: 6px; overflow-y: auto; flex-shrink: 0; box-shadow: var(--shadow);
+        }
+
+        .product-tile {
+            background: var(--bg-gradient); border: 1px solid var(--border); border-radius: 12px;
+            padding: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center;
+            cursor: pointer; text-align: center;
+        }
+        .product-tile .icon { font-size: 20px; margin-bottom: 2px; }
+        .product-tile .name { font-size: 11px; font-weight: 700; color: var(--text-main); }
+        .product-tile .price { font-size: 9px; font-weight: 600; color: var(--text-muted); margin-top: 1px; }
+        .product-tile.add-tile { border: 2px dashed var(--primary); background: rgba(99, 102, 241, 0.05); }
+        .product-tile.add-tile .name { color: var(--primary); }
+
+        /* МОДАЛКИ */
+        .overlay {
+            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4);
+            z-index: 100; justify-content: center; align-items: center; padding: 16px;
+        }
+        .modal {
+            background: var(--glass-card); width: 100%; max-width: 340px; border-radius: 20px;
+            padding: 20px; border: 1px solid var(--border); box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .modal-title { font-size: 16px; font-weight: 800; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; }
+        .input-box, .select-box {
+            width: 100%; background: var(--bg-gradient); border: 1px solid var(--border);
+            padding: 12px; border-radius: 12px; font-size: 14px; color: var(--text-main); outline: none; margin-bottom: 10px;
+        }
+        .btn-action {
+            width: 100%; padding: 12px; border-radius: 12px; border: none; font-size: 14px; font-weight: 700; cursor: pointer;
+        }
+        .btn-action.primary { background: var(--primary); color: #fff; margin-top: 4px; }
+        .btn-action.secondary { background: var(--bg-gradient); color: var(--text-main); border: 1px solid var(--border); margin-bottom: 6px; text-align: left; }
+        
+        .preset-weights { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 10px; }
+        .preset-btn { background: var(--bg-gradient); border: 1px solid var(--border); padding: 8px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 12px; text-align: center; color: var(--text-main); }
+        
+        .report-box {
+            background: var(--bg-gradient); padding: 10px; border-radius: 10px; font-family: monospace;
+            font-size: 11px; max-height: 40vh; overflow-y: auto; border: 1px solid var(--border); margin-bottom: 12px; white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body data-theme="light">
+
+    <header>
+        <div class="brand">AURA POS</div>
+        <div class="header-tools">
+            <div class="btn-icon" onclick="toggleTheme()" id="themeBtn">🌙</div>
+            <div class="btn-icon" onclick="openReport()">📊</div>
+            <div class="btn-icon" onclick="openSettings()">⚙️</div>
+        </div>
+    </header>
+
+    <div class="workspace">
+        <div class="clients-bar" id="clientsBar">
+            <button class="client-tab client-tab-add" onclick="addNewClient()">+ Клиент</button>
+        </div>
+
+        <div class="receipt-card">
+            <div class="receipt-header-row">
+                <input type="text" class="client-input" id="clientNameInput" placeholder="Имя клиента..." oninput="updateClientName()">
+                <div class="pay-badge" id="payBadge" onclick="openModal('modalPay')">💵 Нал</div>
+            </div>
+
+            <div class="cart-list" id="cartList"></div>
+
+            <div class="receipt-footer">
+                <div>
+                    <div class="total-label">Скидка: <span id="discountLabel" style="color:var(--accent-red)">0%</span></div>
+                    <button class="mini-btn" style="width:auto; padding:0 6px; font-size:10px; margin-top:2px;" onclick="openModal('modalDiscount')">🏷️ Изменить</button>
+                </div>
+                <div style="text-align: right;">
+                    <div class="total-label">ИТОГО</div>
+                    <div class="total-sum" id="totalSum">0 ₽</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="catalog-container" id="catalogGrid"></div>
+    </div>
+
+    <!-- МОДАЛКА ВЕСА / ДОСТАВКИ -->
+    <div class="overlay" id="modalWeight">
+        <div class="modal">
+            <div class="modal-title"><span id="weightModalTitle">Укажите значение</span> <div class="btn-icon" style="width:28px; height:28px; font-size:12px;" onclick="closeModal('modalWeight')">✕</div></div>
+            <div class="preset-weights" id="weightPresetsContainer">
+                <div class="preset-btn" onclick="selectWeightPreset(250)">250 г</div>
+                <div class="preset-btn" onclick="selectWeightPreset(500)">500 г</div>
+                <div class="preset-btn" onclick="selectWeightPreset(1000)">1 кг</div>
+            </div>
+            <input type="number" class="input-box" id="weightInput" placeholder="Введите число...">
+            <button class="btn-action primary" onclick="confirmWeightItem()">Добавить в чек</button>
+        </div>
+    </div>
+
+    <!-- МОДАЛКА ДОБАВЛЕНИЯ ТОВАРА -->
+    <div class="overlay" id="modalAddProduct">
+        <div class="modal">
+            <div class="modal-title">Новый товар <div class="btn-icon" style="width:28px; height:28px; font-size:12px;" onclick="closeModal('modalAddProduct')">✕</div></div>
+            <input type="text" class="input-box" id="newProdName" placeholder="Название...">
+            <input type="number" class="input-box" id="newProdPrice" placeholder="Цена (₽)...">
+            <select class="select-box" id="newProdType">
+                <option value="piece">Штучный</option>
+                <option value="weight">Весовой (в граммах)</option>
+                <option value="delivery">Произвольная доставка</option>
+            </select>
+            <button class="btn-action primary" onclick="saveNewProduct()">Добавить в каталог</button>
+        </div>
+    </div>
+
+    <!-- МОДАЛКА ОПЛАТЫ -->
+    <div class="overlay" id="modalPay">
+        <div class="modal">
+            <div class="modal-title">Оплата <div class="btn-icon" style="width:28px; height:28px; font-size:12px;" onclick="closeModal('modalPay')">✕</div></div>
+            <button class="btn-action secondary" style="color:var(--accent-green)" onclick="setPay('Нал')">💵 Наличные</button>
+            <button class="btn-action secondary" style="color:var(--primary)" onclick="setPay('Перевод')">📱 Перевод</button>
+            <button class="btn-action secondary" style="color:#f59e0b" onclick="setPay('Терминал')">💳 Терминал</button>
+            <button class="btn-action secondary" style="color:var(--accent-red)" onclick="setPay('Долг')">📝 В долг</button>
+        </div>
+    </div>
+
+    <!-- МОДАЛКА СКИДКИ -->
+    <div class="overlay" id="modalDiscount">
+        <div class="modal">
+            <div class="modal-title">Скидка <div class="btn-icon" style="width:28px; height:28px; font-size:12px;" onclick="closeModal('modalDiscount')">✕</div></div>
+            <div class="preset-weights" style="grid-template-columns: repeat(3, 1fr);">
+                <div class="preset-btn" onclick="setDiscount(0)">0%</div>
+                <div class="preset-btn" onclick="setDiscount(5)">5%</div>
+                <div class="preset-btn" onclick="setDiscount(10)">10%</div>
+                <div class="preset-btn" onclick="setDiscount(15)">15%</div>
+                <div class="preset-btn" onclick="setDiscount(20)">20%</div>
+                <div class="preset-btn" onclick="setDiscount(25)">25%</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- МОДАЛКА ОТЧЕТА -->
+    <div class="overlay" id="modalReport">
+        <div class="modal">
+            <div class="modal-title">Отчет смены <div class="btn-icon" style="width:28px; height:28px; font-size:12px;" onclick="closeModal('modalReport')">✕</div></div>
+            <div class="report-box" id="reportContent"></div>
+            <button class="btn-action primary" onclick="copyReport()">📋 Скопировать</button>
+        </div>
+    </div>
+
+    <!-- МОДАЛКА НАСТРОЕК -->
+    <div class="overlay" id="modalSettings">
+        <div class="modal">
+            <div class="modal-title">Настройки <div class="btn-icon" style="width:28px; height:28px; font-size:12px;" onclick="closeModal('modalSettings')">✕</div></div>
+            <button class="btn-action secondary" style="color:var(--accent-red); text-align:center;" onclick="resetAllData()">🚨 Сбросить смену</button>
+        </div>
+    </div>
+
+    <script>
+        let catalog = [
+            { id: 1, name: "Клубника ШК", icon: "🍓", price: 900, type: "piece" },
+            { id: 2, name: "Ананас ШК", icon: "🍍", price: 1200, type: "piece" },
+            { id: 3, name: "Роза", icon: "🌹", price: 250, type: "piece" },
+            { id: 4, name: "Клубника (кг)", icon: "⚖️", price: 600, type: "weight" },
+            { id: 5, name: "Доставка", icon: "🚗", price: 0, type: "delivery" }
+        ];
+
+        let state = {
+            theme: 'light',
+            activeClient: 0,
+            clients: [{ id: 1, name: 'Клиент 1', items: [], pay: 'Нал', discount: 0 }]
+        };
+
+        let activeProductForModal = null;
+
+        function init() {
+            try {
+                const saved = localStorage.getItem('aura_pos_v3');
+                if (saved) state = JSON.parse(saved);
+                const savedCat = localStorage.getItem('aura_cat_v3');
+                if (savedCat) catalog = JSON.parse(savedCat);
+            } catch(e) {}
+
+            applyTheme();
+            renderClientsBar();
+            renderCatalog();
+            renderActiveClient();
+        }
+
+        function saveData() {
+            try {
+                localStorage.setItem('aura_pos_v3', JSON.stringify(state));
+            } catch(e) {}
+        }
+
+        function saveCatalog() {
+            try {
+                localStorage.setItem('aura_cat_v3', JSON.stringify(catalog));
+            } catch(e) {}
+        }
+
+        function applyTheme() {
+            document.body.setAttribute('data-theme', state.theme);
+            document.getElementById('themeBtn').innerText = state.theme === 'dark' ? '☀️' : '🌙';
+        }
+
+        function toggleTheme() {
+            state.theme = state.theme === 'dark' ? 'light' : 'dark';
+            applyTheme(); saveData();
+        }
+
+        function openModal(id) { document.getElementById(id).style.display = 'flex'; }
+        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+        function openSettings() { openModal('modalSettings'); }
+
+        // КЛИЕНТЫ
+        function renderClientsBar() {
+            const bar = document.getElementById('clientsBar');
+            bar.innerHTML = '';
+            state.clients.forEach((cli, idx) => {
+                bar.innerHTML += `
+                    <div class="client-tab ${idx === state.activeClient ? 'active' : ''}" onclick="switchClient(${idx})">
+                        ${cli.name || ('Клиент ' + (idx+1))} 
+                        ${state.clients.length > 1 ? `<span onclick="event.stopPropagation(); removeClient(${idx})" style="opacity:0.6; margin-left:4px;">✕</span>` : ''}
+                    </div>
+                `;
+            });
+            bar.innerHTML += `<button class="client-tab client-tab-add" onclick="addNewClient()">+ Клиент</button>`;
+        }
+
+        function addNewClient() {
+            state.clients.push({ id: Date.now(), name: `Клиент ${state.clients.length + 1}`, items: [], pay: 'Нал', discount: 0 });
+            state.activeClient = state.clients.length - 1;
+            saveData(); renderClientsBar(); renderActiveClient();
+        }
+
+        function switchClient(idx) {
+            state.activeClient = idx;
+            renderClientsBar(); renderActiveClient();
+        }
+
+        function removeClient(idx) {
+            if(state.clients.length <= 1) return;
+            state.clients.splice(idx, 1);
+            if(state.activeClient >= state.clients.length) state.activeClient = state.clients.length - 1;
+            saveData(); renderClientsBar(); renderActiveClient();
+        }
+
+        function getCurClient() { return state.clients[state.activeClient]; }
+
+        function updateClientName() {
+            getCurClient().name = document.getElementById('clientNameInput').value;
+            saveData(); renderClientsBar();
+        }
+
+        // КАТАЛОГ
+        function renderCatalog() {
+            const grid = document.getElementById('catalogGrid');
+            grid.innerHTML = '';
+            catalog.forEach(item => {
+                let priceSub = item.type === 'delivery' ? 'Ввод ₽' : (item.type === 'weight' ? `${item.price}₽/кг` : `${item.price}₽`);
+                grid.innerHTML += `
+                    <div class="product-tile" onclick="handleCatalogClick(${item.id})">
+                        <div class="icon">${item.icon || '📦'}</div>
+                        <div class="name">${item.name}</div>
+                        <div class="price">${priceSub}</div>
+                    </div>
+                `;
+            });
+            grid.innerHTML += `
+                <div class="product-tile add-tile" onclick="openModal('modalAddProduct')">
+                    <div class="icon">➕</div>
+                    <div class="name">Новый</div>
+                    <div class="price">Товар</div>
+                </div>
+            `;
+        }
+
+        function saveNewProduct() {
+            let name = document.getElementById('newProdName').value.trim();
+            let price = parseInt(document.getElementById('newProdPrice').value) || 0;
+            let type = document.getElementById('newProdType').value;
+            if(!name) return alert('Введите название');
+
+            catalog.push({
+                id: Date.now(),
+                name: name,
+                icon: type === 'weight' ? '⚖️' : (type === 'delivery' ? '🚗' : '📦'),
+                price: price,
+                type: type
+            });
+            saveCatalog(); renderCatalog(); closeModal('modalAddProduct');
+        }
+
+        function handleCatalogClick(id) {
+            const item = catalog.find(x => x.id === id);
+            if(!item) return;
+            const cli = getCurClient();
+
+            if (item.type === 'piece') {
+                let existing = cli.items.find(i => i.catalogId === item.id && i.type === 'piece');
+                if (existing) {
+                    existing.qty += 1;
+                    existing.sum = existing.qty * existing.price;
+                } else {
+                    cli.items.push({ uid: Date.now() + Math.random(), catalogId: item.id, icon: item.icon, name: item.name, qty: 1, unit: 'шт', price: item.price, sum: item.price, type: 'piece' });
+                }
+                saveData(); renderActiveClient();
+            } else {
+                activeProductForModal = item;
+                document.getElementById('weightModalTitle').innerText = item.type === 'weight' ? `Вес: ${item.name}` : `Сумма доставки`;
+                document.getElementById('weightInput').value = '';
+                document.getElementById('weightPresetsContainer').style.display = item.type === 'weight' ? 'grid' : 'none';
+                openModal('modalWeight');
+                setTimeout(() => document.getElementById('weightInput').focus(), 100);
+            }
+        }
+
+        function selectWeightPreset(grams) {
+            document.getElementById('weightInput').value = grams;
+        }
+
+        function confirmWeightItem() {
+            const val = parseInt(document.getElementById('weightInput').value) || 0;
+            if(val <= 0 || !activeProductForModal) return;
+            const cli = getCurClient();
+
+            if (activeProductForModal.type === 'weight') {
+                let sum = Math.round((val / 1000) * activeProductForModal.price);
+                cli.items.push({ uid: Date.now() + Math.random(), catalogId: activeProductForModal.id, icon: activeProductForModal.icon, name: activeProductForModal.name, qty: val, unit: 'г', price: activeProductForModal.price, sum: sum, type: 'weight' });
+            } else if (activeProductForModal.type === 'delivery') {
+                cli.items.push({ uid: Date.now() + Math.random(), catalogId: activeProductForModal.id, icon: activeProductForModal.icon, name: activeProductForModal.name, qty: 1, unit: '', price: val, sum: val, type: 'delivery' });
+            }
+
+            saveData(); renderActiveClient(); closeModal('modalWeight');
+        }
+
+        function changeQty(uid, delta) {
+            const cli = getCurClient();
+            let idx = cli.items.findIndex(i => i.uid === uid);
+            if(idx === -1) return;
+            let item = cli.items[idx];
+
+            if(item.type === 'piece') {
+                item.qty += delta;
+                if(item.qty <= 0) cli.items.splice(idx, 1);
+                else item.sum = item.qty * item.price;
+            } else {
+                cli.items.splice(idx, 1);
+            }
+            saveData(); renderActiveClient();
+        }
+
+        function renderActiveClient() {
+            const cli = getCurClient();
+            document.getElementById('clientNameInput').value = cli.name || '';
+            document.getElementById('payBadge').innerText = `💵 ${cli.pay}`;
+            document.getElementById('discountLabel').innerText = `${cli.discount}%`;
+
+            const list = document.getElementById('cartList');
+            list.innerHTML = '';
+            let rawSum = 0;
+
+            if(!cli.items || cli.items.length === 0) {
+                list.innerHTML = `<div style="text-align:center; padding:30px 0; color:var(--text-muted); font-size:12px;">Выберите товар снизу 👇</div>`;
+            } else {
+                cli.items.forEach(it => {
+                    rawSum += it.sum;
+                    let controls = it.type === 'piece' ? `
+                        <button class="mini-btn ${it.qty === 1 ? 'del' : ''}" onclick="changeQty(${it.uid}, -1)">${it.qty === 1 ? '✕' : '-'}</button>
+                        <span style="font-size:12px; font-weight:800; min-width:20px; text-align:center;">${it.qty}</span>
+                        <button class="mini-btn" onclick="changeQty(${it.uid}, 1)">+</button>
+                    ` : `
+                        <span style="font-size:11px; font-weight:700; margin-right:4px;">${it.qty}${it.unit}</span>
+                        <button class="mini-btn del" onclick="changeQty(${it.uid}, -1)">✕</button>
+                    `;
+
+                    list.innerHTML += `
+                        <div class="cart-item">
+                            <div class="cart-item-info">
+                                <h5>${it.icon} ${it.name}</h5>
+                                <span>${it.sum.toLocaleString('ru-RU')} ₽</span>
+                            </div>
+                            <div class="cart-item-controls">${controls}</div>
+                        </div>
+                    `;
+                });
+            }
+
+            let finalSum = Math.round(rawSum * (1 - cli.discount / 100));
+            document.getElementById('totalSum').innerText = `${finalSum.toLocaleString('ru-RU')} ₽`;
+        }
+
+        function setPay(method) { getCurClient().pay = method; saveData(); renderActiveClient(); closeModal('modalPay'); }
+        function setDiscount(val) { getCurClient().discount = val; saveData(); renderActiveClient(); closeModal('modalDiscount'); }
+
+        function resetAllData() {
+            if(confirm('Сбросить всё?')) {
+                localStorage.clear();
+                location.reload();
+            }
+        }
+
+        // ОТЧЕТ
+        function generateReport() {
+            let txt = `🍓 ОТЧЕТ ПО СМЕНЕ\n────────────────────\n`;
+            let total = 0;
+            state.clients.forEach((cli, idx) => {
+                if(!cli.items || cli.items.length === 0) return;
+                txt += `👤 ${cli.name || ('Клиент ' + (idx+1))}\n`;
+                let sub = 0;
+                cli.items.forEach(it => {
+                    txt += `  • ${it.name} (${it.qty}${it.unit}) = ${it.sum} ₽\n`;
+                    sub += it.sum;
+                });
+                let final = Math.round(sub * (1 - cli.discount / 100));
+                total += final;
+                txt += `  💳 Оплата: ${cli.pay} — ${final} ₽\n\n`;
+            });
+            txt += `────────────────────\n💰 ИТОГО: ${total} ₽`;
+            return txt;
+        }
+
+        function openReport() {
+            document.getElementById('reportContent').innerText = generateReport();
+            openModal('modalReport');
+        }
+
+        function copyReport() {
+            navigator.clipboard.writeText(generateReport()).then(() => alert('Скопировано!'));
+        }
+
+        window.onload = init;
+    </script>
+</body>
+</html>
