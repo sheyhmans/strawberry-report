@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Strawberry POS & Report</title>
+    <title>Strawberry POS</title>
     
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -12,22 +12,22 @@
 
     <style>
         :root {
-            --bg: #09090b;
-            --card: #18181b;
-            --card-sub: #27272a;
-            --border: #3f3f46;
-            --accent-green: #22c55e;
-            --accent-blue: #3b82f6;
-            --text-main: #f4f4f5;
-            --text-sub: #a1a1aa;
-            --danger: #ef4444;
+            --bg: #000000;
+            --card: #121212;
+            --card-sub: #1c1c1e;
+            --border: #2c2c2e;
+            --accent: #0a84ff;
+            --accent-green: #30d158;
+            --danger: #ff453a;
+            --text-main: #ffffff;
+            --text-sub: #8e8e93;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", Roboto, sans-serif;
             -webkit-tap-highlight-color: transparent;
         }
 
@@ -43,15 +43,13 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 14px;
+            padding: 4px 2px 12px 2px;
         }
 
         .header h1 {
-            font-size: 22px;
-            font-weight: 800;
-            background: linear-gradient(90deg, #22c55e, #3b82f6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
         }
 
         .btn-sm {
@@ -59,17 +57,18 @@
             color: var(--text-sub);
             border: 1px solid var(--border);
             padding: 6px 12px;
-            border-radius: 20px;
+            border-radius: 18px;
             font-size: 12px;
             font-weight: 600;
         }
+        .btn-sm:active { transform: scale(0.96); }
 
         .card {
             background: var(--card);
             border: 1px solid var(--border);
             border-radius: 16px;
-            padding: 14px;
-            margin-bottom: 12px;
+            padding: 12px;
+            margin-bottom: 10px;
         }
 
         .row { display: flex; gap: 8px; }
@@ -78,10 +77,11 @@
         label {
             display: block;
             font-size: 11px;
-            font-weight: 700;
+            font-weight: 600;
             color: var(--text-sub);
-            margin-bottom: 6px;
+            margin-bottom: 5px;
             text-transform: uppercase;
+            letter-spacing: 0.2px;
         }
 
         input, textarea, select {
@@ -89,56 +89,73 @@
             background: #000;
             border: 1px solid var(--border);
             color: #fff;
-            padding: 10px 12px;
+            padding: 9px 11px;
             border-radius: 10px;
             font-size: 14px;
             outline: none;
         }
+        input:focus, textarea:focus { border-color: var(--accent); }
 
-        input:focus, textarea:focus { border-color: var(--accent-blue); }
-
-        /* КАТАЛОГ ТОВАРОВ */
-        .catalog-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
-        }
-
-        .products-scroll {
+        /* ЛЕНТА КАТАЛОГА (КОМПАКТНАЯ) */
+        .catalog-bar {
             display: flex;
             gap: 8px;
             overflow-x: auto;
-            padding-bottom: 8px;
+            padding-bottom: 6px;
             scrollbar-width: none;
         }
-        .products-scroll::-webkit-scrollbar { display: none; }
+        .catalog-bar::-webkit-scrollbar { display: none; }
 
-        .product-card {
+        .prod-chip {
             background: var(--card-sub);
             border: 1px solid var(--border);
-            border-radius: 14px;
-            padding: 10px;
-            min-width: 120px;
+            border-radius: 12px;
+            padding: 8px 10px;
+            min-width: 115px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            gap: 6px;
+            position: relative;
             cursor: pointer;
-            transition: transform 0.1s;
+            transition: transform 0.1s, border-color 0.1s;
+        }
+        .prod-chip:active { transform: scale(0.95); border-color: var(--accent); }
+
+        .prod-title { font-size: 12px; font-weight: 600; color: #fff; padding-right: 14px; line-height: 1.2; }
+        .prod-price { font-size: 11px; color: var(--accent-green); font-weight: 700; margin-top: 4px; }
+
+        .edit-icon {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            font-size: 11px;
+            opacity: 0.5;
+            padding: 2px;
+        }
+        .edit-icon:active { opacity: 1; }
+
+        .add-chip-btn {
+            background: rgba(10, 132, 255, 0.1);
+            border: 1px dashed var(--accent);
+            color: var(--accent);
+            border-radius: 12px;
+            padding: 8px 14px;
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
         }
 
-        .product-card:active { transform: scale(0.95); }
-        .product-name { font-size: 13px; font-weight: 600; color: #fff; }
-        .product-price { font-size: 12px; color: var(--accent-green); font-weight: 700; }
-
-        /* СПИСОК КЛИЕНТОВ */
+        /* КЛИЕНТЫ */
         .client-card {
             background: var(--card);
             border: 1px solid var(--border);
             border-radius: 16px;
-            padding: 14px;
-            margin-bottom: 12px;
+            padding: 12px;
+            margin-bottom: 10px;
         }
 
         .client-header {
@@ -151,7 +168,7 @@
         .segmented {
             display: flex;
             background: #000;
-            padding: 3px;
+            padding: 2px;
             border-radius: 10px;
             border: 1px solid var(--border);
             margin-bottom: 8px;
@@ -160,29 +177,27 @@
         .seg-btn {
             flex: 1;
             text-align: center;
-            padding: 7px 0;
-            font-size: 12px;
+            padding: 6px 0;
+            font-size: 11px;
             font-weight: 600;
             color: var(--text-sub);
             border-radius: 8px;
-            cursor: pointer;
         }
 
-        .seg-btn.active {
-            background: var(--card-sub);
-            color: #fff;
-        }
+        .seg-btn.active { background: var(--card-sub); color: #fff; }
 
         .btn-add-client {
-            background: var(--accent-blue);
+            background: var(--accent);
             color: #fff;
             border: none;
-            padding: 14px;
+            padding: 12px;
             border-radius: 12px;
             font-weight: 700;
+            font-size: 14px;
             width: 100%;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
         }
+        .btn-add-client:active { transform: scale(0.98); }
 
         .preview {
             background: #000;
@@ -190,9 +205,9 @@
             font-family: monospace;
             padding: 10px;
             border-radius: 10px;
-            font-size: 12px;
+            font-size: 11px;
             white-space: pre-wrap;
-            max-height: 140px;
+            max-height: 130px;
             overflow-y: auto;
             border: 1px solid var(--border);
         }
@@ -200,10 +215,11 @@
         .bottom-bar {
             position: fixed;
             bottom: 0; left: 0; right: 0;
-            background: rgba(9, 9, 11, 0.9);
-            backdrop-filter: blur(15px);
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border-top: 1px solid var(--border);
-            padding: 12px 16px max(12px, env(safe-area-inset-bottom)) 16px;
+            padding: 10px 14px max(10px, env(safe-area-inset-bottom)) 14px;
             z-index: 100;
         }
 
@@ -218,27 +234,57 @@
             width: 100%;
         }
 
-        /* МОДАЛЬНЫЕ ОКНА */
-        .modal {
+        /* iOS BOTTOM SHEET (ШТОРКА СНИЗУ) */
+        .sheet-overlay {
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(0,0,0,0.8);
-            backdrop-filter: blur(6px);
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(4px);
             z-index: 200;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
+            align-items: flex-end;
         }
 
-        .modal-body {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 20px;
+        .sheet-body {
+            background: #1c1c1e;
+            border-top: 1px solid var(--border);
+            border-radius: 20px 20px 0 0;
+            padding: 16px 16px max(16px, env(safe-area-inset-bottom)) 16px;
             width: 100%;
-            max-width: 340px;
+            animation: slideUp 0.25s cubic-bezier(0.1, 0.9, 0.2, 1);
         }
+
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+
+        .sheet-drag {
+            width: 36px;
+            height: 4px;
+            background: var(--border);
+            border-radius: 2px;
+            margin: 0 auto 12px auto;
+        }
+
+        .quick-weight-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 6px;
+            margin: 10px 0;
+        }
+
+        .qw-btn {
+            background: #000;
+            border: 1px solid var(--border);
+            color: #fff;
+            padding: 8px 0;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            text-align: center;
+        }
+        .qw-btn:active { background: var(--accent); }
     </style>
 </head>
 <body>
@@ -262,13 +308,10 @@
         </div>
     </div>
 
-    <!-- КАТАЛОГ ТОВАРОВ C ЦЕНАМИ -->
-    <div style="margin-bottom: 12px;">
-        <div class="catalog-header">
-            <label style="padding-left:4px;">Выбрать товар в заказ</label>
-            <button class="btn-sm" style="color:var(--accent-blue); padding:3px 10px;" onclick="openAddProductModal()">+ Настроить товары</button>
-        </div>
-        <div class="products-scroll" id="productsCatalog"></div>
+    <!-- КАТАЛОГ (БЫСТРЫЙ ВЫБОР) -->
+    <div style="margin-bottom: 10px;">
+        <label style="padding-left:2px;">Товары быстрого доступа</label>
+        <div class="catalog-bar" id="catalogBar"></div>
     </div>
 
     <!-- КЛИЕНТЫ -->
@@ -277,86 +320,95 @@
 
     <!-- РАСХОД И КЛУБНИКА -->
     <div class="card">
-        <div class="row" style="margin-bottom: 10px;">
+        <div class="row" style="margin-bottom: 8px;">
             <div>
                 <label>Расход</label>
                 <input type="text" id="expenses" placeholder="не было" oninput="saveData()">
             </div>
             <div style="flex:0.35; display:flex; align-items:flex-end;">
-                <button class="btn-sm" style="width:100%; padding:11px; border-radius:10px;" onclick="document.getElementById('expenses').value='не было'; saveData();">Не было</button>
+                <button class="btn-sm" style="width:100%; padding:9px; border-radius:10px;" onclick="document.getElementById('expenses').value='не было'; saveData();">Не было</button>
             </div>
         </div>
-        <label>По клубникам (Заметки)</label>
+        <label>По клубникам</label>
         <input type="text" id="strawberries" placeholder="продаж не было" oninput="saveData()">
     </div>
 
     <!-- ПРЕДПРОСМОТР -->
     <div class="card">
-        <label>Итоговый отчёт</label>
+        <label>Отчёт</label>
         <div class="preview" id="reportPreview"></div>
     </div>
 
-    <!-- ФИКСИРОВАННАЯ КНОПКА СНИЗУ -->
+    <!-- НИЖНЯЯ ПАНЕЛЬ -->
     <div class="bottom-bar">
         <button class="btn-copy" onclick="copyReport()">📋 Скопировать отчёт</button>
     </div>
 
-    <!-- МОДАЛЬНОЕ ОКНО ДОБАВЛЕНИЯ ТОВАРА КЛИЕНТУ -->
-    <div class="modal" id="addItemModal">
-        <div class="modal-body">
-            <h3 id="modalProductName" style="margin-bottom: 10px;"></h3>
+    <!-- ШТОРКА 1: ДОБАВЛЕНИЕ ТОВАРА В ЧЕК -->
+    <div class="sheet-overlay" id="addItemSheet">
+        <div class="sheet-body">
+            <div class="sheet-drag"></div>
+            <h3 id="sheetProdTitle" style="font-size:16px; margin-bottom:10px;"></h3>
             
-            <div id="pieceInputs">
+            <div id="pieceMode">
                 <label>Количество (шт)</label>
-                <input type="number" id="pieceCount" value="1" min="1">
+                <input type="number" id="pieceInput" value="1" min="1" style="margin-bottom:12px;">
             </div>
 
-            <div id="weightInputs" style="display:none;">
-                <label>Вес (в граммах)</label>
-                <input type="number" id="weightGram" placeholder="например, 290" oninput="calcWeightPrice()">
-                <div style="margin-top:8px; font-size:13px; color:var(--accent-green); font-weight:700;" id="calcResultText">Итого: 0 ₽</div>
+            <div id="weightMode" style="display:none;">
+                <label>Быстрый вес</label>
+                <div class="quick-weight-grid">
+                    <div class="qw-btn" onclick="setGrams(250)">250г</div>
+                    <div class="qw-btn" onclick="setGrams(500)">500г</div>
+                    <div class="qw-btn" onclick="setGrams(750)">750г</div>
+                    <div class="qw-btn" onclick="setGrams(1000)">1 кг</div>
+                </div>
+                <label>Или введите точный вес (в граммах)</label>
+                <input type="number" id="weightInput" placeholder="например: 350" oninput="updateWeightCalc()">
+                <div style="margin-top:8px; font-size:14px; color:var(--accent-green); font-weight:700;" id="weightCalcText">Сумма: 0 ₽</div>
             </div>
 
-            <button class="btn-add-client" style="margin-top:16px; margin-bottom:0;" onclick="confirmAddItemToClient()">Добавить в чек</button>
-            <button class="btn-sm" style="width:100%; margin-top:8px;" onclick="closeModal('addItemModal')">Отмена</button>
+            <button class="btn-add-client" style="margin-top:12px;" onclick="confirmAddItem()">Добавить в чек</button>
+            <button class="btn-sm" style="width:100%;" onclick="closeSheet('addItemSheet')">Отмена</button>
         </div>
     </div>
 
-    <!-- МОДАЛЬНОЕ ОКНО СОЗДАНИЯ/ РЕДАКТИРОВАНИЯ ТОВАРА В БАЗЕ -->
-    <div class="modal" id="newProductModal">
-        <div class="modal-body">
-            <h3 style="margin-bottom: 12px;">Добавить товар в каталог</h3>
-            <label>Название товара</label>
-            <input type="text" id="newProdName" placeholder="например, Клубника весовая" style="margin-bottom:10px;">
+    <!-- ШТОРКА 2: РЕДАКТИРОВАНИЕ ТОВАРА В БАЗЕ -->
+    <div class="sheet-overlay" id="editProductSheet">
+        <div class="sheet-body">
+            <div class="sheet-drag"></div>
+            <h3 id="editSheetTitle" style="font-size:16px; margin-bottom:10px;">Настройка товара</h3>
+            
+            <label>Название</label>
+            <input type="text" id="editProdName" style="margin-bottom:10px;">
             
             <label>Тип товара</label>
-            <select id="newProdType" style="margin-bottom:10px;">
+            <select id="editProdType" style="margin-bottom:10px;">
                 <option value="piece">Штучный (шт)</option>
-                <option value="weight">Весовой (цена за кг)</option>
+                <option value="weight">Весовой (за 1 кг)</option>
             </select>
 
             <label>Цена (₽)</label>
-            <input type="number" id="newProdPrice" placeholder="например, 900" style="margin-bottom:14px;">
+            <input type="number" id="editProdPrice" style="margin-bottom:14px;">
 
-            <button class="btn-add-client" style="margin-bottom:0;" onclick="saveNewProductToCatalog()">Сохранить товар</button>
-            <button class="btn-sm" style="width:100%; margin-top:8px;" onclick="closeModal('newProductModal')">Закрыть</button>
+            <button class="btn-add-client" style="margin-bottom:8px;" onclick="saveProductChanges()">Сохранить изменения</button>
+            <button class="btn-sm" style="width:100%; color:var(--danger); border-color:rgba(255,69,58,0.3); margin-bottom:8px;" id="btnDeleteProd" onclick="deleteProduct()">Удалить товар из базы</button>
+            <button class="btn-sm" style="width:100%;" onclick="closeSheet('editProductSheet')">Отмена</button>
         </div>
     </div>
 
     <script>
-        // Стандартный каталог позиций с ценами
         let catalog = [
-            { name: "Ст.клубника в шк", price: 900, type: "piece" },
-            { name: "Ст.ананас", price: 1200, type: "piece" },
-            { name: "Ст.черешня", price: 1200, type: "piece" },
-            { name: "Роза красная", price: 250, type: "piece" },
-            { name: "Куст.розы", price: 300, type: "piece" },
-            { name: "Клубника весовая", price: 500, type: "weight" }, // цена за 1 кг (1000г)
-            { name: "Доставка", price: 350, type: "piece" }
+            { id: 1, name: "Клубника в шк", price: 900, type: "piece" },
+            { id: 2, name: "Ананас в шк", price: 1200, type: "piece" },
+            { id: 3, name: "Клубника (кг)", price: 600, type: "weight" },
+            { id: 4, name: "Роза красная", price: 250, type: "piece" },
+            { id: 5, name: "Доставка", price: 350, type: "piece" }
         ];
 
         let clients = [];
-        let activeProduct = null;
+        let activeProd = null;
+        let editingProdId = null;
 
         function initDate() {
             const today = new Date();
@@ -367,105 +419,138 @@
         }
 
         function renderCatalog() {
-            const container = document.getElementById('productsCatalog');
+            const container = document.getElementById('catalogBar');
             container.innerHTML = '';
 
+            // Кнопка добавить новый
+            const addBtn = document.createElement('div');
+            addBtn.className = 'add-chip-btn';
+            addBtn.innerText = '+ Товар';
+            addBtn.onclick = () => openEditSheet(null);
+            container.appendChild(addBtn);
+
             catalog.forEach(item => {
-                const card = document.createElement('div');
-                card.className = 'product-card';
-                card.onclick = () => openAddItemModal(item);
-                
+                const chip = document.createElement('div');
+                chip.className = 'prod-chip';
                 const unit = item.type === 'weight' ? '₽/кг' : '₽';
-                card.innerHTML = `
-                    <div class="product-name">${item.name}</div>
-                    <div class="product-price">${item.price} ${unit}</div>
+                
+                chip.innerHTML = `
+                    <span class="edit-icon" onclick="event.stopPropagation(); openEditSheet(${item.id});">✏️</span>
+                    <div class="prod-title">${item.name}</div>
+                    <div class="prod-price">${item.price} ${unit}</div>
                 `;
-                container.appendChild(card);
+                chip.onclick = () => openAddSheet(item);
+                container.appendChild(chip);
             });
         }
 
-        function openAddItemModal(item) {
-            activeProduct = item;
-            document.getElementById('modalProductName').innerText = item.name;
+        function openAddSheet(item) {
+            activeProd = item;
+            document.getElementById('sheetProdTitle').innerText = item.name;
             
             if (item.type === 'piece') {
-                document.getElementById('pieceInputs').style.display = 'block';
-                document.getElementById('weightInputs').style.display = 'none';
-                document.getElementById('pieceCount').value = 1;
+                document.getElementById('pieceMode').style.display = 'block';
+                document.getElementById('weightMode').style.display = 'none';
+                document.getElementById('pieceInput').value = 1;
             } else {
-                document.getElementById('pieceInputs').style.display = 'none';
-                document.getElementById('weightInputs').style.display = 'block';
-                document.getElementById('weightGram').value = '';
-                document.getElementById('calcResultText').innerText = `Цена: ${item.price} ₽/кг`;
+                document.getElementById('pieceMode').style.display = 'none';
+                document.getElementById('weightMode').style.display = 'block';
+                document.getElementById('weightInput').value = '';
+                updateWeightCalc();
             }
-            
-            document.getElementById('addItemModal').style.display = 'flex';
+            document.getElementById('addItemSheet').style.display = 'flex';
         }
 
-        function calcWeightPrice() {
-            if (!activeProduct || activeProduct.type !== 'weight') return;
-            const grams = parseFloat(document.getElementById('weightGram').value) || 0;
-            const totalPrice = Math.round((grams / 1000) * activeProduct.price);
-            document.getElementById('calcResultText').innerText = `Итого: ${totalPrice} ₽ (${grams}гр)`;
+        function setGrams(g) {
+            document.getElementById('weightInput').value = g;
+            updateWeightCalc();
         }
 
-        function confirmAddItemToClient() {
+        function updateWeightCalc() {
+            if (!activeProd || activeProd.type !== 'weight') return;
+            const grams = parseFloat(document.getElementById('weightInput').value) || 0;
+            const price = Math.round((grams / 1000) * activeProd.price);
+            document.getElementById('weightCalcText').innerText = `Сумма: ${price} ₽ (${grams}г)`;
+        }
+
+        function confirmAddItem() {
             if (clients.length === 0) addClient(false);
             const lastIdx = clients.length - 1;
-            let itemText = '';
-            let itemSum = 0;
+            let text = '';
+            let sum = 0;
 
-            if (activeProduct.type === 'piece') {
-                const count = parseInt(document.getElementById('pieceCount').value) || 1;
-                itemText = `${activeProduct.name} - ${count}`;
-                itemSum = activeProduct.price * count;
+            if (activeProd.type === 'piece') {
+                const count = parseInt(document.getElementById('pieceInput').value) || 1;
+                text = `${activeProd.name} - ${count}`;
+                sum = activeProd.price * count;
             } else {
-                const grams = parseFloat(document.getElementById('weightGram').value) || 0;
-                itemSum = Math.round((grams / 1000) * activeProduct.price);
-                itemText = `${activeProduct.name} - ${grams}гр`;
+                const grams = parseFloat(document.getElementById('weightInput').value) || 0;
+                sum = Math.round((grams / 1000) * activeProd.price);
+                text = `${activeProd.name} - ${grams}г`;
             }
 
-            // Добавляем текст позиции
-            if (clients[lastIdx].items) {
-                clients[lastIdx].items += '\n' + itemText;
-            } else {
-                clients[lastIdx].items = itemText;
-            }
+            if (clients[lastIdx].items) clients[lastIdx].items += '\n' + text;
+            else clients[lastIdx].items = text;
 
-            // Автоматически суммируем стоимость заказа у клиента
-            const currentAmount = parseFloat(clients[lastIdx].amount) || 0;
-            clients[lastIdx].amount = currentAmount + itemSum;
+            const currentAmt = parseFloat(clients[lastIdx].amount) || 0;
+            clients[lastIdx].amount = currentAmt + sum;
 
-            closeModal('addItemModal');
+            closeSheet('addItemSheet');
             renderClients();
             saveData();
         }
 
-        function openAddProductModal() {
-            document.getElementById('newProductModal').style.display = 'flex';
+        function openEditSheet(id) {
+            editingProdId = id;
+            if (id === null) {
+                document.getElementById('editSheetTitle').innerText = 'Новый товар';
+                document.getElementById('editProdName').value = '';
+                document.getElementById('editProdType').value = 'piece';
+                document.getElementById('editProdPrice').value = '';
+                document.getElementById('btnDeleteProd').style.display = 'none';
+            } else {
+                const item = catalog.find(x => x.id === id);
+                document.getElementById('editSheetTitle').innerText = 'Редактировать товар';
+                document.getElementById('editProdName').value = item.name;
+                document.getElementById('editProdType').value = item.type;
+                document.getElementById('editProdPrice').value = item.price;
+                document.getElementById('btnDeleteProd').style.display = 'block';
+            }
+            document.getElementById('editProductSheet').style.display = 'flex';
         }
 
-        function saveNewProductToCatalog() {
-            const name = document.getElementById('newProdName').value.trim();
-            const type = document.getElementById('newProdType').value;
-            const price = parseFloat(document.getElementById('newProdPrice').value) || 0;
+        function saveProductChanges() {
+            const name = document.getElementById('editProdName').value.trim();
+            const type = document.getElementById('editProdType').value;
+            const price = parseFloat(document.getElementById('editProdPrice').value) || 0;
 
-            if (name && price > 0) {
-                catalog.push({ name, price, type });
+            if (!name || price <= 0) return alert('Заполните название и цену!');
+
+            if (editingProdId === null) {
+                catalog.push({ id: Date.now(), name, type, price });
+            } else {
+                const item = catalog.find(x => x.id === editingProdId);
+                if (item) { item.name = name; item.type = type; item.price = price; }
+            }
+
+            closeSheet('editProductSheet');
+            renderCatalog();
+            saveData();
+        }
+
+        function deleteProduct() {
+            if (editingProdId && confirm('Удалить товар из панели быстрого доступа?')) {
+                catalog = catalog.filter(x => x.id !== editingProdId);
+                closeSheet('editProductSheet');
                 renderCatalog();
                 saveData();
-                closeModal('newProductModal');
-                document.getElementById('newProdName').value = '';
-                document.getElementById('newProdPrice').value = '';
             }
         }
 
-        function closeModal(id) {
-            document.getElementById(id).style.display = 'none';
-        }
+        function closeSheet(id) { document.getElementById(id).style.display = 'none'; }
 
         function loadData() {
-            const saved = localStorage.getItem('pos_strawberry_data');
+            const saved = localStorage.getItem('pos_strawberry_v2');
             if (saved) {
                 const data = JSON.parse(saved);
                 document.getElementById('shiftDate').value = data.shiftDate || initDate();
@@ -492,10 +577,9 @@
                 cashRegister: document.getElementById('cashRegister').value,
                 expenses: document.getElementById('expenses').value,
                 strawberries: document.getElementById('strawberries').value,
-                clients: clients,
-                catalog: catalog
+                clients, catalog
             };
-            localStorage.setItem('pos_strawberry_data', JSON.stringify(data));
+            localStorage.setItem('pos_strawberry_v2', JSON.stringify(data));
             updateReport();
         }
 
@@ -537,9 +621,9 @@
                         <strong>Клиент ${i + 1}</strong>
                         ${clients.length > 1 ? `<span style="color:var(--danger); font-size:12px; font-weight:600; cursor:pointer;" onclick="removeClient(${i})">Удалить</span>` : ''}
                     </div>
-                    <input type="text" placeholder="Примечание (напр., Муса Вип)" value="${c.name}" style="margin-bottom:8px;" oninput="clients[${i}].name = this.value; saveData();">
+                    <input type="text" placeholder="Примечание (напр., Муса Вип)" value="${c.name}" style="margin-bottom:6px;" oninput="clients[${i}].name = this.value; saveData();">
                     
-                    <textarea placeholder="Состав заказа" rows="2" style="margin-bottom:8px;" oninput="clients[${i}].items = this.value; saveData();">${c.items}</textarea>
+                    <textarea placeholder="Состав заказа" rows="2" style="margin-bottom:6px;" oninput="clients[${i}].items = this.value; saveData();">${c.items}</textarea>
 
                     <div class="segmented">
                         <div class="seg-btn ${c.payType==='Нал'?'active':''}" onclick="setPayType(${i}, 'Нал')">Нал</div>
@@ -551,7 +635,7 @@
                     <div class="row">
                         <input type="number" placeholder="Сумма (₽)" value="${c.amount}" oninput="clients[${i}].amount = this.value; saveData();">
                         <input type="text" placeholder="Время (01:27)" value="${c.time}" oninput="clients[${i}].time = this.value; saveData();">
-                        <button class="btn-sm" style="background:#27272a; color:#fff;" onclick="setTimeNow(${i})">🕒</button>
+                        <button class="btn-sm" style="background:#2c2c2e; color:#fff;" onclick="setTimeNow(${i})">🕒</button>
                     </div>
                 `;
                 container.appendChild(card);
@@ -612,8 +696,8 @@
         }
 
         function resetShift() {
-            if (confirm('Очистить данные смены и начать новую?')) {
-                localStorage.removeItem('pos_strawberry_data');
+            if (confirm('Очистить данные смены?')) {
+                localStorage.removeItem('pos_strawberry_v2');
                 clients = [];
                 document.getElementById('expenses').value = '';
                 document.getElementById('strawberries').value = 'продаж не было';
