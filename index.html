@@ -767,7 +767,7 @@
             navigator.clipboard.writeText(generateReport()).then(() => alert('Отчет скопирован!'));
         }
 
-        // Автоматический анализ с помощью Gemini API
+        // Автоматический анализ с помощью Gemini API с обходом лимитов
         async function runGeminiAnalysis() {
             const apiKey = state.apiKey;
             if (!apiKey) {
@@ -783,29 +783,50 @@
             const reportText = generateReport();
             const prompt = `Проанализируй этот отчет по кассе смены, выдели, что больше предпочитают по оплате, какие товары больше всего покупают, и дай краткие полезные рекомендации для бизнеса:\n\n` + reportText;
 
-            try {
-                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        contents: [{
-                            parts: [{ text: prompt }]
-                        }]
-                    })
-                });
+            // Список моделей для последовательной попытки (если на первой квота исчерпана)
+            const models = ['gemini-2.0-flash', 'gemini-1.5-flash', 'gemini-1.5-pro'];
+            let success = false;
+            let lastErrorMsg = "";
 
-                const data = await response.json();
-                
-                if (data.candidates && data.candidates[0].content.parts[0].text) {
-                    let resultText = data.candidates[0].content.parts[0].text;
-                    document.getElementById('geminiOutputText').innerText = resultText;
-                } else if (data.error) {
-                    document.getElementById('geminiOutputText').innerText = "Ошибка API: " + (data.error.message || JSON.stringify(data.error));
-                } else {
-                    document.getElementById('geminiOutputText').innerText = "Не удалось получить ответ от Gemini.";
+            for (const model of models) {
+                try {
+                    document.getElementById('geminiOutputText').innerText = `⏳ Пробуем модель ${model}...`;
+                    
+                    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            contents: [{
+                                parts: [{ text: prompt }]
+                            }]
+                        })
+                    });
+
+                    const data = await response.json();
+                    
+                    if (data.candidates && data.candidates[0].content.parts[0].text) {
+                        document.getElementById('geminiOutputText').innerText = data.candidates[0].content.parts[0].text;
+                        success = true;
+                        break;
+                    } else if (data.error) {
+                        lastErrorMsg = data.error.message || JSON.stringify(data.error);
+                        // Если ошибка квоты, переходим к следующей модели в цикле
+                        if (lastErrorMsg.includes("quota") || lastErrorMsg.includes("limit") || response.status === 429) {
+                            continue;
+                        } else {
+                            break;
+                        }
+                    }
+                } catch (error) {
+                    lastErrorMsg = error.message;
                 }
-            } catch (error) {
-                document.getElementById('geminiOutputText').innerText = "Ошибка сети при обращении к Gemini API: " + error.message;
+            }
+
+            if (!success) {
+                document.getElementById('geminiOutputText').innerText = "❌ Ошибка лимитов API (Quota Exceeded).\n\n" + 
+                    "Бесплатный ключ Gemini исчерпал лимит запросов на сегодня или минуту.\n" +
+                    "Подробности: " + lastErrorMsg + "\n\n" +
+                    "Подождите пару минут или создайте новый ключ в Google AI Studio.";
             }
         }
 
