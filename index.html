@@ -339,9 +339,9 @@
 
         function init() {
             try {
-                const saved = localStorage.getItem('pos_state_v6');
+                const saved = localStorage.getItem('pos_state_v7');
                 if (saved) state = JSON.parse(saved);
-                const savedCat = localStorage.getItem('pos_cat_v6');
+                const savedCat = localStorage.getItem('pos_cat_v7');
                 if (savedCat) catalog = JSON.parse(savedCat);
             } catch(e) {}
 
@@ -351,8 +351,8 @@
             renderActiveClient();
         }
 
-        function saveData() { try { localStorage.setItem('pos_state_v6', JSON.stringify(state)); } catch(e) {} }
-        function saveCatalog() { try { localStorage.setItem('pos_cat_v6', JSON.stringify(catalog)); } catch(e) {} }
+        function saveData() { try { localStorage.setItem('pos_state_v7', JSON.stringify(state)); } catch(e) {} }
+        function saveCatalog() { try { localStorage.setItem('pos_cat_v7', JSON.stringify(catalog)); } catch(e) {} }
 
         function applyTheme() {
             document.body.setAttribute('data-theme', state.theme);
@@ -650,52 +650,62 @@
             }
         }
 
-        // ОТЧЕТ (В точной структуре вашего шаблона с расходами и вычетом доставки из наличных)
+        // ТОЧНЫЙ СТАНДАРТНЫЙ ФОРМАТ ОТЧЕТА С РАСХОДАМИ И ВЫЧЕТОМ ДОСТАВКИ ИЗ НАЛИЧНЫХ
         function generateReport() {
-            let txt = `🍓 ОТЧЕТ ПО СМЕНЕ\n────────────────────\n`;
-            let totalCash = 0, totalCard = 0, totalDelivery = 0;
-            let totalExpenses = 0; // Место под ваши расходы, если они будут добавлены или учтены
+            let txt = `🍓ОТЧЕТ ПО СМЕНЕ🍓\n`;
+            
+            let totalCash = 0;
+            let totalCard = 0;
+            let totalDelivery = 0;
 
             state.clients.forEach((cli, idx) => {
                 if(!cli.items || cli.items.length === 0) return;
-                txt += `👤 ${cli.name || ('Клиент ' + (idx+1))}\n`;
+                
+                txt += `\n👤 ${cli.name || ('Клиент ' + (idx+1))}\n`;
                 let sub = 0;
                 let clientDelivery = 0;
 
                 cli.items.forEach(it => {
-                    txt += `  • ${it.name} (${it.qty}${it.unit}) = ${it.sum} ₽\n`;
+                    // Формат: Название (количество) - Сумма
+                    txt += `• ${it.name} (${it.qty}${it.unit}) — ${it.sum} руб\n`;
                     sub += it.sum;
                     if(it.type === 'delivery') clientDelivery += it.sum;
                 });
 
                 let final = Math.round(sub * (1 - cli.discount / 100));
-                
+
+                if(cli.discount > 0) {
+                    txt += `Скидка: ${cli.discount}%\n`;
+                }
+
                 if(cli.pay === 'Нал') {
                     totalCash += final;
                     totalDelivery += clientDelivery;
+                    txt += `💳 Оплата: Наличные (${final} руб)\n`;
+                } else if(cli.pay === 'Перевод') {
+                    totalCard += final;
+                    txt += `💳 Оплата: Перевод${cli.time ? ' ' + cli.time : ''} (${final} руб)\n`;
+                } else if(cli.pay === 'Терминал') {
+                    totalCard += final;
+                    txt += `💳 Оплата: Терминал${cli.time ? ' ' + cli.time : ''} (${final} руб)\n`;
                 } else {
                     totalCard += final;
+                    txt += `💳 Оплата: ${cli.pay} (${final} руб)\n`;
                 }
-
-                if(cli.discount > 0) txt += `  🏷️ Скидка: ${cli.discount}%\n`;
-                
-                let payLine = `  💳 Оплата: ${cli.pay}`;
-                if((cli.pay === 'Перевод' || cli.pay === 'Терминал') && cli.time) {
-                    payLine += ` (${cli.time})`;
-                }
-                txt += `${payLine} — ${final} ₽\n\n`;
             });
 
             let finalNetCash = totalCash - totalDelivery;
-            let totalRevenue = totalCash + totalCard;
-            let finalTotalBox = finalNetCash + totalCard - totalExpenses;
+            let totalRevenue = finalNetCash + totalCard;
 
-            txt += `────────────────────\n`;
-            txt += `💸 Расходы: ${totalExpenses} ₽\n`;
-            txt += `💵 Наличные (чистые): ${finalNetCash} ₽\n`;
-            if(totalDelivery > 0) txt += `  (Вычтена доставка: -${totalDelivery} ₽)\n`;
-            txt += `📱 Безнал / Перевод: ${totalCard} ₽\n`;
-            txt += `💰 ИТОГО КАССА: ${finalTotalBox} ₽`;
+            txt += `\n-------------------\n`;
+            txt += `💸 Расходы: 0 руб\n`;
+            txt += `💵 Наличные: ${finalNetCash} руб\n`;
+            if(totalDelivery > 0) {
+                txt += `(Доставка: -${totalDelivery} руб)\n`;
+            }
+            txt += `📱 Переводы/Терминал: ${totalCard} руб\n`;
+            txt += `💰 ИТОГО КАССА: ${totalRevenue} руб`;
+
             return txt;
         }
 
