@@ -29,7 +29,6 @@
             --shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
         }
 
-        /* КРАСИВЫЙ ШРИФТ И УВЕЛИЧЕННЫЙ РАЗМЕР */
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; -webkit-tap-highlight-color: transparent; }
 
         body {
@@ -53,7 +52,7 @@
             flex: 1; display: flex; flex-direction: column; padding: 16px; gap: 14px; overflow: hidden; max-width: 600px; width: 100%; margin: 0 auto;
         }
 
-        /* ТАБЫ КЛИЕНТОВ */
+        /* ТАБЫ */
         .clients-bar {
             display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; flex-shrink: 0;
         }
@@ -76,12 +75,14 @@
             padding-bottom: 10px; border-bottom: 1px solid var(--border);
         }
         .client-input {
-            background: transparent; border: none; font-size: 18px; font-weight: 700; color: var(--text-main); outline: none; width: 60%;
+            background: transparent; border: none; font-size: 18px; font-weight: 700; color: var(--text-main); outline: none; width: 50%;
         }
-        .pay-badge {
-            background: rgba(79, 70, 229, 0.1); color: var(--primary); padding: 8px 14px;
-            border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer;
+        .header-badges { display: flex; gap: 6px; align-items: center; }
+        .pay-badge, .time-badge {
+            background: rgba(79, 70, 229, 0.1); color: var(--primary); padding: 8px 12px;
+            border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer;
         }
+        .time-badge { background: rgba(107, 114, 128, 0.1); color: var(--text-muted); }
 
         .cart-list {
             flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 10px;
@@ -128,7 +129,6 @@
         .product-tile.add-tile { border: 2px dashed var(--primary); background: rgba(79, 70, 229, 0.05); }
         .product-tile.add-tile .name { color: var(--primary); }
 
-        /* КНОПКА РЕДАКТИРОВАНИЯ НА ПЛИТКЕ ТОВАРА */
         .edit-prod-btn {
             position: absolute; top: 6px; right: 6px; width: 24px; height: 24px;
             background: var(--glass-card); border: 1px solid var(--border); border-radius: 6px;
@@ -161,14 +161,13 @@
         
         .report-box {
             background: var(--bg-gradient); padding: 14px; border-radius: 14px; font-family: monospace;
-            font-size: 13px; max-height: 40vh; overflow-y: auto; border: 1px solid var(--border); margin-bottom: 16px; white-space: pre-wrap;
+            font-size: 13px; max-height: 45vh; overflow-y: auto; border: 1px solid var(--border); margin-bottom: 16px; white-space: pre-wrap;
         }
     </style>
 </head>
 <body data-theme="light">
 
     <header>
-        <!-- ЗДЕСЬ МОЖНО ВПИСАТЬ СВОЕ НАЗВАНИЕ -->
         <div class="brand">✨ КАССА</div>
         <div class="header-tools">
             <div class="btn-icon" onclick="toggleTheme()" id="themeBtn">🌙</div>
@@ -186,8 +185,11 @@
         <!-- ЧЕК КЛИЕНТА -->
         <div class="receipt-card">
             <div class="receipt-header-row">
-                <input type="text" class="client-input" id="clientNameInput" placeholder="Имя клиента..." oninput="updateClientName()">
-                <div class="pay-badge" id="payBadge" onclick="openModal('modalPay')">💵 Нал</div>
+                <input type="text" class="client-input" id="clientNameInput" placeholder="Клиент..." oninput="updateClientName()">
+                <div class="header-badges">
+                    <div class="time-badge" id="timeBadge" onclick="openModal('modalTime')" title="Время перевода/терминала">🕒 --:--</div>
+                    <div class="pay-badge" id="payBadge" onclick="openModal('modalPay')">💵 Нал</div>
+                </div>
             </div>
 
             <div class="cart-list" id="cartList"></div>
@@ -211,14 +213,24 @@
     <!-- МОДАЛКА ВЕСА / ДОСТАВКИ -->
     <div class="overlay" id="modalWeight">
         <div class="modal">
-            <div class="modal-title"><span id="weightModalTitle">Укажите значение</span> <div class="btn-icon" style="width:34px; height:34px; font-size:14px;" onclick="closeModal('modalWeight')">✕</div></div>
+            <div class="modal-title"><span id="weightModalTitle">Значение</span> <div class="btn-icon" style="width:34px; height:34px; font-size:14px;" onclick="closeModal('modalWeight')">✕</div></div>
             <div class="preset-weights" id="weightPresetsContainer">
                 <div class="preset-btn" onclick="selectWeightPreset(250)">250 г</div>
                 <div class="preset-btn" onclick="selectWeightPreset(500)">500 г</div>
                 <div class="preset-btn" onclick="selectWeightPreset(1000)">1 кг</div>
             </div>
-            <input type="number" class="input-box" id="weightInput" placeholder="Введите число...">
+            <input type="number" class="input-box" id="weightInput" placeholder="Число...">
             <button class="btn-action primary" onclick="confirmWeightItem()">Добавить в чек</button>
+        </div>
+    </div>
+
+    <!-- МОДАЛКА ВРЕМЕНИ -->
+    <div class="overlay" id="modalTime">
+        <div class="modal">
+            <div class="modal-title">Время перевода/терминала <div class="btn-icon" style="width:34px; height:34px; font-size:14px;" onclick="closeModal('modalTime')">✕</div></div>
+            <input type="text" class="input-box" id="timeInput" placeholder="например: 14:35">
+            <button class="btn-action primary" onclick="saveTime()">Сохранить время</button>
+            <button class="btn-action secondary" style="margin-top:8px; text-align:center;" onclick="clearTime()">Сбросить время</button>
         </div>
     </div>
 
@@ -226,9 +238,9 @@
     <div class="overlay" id="modalEditItem">
         <div class="modal">
             <div class="modal-title"><span id="editItemTitle">Изменить товар</span> <div class="btn-icon" style="width:34px; height:34px; font-size:14px;" onclick="closeModal('modalEditItem')">✕</div></div>
-            <input type="number" class="input-box" id="editItemInput" placeholder="Новое количество / вес...">
+            <input type="number" class="input-box" id="editItemInput" placeholder="Новое значение...">
             <button class="btn-action primary" onclick="saveEditedItem()">Сохранить</button>
-            <button class="btn-action secondary" style="color:var(--accent-red); margin-top:12px; text-align:center;" onclick="deleteEditedItem()">🗑️ Удалить из чека</button>
+            <button class="btn-action secondary" style="color:var(--accent-red); margin-top:12px; text-align:center;" onclick="deleteEditedItem()">🗑️ Удалить</button>
         </div>
     </div>
 
@@ -236,10 +248,10 @@
     <div class="overlay" id="modalAddProduct">
         <div class="modal">
             <div class="modal-title">Новый товар <div class="btn-icon" style="width:34px; height:34px; font-size:14px;" onclick="closeModal('modalAddProduct')">✕</div></div>
-            <input type="text" class="input-box" id="newProdName" placeholder="Название (например: Манго)">
-            <input type="number" class="input-box" id="newProdPrice" placeholder="Цена за 1 шт или 1 кг (₽)">
+            <input type="text" class="input-box" id="newProdName" placeholder="Название...">
+            <input type="number" class="input-box" id="newProdPrice" placeholder="Цена (₽)...">
             <select class="select-box" id="newProdType">
-                <option value="piece">Штучный товар</option>
+                <option value="piece">Штучный</option>
                 <option value="weight">Весовой (в граммах)</option>
                 <option value="delivery">Произвольная доставка</option>
             </select>
@@ -247,19 +259,19 @@
         </div>
     </div>
 
-    <!-- МОДАЛКА ИЗМЕНЕНИЯ/УДАЛЕНИЯ ТОВАРА ИЗ КАТАЛОГА -->
+    <!-- МОДАЛКА ИЗМЕНЕНИЯ ТОВАРА КАТАЛОГА -->
     <div class="overlay" id="modalEditCatalog">
         <div class="modal">
             <div class="modal-title">Настройки товара <div class="btn-icon" style="width:34px; height:34px; font-size:14px;" onclick="closeModal('modalEditCatalog')">✕</div></div>
             <input type="text" class="input-box" id="editCatName" placeholder="Название">
             <input type="number" class="input-box" id="editCatPrice" placeholder="Цена">
             <select class="select-box" id="editCatType">
-                <option value="piece">Штучный товар</option>
+                <option value="piece">Штучный</option>
                 <option value="weight">Весовой (в граммах)</option>
                 <option value="delivery">Произвольная доставка</option>
             </select>
-            <button class="btn-action primary" onclick="saveCatalogEdits()">💾 Сохранить изменения</button>
-            <button class="btn-action secondary" style="color:var(--accent-red); margin-top:12px; text-align:center;" onclick="deleteFromCatalog()">🗑️ Удалить из каталога</button>
+            <button class="btn-action primary" onclick="saveCatalogEdits()">💾 Сохранить</button>
+            <button class="btn-action secondary" style="color:var(--accent-red); margin-top:12px; text-align:center;" onclick="deleteFromCatalog()">🗑️ Удалить</button>
         </div>
     </div>
 
@@ -318,7 +330,7 @@
         let state = {
             theme: 'light',
             activeClient: 0,
-            clients: [{ id: 1, name: 'Клиент 1', items: [], pay: 'Нал', discount: 0 }]
+            clients: [{ id: 1, name: 'Клиент 1', items: [], pay: 'Нал', time: '', discount: 0 }]
         };
 
         let activeProductForModal = null;
@@ -327,9 +339,9 @@
 
         function init() {
             try {
-                const saved = localStorage.getItem('pos_state_v5');
+                const saved = localStorage.getItem('pos_state_v6');
                 if (saved) state = JSON.parse(saved);
-                const savedCat = localStorage.getItem('pos_cat_v5');
+                const savedCat = localStorage.getItem('pos_cat_v6');
                 if (savedCat) catalog = JSON.parse(savedCat);
             } catch(e) {}
 
@@ -339,8 +351,8 @@
             renderActiveClient();
         }
 
-        function saveData() { try { localStorage.setItem('pos_state_v5', JSON.stringify(state)); } catch(e) {} }
-        function saveCatalog() { try { localStorage.setItem('pos_cat_v5', JSON.stringify(catalog)); } catch(e) {} }
+        function saveData() { try { localStorage.setItem('pos_state_v6', JSON.stringify(state)); } catch(e) {} }
+        function saveCatalog() { try { localStorage.setItem('pos_cat_v6', JSON.stringify(catalog)); } catch(e) {} }
 
         function applyTheme() {
             document.body.setAttribute('data-theme', state.theme);
@@ -372,7 +384,7 @@
         }
 
         function addNewClient() {
-            state.clients.push({ id: Date.now(), name: `Клиент ${state.clients.length + 1}`, items: [], pay: 'Нал', discount: 0 });
+            state.clients.push({ id: Date.now(), name: `Клиент ${state.clients.length + 1}`, items: [], pay: 'Нал', time: '', discount: 0 });
             state.activeClient = state.clients.length - 1;
             saveData(); renderClientsBar(); renderActiveClient();
         }
@@ -393,7 +405,18 @@
             saveData(); renderClientsBar();
         }
 
-        // КАТАЛОГ И ЕГО РЕДАКТИРОВАНИЕ
+        function saveTime() {
+            let val = document.getElementById('timeInput').value.trim();
+            getCurClient().time = val;
+            saveData(); renderActiveClient(); closeModal('modalTime');
+        }
+
+        function clearTime() {
+            getCurClient().time = '';
+            saveData(); renderActiveClient(); closeModal('modalTime');
+        }
+
+        // КАТАЛОГ
         function renderCatalog() {
             const grid = document.getElementById('catalogGrid');
             grid.innerHTML = '';
@@ -417,15 +440,13 @@
         }
 
         function openEditCatalogModal(id, event) {
-            event.stopPropagation(); // Чтобы не добавлялся в чек при клике на карандашик
+            event.stopPropagation();
             const item = catalog.find(x => x.id === id);
             if(!item) return;
             editingCatalogId = id;
-            
             document.getElementById('editCatName').value = item.name;
             document.getElementById('editCatPrice').value = item.price;
             document.getElementById('editCatType').value = item.type;
-            
             openModal('modalEditCatalog');
         }
 
@@ -437,13 +458,12 @@
                 let newType = document.getElementById('editCatType').value;
                 item.type = newType;
                 item.icon = newType === 'weight' ? '⚖️' : (newType === 'delivery' ? '🚗' : '📦');
-                
                 saveCatalog(); renderCatalog(); closeModal('modalEditCatalog');
             }
         }
 
         function deleteFromCatalog() {
-            if(confirm('Точно удалить этот товар из каталога?')) {
+            if(confirm('Удалить товар из каталога?')) {
                 catalog = catalog.filter(x => x.id !== editingCatalogId);
                 saveCatalog(); renderCatalog(); closeModal('modalEditCatalog');
             }
@@ -463,8 +483,6 @@
                 type: type
             });
             saveCatalog(); renderCatalog(); closeModal('modalAddProduct');
-            
-            // Очищаем поля
             document.getElementById('newProdName').value = '';
             document.getElementById('newProdPrice').value = '';
         }
@@ -568,6 +586,16 @@
             const cli = getCurClient();
             document.getElementById('clientNameInput').value = cli.name || '';
             document.getElementById('payBadge').innerText = `💵 ${cli.pay}`;
+            
+            const timeBadge = document.getElementById('timeBadge');
+            if(cli.time) {
+                timeBadge.innerText = `🕒 ${cli.time}`;
+                timeBadge.style.color = 'var(--primary)';
+            } else {
+                timeBadge.innerText = `🕒 --:--`;
+                timeBadge.style.color = 'var(--text-muted)';
+            }
+            
             document.getElementById('discountLabel').innerText = `${cli.discount}%`;
 
             const list = document.getElementById('cartList');
@@ -575,7 +603,7 @@
             let rawSum = 0;
 
             if(!cli.items || cli.items.length === 0) {
-                list.innerHTML = `<div style="text-align:center; padding:40px 0; color:var(--text-muted); font-size:15px; font-weight:600;">Добавьте товары из каталога 👇</div>`;
+                list.innerHTML = `<div style="text-align:center; padding:40px 0; color:var(--text-muted); font-size:15px; font-weight:600;">Выберите товары из каталога 👇</div>`;
             } else {
                 cli.items.forEach(it => {
                     rawSum += it.sum;
@@ -604,20 +632,29 @@
             document.getElementById('totalSum').innerText = `${finalSum.toLocaleString('ru-RU')} ₽`;
         }
 
-        function setPay(method) { getCurClient().pay = method; saveData(); renderActiveClient(); closeModal('modalPay'); }
+        function setPay(method) { 
+            getCurClient().pay = method; 
+            saveData(); renderActiveClient(); closeModal('modalPay'); 
+            if(method === 'Перевод' || method === 'Терминал') {
+                document.getElementById('timeInput').value = getCurClient().time || '';
+                openModal('modalTime');
+            }
+        }
+        
         function setDiscount(val) { getCurClient().discount = val; saveData(); renderActiveClient(); closeModal('modalDiscount'); }
 
         function resetAllData() {
-            if(confirm('Сбросить всё (клиентов и каталог)?')) {
+            if(confirm('Сбросить смену и данные?')) {
                 localStorage.clear();
                 location.reload();
             }
         }
 
-        // ОТЧЕТ (Доставка вычитается из наличных)
+        // ОТЧЕТ (В точной структуре вашего шаблона с расходами и вычетом доставки из наличных)
         function generateReport() {
-            let txt = `📋 ОТЧЕТ ПО СМЕНЕ\n────────────────────\n`;
+            let txt = `🍓 ОТЧЕТ ПО СМЕНЕ\n────────────────────\n`;
             let totalCash = 0, totalCard = 0, totalDelivery = 0;
+            let totalExpenses = 0; // Место под ваши расходы, если они будут добавлены или учтены
 
             state.clients.forEach((cli, idx) => {
                 if(!cli.items || cli.items.length === 0) return;
@@ -641,17 +678,24 @@
                 }
 
                 if(cli.discount > 0) txt += `  🏷️ Скидка: ${cli.discount}%\n`;
-                txt += `  💳 Оплата: ${cli.pay} — ${final} ₽\n\n`;
+                
+                let payLine = `  💳 Оплата: ${cli.pay}`;
+                if((cli.pay === 'Перевод' || cli.pay === 'Терминал') && cli.time) {
+                    payLine += ` (${cli.time})`;
+                }
+                txt += `${payLine} — ${final} ₽\n\n`;
             });
 
             let finalNetCash = totalCash - totalDelivery;
             let totalRevenue = totalCash + totalCard;
+            let finalTotalBox = finalNetCash + totalCard - totalExpenses;
 
             txt += `────────────────────\n`;
+            txt += `💸 Расходы: ${totalExpenses} ₽\n`;
             txt += `💵 Наличные (чистые): ${finalNetCash} ₽\n`;
             if(totalDelivery > 0) txt += `  (Вычтена доставка: -${totalDelivery} ₽)\n`;
             txt += `📱 Безнал / Перевод: ${totalCard} ₽\n`;
-            txt += `💰 ИТОГО ВЫРУЧКА: ${totalRevenue} ₽`;
+            txt += `💰 ИТОГО КАССА: ${finalTotalBox} ₽`;
             return txt;
         }
 
